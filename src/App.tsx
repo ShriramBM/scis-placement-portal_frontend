@@ -26,7 +26,7 @@ function App() {
   path="/student"
   element={
     <Layout>
-      <StudentDashboard />
+      <StudentDashboard/>
     </Layout>
   }
 />
@@ -44,7 +44,7 @@ function App() {
   path="/student/applications"
   element={
     <Layout>
-      <MyApplications />
+      <MyApplications/>
     </Layout>
   }
 />
