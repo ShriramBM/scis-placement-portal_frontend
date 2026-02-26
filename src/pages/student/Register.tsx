@@ -8,7 +8,7 @@ const CustomSelect = ({
   onChange, 
   options, 
   placeholder = "Select",
-  // required = false,
+  required = false,
   style = {}
 }: { 
   name: string;
@@ -37,7 +37,7 @@ const CustomSelect = ({
   return (
     <div ref={containerRef} style={{ position: "relative", ...style }}>
       <div
-        className="custom-select-trigger" // added for responsive styling
+        className="custom-select-trigger"
         onClick={() => setIsOpen(!isOpen)}
         style={{
           ...styles.input,
@@ -91,6 +91,11 @@ const CustomSelect = ({
 const Register = () => {
   const navigate = useNavigate();
 
+  // Compute current year and set range for batch year (±5 years = 10-year span)
+  const currentYear = new Date().getFullYear();
+  const minBatchYear = currentYear - 10;
+  const maxBatchYear = currentYear;
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -139,7 +144,7 @@ const Register = () => {
     { value: "IT", label: "IT" },
   ];
 
-  // Combined keyframes and responsive styles
+  // Combined keyframes, responsive styles, and number input spinner removal
   const styleTag = `
     @keyframes popIn {
       0% { transform: scale(0.85) translateY(30px); opacity: 0; }
@@ -171,6 +176,17 @@ const Register = () => {
         font-size: 14px !important;
         padding: 10px !important;
       }
+    }
+
+    /* Hide spinner arrows on number inputs */
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+      appearance: textfield;
     }
   `;
 
@@ -227,8 +243,11 @@ const Register = () => {
           <input
             name="batchYear"
             type="number"
-            placeholder="Batch Year"
+            placeholder={String(currentYear)} // Show current year as placeholder
             onChange={handleChange}
+            min={minBatchYear}
+            max={maxBatchYear}
+            title={`Batch year must be between ${minBatchYear} and ${maxBatchYear}`}
             required
             style={{ ...styles.input, flex: 1 }}
           />
