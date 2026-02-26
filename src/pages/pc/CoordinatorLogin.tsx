@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../../services/api";
 
 const CoordinatorLogin = () => {
   const [form, setForm] = useState({
@@ -18,10 +19,7 @@ const CoordinatorLogin = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post(
-        "auth/coordinator/login",
-        form
-      );
+      const res = await api.post("/auth/coordinator/login", form);
 
       localStorage.setItem("token", res.data.token);
 

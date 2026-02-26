@@ -26,7 +26,7 @@ const handleLogin = async (e: React.FormEvent) => {
     // 🔥 Role-based redirect
     if (role === "STUDENT") navigate("/student");
     else if (role === "STREAM_COORDINATOR") navigate("/stream");
-    else if (role === "PLACEMENT_COORDINATOR") navigate("/placement");
+    else if (role === "PLACEMENT_COORDINATOR") navigate("/coordinator");
     else if (role === "PLACEMENT_OFFICER") navigate("/officer");
 
   } catch (err: any) {

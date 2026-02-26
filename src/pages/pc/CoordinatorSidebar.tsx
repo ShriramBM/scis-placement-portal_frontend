@@ -27,7 +27,7 @@ const CoordinatorSidebar = () => {
       </button>
 
       <button
-        onClick={() => navigate("/coordinator/students")}
+        onClick={() => navigate("/coordinator/management")}
         style={styles.link}
       >
         Student Management
