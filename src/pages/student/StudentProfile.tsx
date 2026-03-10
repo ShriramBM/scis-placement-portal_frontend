@@ -1,15 +1,29 @@
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 
+type AcadLevel = "TENTH" | "TWELFTH" | "DIPLOMA" | "GRADUATION" | "POSTGRADUATION";
+
 interface AcademicRecord {
   id: number;
-  level: "TENTH" | "TWELFTH" | "DIPLOMA" | "GRADUATION" | "POSTGRADUATION";
+  level: AcadLevel;
   institution_school_name: string;
   board: string | null;
   university: string | null;
   yearOfPassing: number;
   percentage_cgpa: number;
 }
+
+const emptyAcademic = (
+  level: AcadLevel
+): AcademicRecord => ({
+  id: 0,
+  level,
+  institution_school_name: "",
+  board: null,
+  university: null,
+  yearOfPassing: 0,
+  percentage_cgpa: 0,
+});
 
 interface Profile {
   id: number;
@@ -67,13 +81,28 @@ const StudentProfile = () => {
     fetchProfile();
   }, []);
 
+  const ensureAcademicPlaceholders = (details: AcademicRecord[]): AcademicRecord[] => {
+    const byLevel = (level: AcadLevel) =>
+      details.find((r) => r.level === level) || emptyAcademic(level);
+    const tenth = byLevel("TENTH");
+    const twelfth = byLevel("TWELFTH");
+    const postGrad = details.find((r) => r.level === "POSTGRADUATION") || emptyAcademic("POSTGRADUATION");
+    const prior = details.filter((r) => r.level === "GRADUATION" || r.level === "DIPLOMA");
+    return [tenth, twelfth, postGrad, ...prior];
+  };
+
   const fetchProfile = async () => {
     try {
       const res = await api.get("/student/me");
-      setProfile(res.data);
-      setEdited(res.data);
-      if (res.data.permanentAddress && res.data.currentAddress &&
-          res.data.permanentAddress === res.data.currentAddress) {
+      const data = res.data;
+      const withAcademic = {
+        ...data,
+        AcadamicDetails: ensureAcademicPlaceholders(data.AcadamicDetails || []),
+      };
+      setProfile(withAcademic);
+      setEdited(withAcademic);
+      if (data.permanentAddress && data.currentAddress &&
+          data.permanentAddress === data.currentAddress) {
         setSameAddress(true);
       }
     } catch {
@@ -107,30 +136,107 @@ const StudentProfile = () => {
     setMessage({ type: "", text: "" });
   };
 
+  const updateSchoolRecord = (level: "TENTH" | "TWELFTH", field: keyof AcademicRecord, value: string | number | null) => {
+    if (!edited) return;
+    const list = [...(edited.AcadamicDetails || [])];
+    const idx = list.findIndex((r) => r.level === level);
+    const rec = idx >= 0 ? list[idx] : emptyAcademic(level);
+    const updated = { ...rec, [field]: value };
+    const next = idx >= 0 ? list.map((r, i) => (i === idx ? updated : r)) : [...list, updated];
+    setEdited({ ...edited, AcadamicDetails: next });
+  };
+
+  const updateCurrentDegree = (field: keyof AcademicRecord, value: string | number | null) => {
+    if (!edited) return;
+    const list = [...(edited.AcadamicDetails || [])];
+    const idx = list.findIndex((r) => r.level === "POSTGRADUATION");
+    const rec = idx >= 0 ? list[idx] : emptyAcademic("POSTGRADUATION");
+    const updated = { ...rec, [field]: value };
+    const next = idx >= 0 ? list.map((r, i) => (i === idx ? updated : r)) : [...list, updated];
+    setEdited({ ...edited, AcadamicDetails: next });
+  };
+
+  const updatePriorRecord = (priorIndex: number, field: keyof AcademicRecord, value: string | number | null) => {
+    if (!edited) return;
+    const list = [...(edited.AcadamicDetails || [])];
+    const priorIndices = list
+      .map((r, i) => (r.level === "GRADUATION" || r.level === "DIPLOMA" ? i : -1))
+      .filter((i) => i >= 0);
+    const targetIndex = priorIndices[priorIndex];
+    if (targetIndex == null) return;
+    const next = list.map((r, i) =>
+      i === targetIndex ? { ...r, [field]: value } : r
+    );
+    setEdited({ ...edited, AcadamicDetails: next });
+  };
+
+  const addPriorDegree = () => {
+    if (!edited) return;
+    const newRec = emptyAcademic("GRADUATION");
+    setEdited({ ...edited, AcadamicDetails: [...(edited.AcadamicDetails || []), newRec] });
+  };
+
+  const removePriorDegree = (priorIndex: number) => {
+    if (!edited) return;
+    const list = edited.AcadamicDetails || [];
+    const priorIndices = list
+      .map((r, i) => (r.level === "GRADUATION" || r.level === "DIPLOMA" ? i : -1))
+      .filter((i) => i >= 0);
+    const targetIndex = priorIndices[priorIndex];
+    if (targetIndex == null) return;
+    const next = list.filter((_, i) => i !== targetIndex);
+    setEdited({ ...edited, AcadamicDetails: next });
+  };
+
   const handleSave = async () => {
     if (!edited) return;
     setSaving(true);
     setMessage({ type: "", text: "" });
     try {
-      const res = await api.put("/student/me", {
-        phone: edited.phone,
-        alternateEmail: edited.alternateEmail,
-        linkedInUrl: edited.linkedInUrl,
-        githubUrl: edited.githubUrl,
-        gender: edited.gender,
-        dob: edited.dob,
-        category: edited.category,
-        permanentAddress: edited.permanentAddress,
-        currentAddress: edited.currentAddress,
-        preferredJobLocation: edited.preferredJobLocation,
-        carreerType: edited.carreerType,
-        stream: edited.stream,
-      });
-      setProfile(res.data.profile);
-      setEdited(res.data.profile);
-      setMessage({ type: "success", text: "Profile updated successfully" });
+      if (activeTab === "personal") {
+        const res = await api.put("/student/me", {
+          phone: edited.phone,
+          alternateEmail: edited.alternateEmail,
+          linkedInUrl: edited.linkedInUrl,
+          githubUrl: edited.githubUrl,
+          gender: edited.gender,
+          dob: edited.dob,
+          category: edited.category,
+          permanentAddress: edited.permanentAddress,
+          currentAddress: edited.currentAddress,
+          preferredJobLocation: edited.preferredJobLocation,
+          carreerType: edited.carreerType,
+          stream: edited.stream,
+        });
+        const data = res.data?.profile ?? res.data;
+        const withAcademic = {
+          ...data,
+          AcadamicDetails: ensureAcademicPlaceholders(data.AcadamicDetails || []),
+        };
+        setProfile(withAcademic);
+        setEdited(withAcademic);
+        setMessage({ type: "success", text: "Profile updated successfully" });
+      } else if (activeTab === "academic") {
+        const details = edited.AcadamicDetails || [];
+        const payload = details.map((r) => ({
+          level: r.level,
+          institution_school_name: r.institution_school_name || "",
+          board: r.board ?? undefined,
+          university: r.university ?? undefined,
+          yearOfPassing: Number(r.yearOfPassing) || 0,
+          percentage_cgpa: Number(r.percentage_cgpa) || 0,
+        }));
+        await api.put("/student/me/academic", { academicDetails: payload });
+        const withAcademic = {
+          ...edited,
+          AcadamicDetails: ensureAcademicPlaceholders(details),
+        };
+        setProfile(withAcademic);
+        setEdited(withAcademic);
+        setMessage({ type: "success", text: "Academic information updated successfully" });
+      }
     } catch {
-      setMessage({ type: "error", text: "Failed to update profile" });
+      setMessage({ type: "error", text: activeTab === "academic" ? "Failed to update academic information" : "Failed to update profile" });
     } finally {
       setSaving(false);
     }
@@ -161,15 +267,11 @@ const StudentProfile = () => {
     ? `${DEPARTMENT_LABELS[edited.department] || edited.department} / ${edited.stream}`
     : DEPARTMENT_LABELS[edited.department] || edited.department;
 
-  const schoolRecords = (edited.AcadamicDetails || [])
-    .filter(r => r.level === "TENTH" || r.level === "TWELFTH")
-    .sort((a, b) => (a.level === "TWELFTH" ? -1 : b.level === "TWELFTH" ? 1 : 0));
-
-  const currentDegree = (edited.AcadamicDetails || [])
-    .filter(r => r.level === "POSTGRADUATION");
-
-  const priorEducation = (edited.AcadamicDetails || [])
-    .filter(r => r.level === "GRADUATION" || r.level === "DIPLOMA");
+  const academicList = edited.AcadamicDetails || [];
+  const tenthRec = academicList.find((r) => r.level === "TENTH") || emptyAcademic("TENTH");
+  const twelfthRec = academicList.find((r) => r.level === "TWELFTH") || emptyAcademic("TWELFTH");
+  const currentDegreeRec = academicList.find((r) => r.level === "POSTGRADUATION") || emptyAcademic("POSTGRADUATION");
+  const priorEducation = academicList.filter((r) => r.level === "GRADUATION" || r.level === "DIPLOMA");
 
   return (
     <div style={s.pageWrapper}>
@@ -464,7 +566,6 @@ const StudentProfile = () => {
           <div style={s.card}>
             <h3 style={s.sectionTitle}>Schooling Information</h3>
 
-            {/* Table header */}
             <div style={s.tableHeader}>
               <div style={{ width: 50 }} />
               <div style={{ flex: 2 }}>Board</div>
@@ -473,27 +574,83 @@ const StudentProfile = () => {
               <div style={{ flex: 1, textAlign: "center" as const }}>Year</div>
             </div>
 
-            {schoolRecords.length > 0 ? schoolRecords.map(rec => (
-              <div key={rec.id} style={s.tableRow}>
-                <div style={{ width: 50, fontWeight: 700, fontSize: 13, color: "#333" }}>
-                  {LEVEL_LABELS[rec.level]}
-                </div>
-                <div style={{ flex: 2 }}>
-                  <input value={rec.board || "-"} disabled style={{ ...s.cellInput, ...s.disabledInput }} />
-                </div>
-                <div style={{ flex: 3 }}>
-                  <input value={rec.institution_school_name} disabled style={{ ...s.cellInput, ...s.disabledInput }} />
-                </div>
-                <div style={{ flex: 1.5 }}>
-                  <input value={rec.percentage_cgpa} disabled style={{ ...s.cellInput, ...s.disabledInput, textAlign: "center" as const }} />
-                </div>
-                <div style={{ flex: 1 }}>
-                  <input value={rec.yearOfPassing} disabled style={{ ...s.cellInput, ...s.disabledInput, textAlign: "center" as const }} />
-                </div>
+            {/* XII row */}
+            <div style={s.tableRow}>
+              <div style={{ width: 50, fontWeight: 700, fontSize: 13, color: "#333" }}>XII</div>
+              <div style={{ flex: 2 }}>
+                <input
+                  value={twelfthRec.board ?? ""}
+                  onChange={(e) => updateSchoolRecord("TWELFTH", "board", e.target.value || null)}
+                  style={s.cellInput}
+                  placeholder="Board"
+                />
               </div>
-            )) : (
-              <p style={s.emptyText}>No schooling records found.</p>
-            )}
+              <div style={{ flex: 3 }}>
+                <input
+                  value={twelfthRec.institution_school_name}
+                  onChange={(e) => updateSchoolRecord("TWELFTH", "institution_school_name", e.target.value)}
+                  style={s.cellInput}
+                  placeholder="School"
+                />
+              </div>
+              <div style={{ flex: 1.5 }}>
+                <input
+                  type="text"
+                  value={twelfthRec.percentage_cgpa || ""}
+                  onChange={(e) => updateSchoolRecord("TWELFTH", "percentage_cgpa", e.target.value ? Number(e.target.value) : 0)}
+                  style={{ ...s.cellInput, textAlign: "center" as const }}
+                  placeholder="e.g. 8.75"
+                />
+              </div>
+              <div style={{ flex: 1 }}>
+                <input
+                  type="text"
+                  value={twelfthRec.yearOfPassing || ""}
+                  onChange={(e) => updateSchoolRecord("TWELFTH", "yearOfPassing", e.target.value ? Number(e.target.value) : 0)}
+                  style={{ ...s.cellInput, textAlign: "center" as const }}
+                  placeholder="Year"
+                />
+              </div>
+            </div>
+
+            {/* X row */}
+            <div style={s.tableRow}>
+              <div style={{ width: 50, fontWeight: 700, fontSize: 13, color: "#333" }}>X</div>
+              <div style={{ flex: 2 }}>
+                <input
+                  value={tenthRec.board ?? ""}
+                  onChange={(e) => updateSchoolRecord("TENTH", "board", e.target.value || null)}
+                  style={s.cellInput}
+                  placeholder="Board"
+                />
+              </div>
+              <div style={{ flex: 3 }}>
+                <input
+                  value={tenthRec.institution_school_name}
+                  onChange={(e) => updateSchoolRecord("TENTH", "institution_school_name", e.target.value)}
+                  style={s.cellInput}
+                  placeholder="School"
+                />
+              </div>
+              <div style={{ flex: 1.5 }}>
+                <input
+                  type="text"
+                  value={tenthRec.percentage_cgpa || ""}
+                  onChange={(e) => updateSchoolRecord("TENTH", "percentage_cgpa", e.target.value ? Number(e.target.value) : 0)}
+                  style={{ ...s.cellInput, textAlign: "center" as const }}
+                  placeholder="e.g. 9.50"
+                />
+              </div>
+              <div style={{ flex: 1 }}>
+                <input
+                  type="text"
+                  value={tenthRec.yearOfPassing || ""}
+                  onChange={(e) => updateSchoolRecord("TENTH", "yearOfPassing", e.target.value ? Number(e.target.value) : 0)}
+                  style={{ ...s.cellInput, textAlign: "center" as const }}
+                  placeholder="Year"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Current Degree */}
@@ -506,60 +663,118 @@ const StudentProfile = () => {
               <div style={{ flex: 1.5, textAlign: "center" as const }}>Passing Year</div>
             </div>
 
-            {currentDegree.length > 0 ? currentDegree.map(rec => (
-              <div key={rec.id} style={s.tableRow}>
-                <div style={{ flex: 4 }}>
-                  <input value={deptLabel} disabled style={{ ...s.cellInput, ...s.disabledInput }} />
-                </div>
-                <div style={{ flex: 1.5 }}>
-                  <input value={rec.percentage_cgpa} disabled style={{ ...s.cellInput, ...s.disabledInput, textAlign: "center" as const }} />
-                </div>
-                <div style={{ flex: 1.5 }}>
-                  <input value={rec.yearOfPassing} disabled style={{ ...s.cellInput, ...s.disabledInput, textAlign: "center" as const }} />
-                </div>
+            <div style={s.tableRow}>
+              <div style={{ flex: 4 }}>
+                <input value={deptLabel} disabled style={{ ...s.cellInput, ...s.disabledInput }} />
               </div>
-            )) : (
-              <p style={s.emptyText}>No current degree record found.</p>
-            )}
+              <div style={{ flex: 1.5 }}>
+                <input
+                  type="text"
+                  value={currentDegreeRec.percentage_cgpa || ""}
+                  onChange={(e) => updateCurrentDegree("percentage_cgpa", e.target.value ? Number(e.target.value) : 0)}
+                  style={{ ...s.cellInput, textAlign: "center" as const }}
+                  placeholder="e.g. 7.48"
+                />
+              </div>
+              <div style={{ flex: 1.5 }}>
+                <input
+                  type="text"
+                  value={currentDegreeRec.yearOfPassing || ""}
+                  onChange={(e) => updateCurrentDegree("yearOfPassing", e.target.value ? Number(e.target.value) : 0)}
+                  style={{ ...s.cellInput, textAlign: "center" as const }}
+                  placeholder="e.g. 2026"
+                />
+              </div>
+            </div>
           </div>
 
-          {/* Prior Education */}
-          {(edited.department === "MTECH" || edited.department === "IMTECH") && (
-            <div style={{ ...s.card, marginTop: 20 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-                <h3 style={{ ...s.sectionTitle, marginBottom: 0 }}>
-                  Education details prior to University (Only for P.G. & Ph.D Students)
-                </h3>
-              </div>
+          {/* Prior Education (P.G. & Ph.D) – all departments can add prior details */}
+          <div style={{ ...s.card, marginTop: 20 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <h3 style={{ ...s.sectionTitle, marginBottom: 0 }}>
+                Education details prior to UOH (Only for P.G. & Ph.D Students)
+              </h3>
+              <button
+                type="button"
+                onClick={addPriorDegree}
+                style={{
+                  padding: "8px 16px",
+                  fontSize: 14,
+                  fontWeight: 600,
+                  borderRadius: 6,
+                  border: "none",
+                  backgroundColor: "#1a73e8",
+                  color: "#fff",
+                  cursor: "pointer",
+                }}
+              >
+                Add Degree
+              </button>
+            </div>
 
-              {priorEducation.length > 0 ? priorEducation.map(rec => (
-                <div key={rec.id} style={s.priorBlock}>
+            {priorEducation.length === 0 ? (
+              <p style={s.emptyText}>No prior education added. Click &quot;Add Degree&quot; to add.</p>
+            ) : (
+              priorEducation.map((rec, idx) => (
+                <div key={rec.id || `prior-${idx}`} style={s.priorCard}>
                   <div style={s.row}>
                     <div style={s.fieldGroup}>
                       <label style={s.label}>Degree</label>
-                      <input value={LEVEL_LABELS[rec.level] || rec.level} disabled style={{ ...s.input, ...s.disabledInput }} />
+                      <input
+                        value={rec.university ?? ""}
+                        onChange={(e) => updatePriorRecord(idx, "university", e.target.value || null)}
+                        style={s.input}
+                        placeholder="e.g. B.Tech Computer Science & Engineering"
+                      />
                     </div>
-                    <div style={s.fieldGroup}>
-                      <label style={s.label}>CGPA/Percentage</label>
-                      <input value={rec.percentage_cgpa} disabled style={{ ...s.input, ...s.disabledInput }} />
-                    </div>
-                  </div>
-                  <div style={{ ...s.row, marginTop: 12 }}>
                     <div style={s.fieldGroup}>
                       <label style={s.label}>Institute</label>
-                      <input value={rec.institution_school_name} disabled style={{ ...s.input, ...s.disabledInput }} />
+                      <input
+                        value={rec.institution_school_name}
+                        onChange={(e) => updatePriorRecord(idx, "institution_school_name", e.target.value)}
+                        style={s.input}
+                        placeholder="e.g. JNTUA College of Engineering, Pulivendula"
+                      />
+                    </div>
+                  </div>
+                  <div style={{ ...s.row, marginTop: 12, alignItems: "flex-end" }}>
+                    <div style={s.fieldGroup}>
+                      <label style={s.label}>CGPA/Percentage</label>
+                      <input
+                        type="text"
+                        value={rec.percentage_cgpa || ""}
+                        onChange={(e) => updatePriorRecord(idx, "percentage_cgpa", e.target.value ? Number(e.target.value) : 0)}
+                        style={s.input}
+                        placeholder="e.g. 7.14"
+                      />
                     </div>
                     <div style={s.fieldGroup}>
                       <label style={s.label}>Passing Year</label>
-                      <input value={rec.yearOfPassing} disabled style={{ ...s.input, ...s.disabledInput }} />
+                      <input
+                        type="text"
+                        value={rec.yearOfPassing || ""}
+                        onChange={(e) => updatePriorRecord(idx, "yearOfPassing", e.target.value ? Number(e.target.value) : 0)}
+                        style={s.input}
+                        placeholder="e.g. 2023"
+                      />
+                    </div>
+                    <div style={{ flex: 0, marginLeft: "auto", paddingBottom: 6 }}>
+                      <button
+                        type="button"
+                        onClick={() => removePriorDegree(idx)}
+                        style={s.deletePriorBtn}
+                        title="Delete degree"
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                      </button>
                     </div>
                   </div>
                 </div>
-              )) : (
-                <p style={s.emptyText}>No prior education records found.</p>
-              )}
-            </div>
-          )}
+              ))
+            )}
+          </div>
 
           {/* Action Buttons */}
           <div style={{ ...s.buttonRow, marginTop: 24 }}>
@@ -597,7 +812,7 @@ const s: Record<string, React.CSSProperties> = {
     backgroundColor: "#f5f7fa",
     minHeight: "100vh",
     padding: "24px 32px",
-    fontFamily: "'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
+    fontFamily: "ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace",
     color: "#333",
     overflowY: "auto",
   },
@@ -789,6 +1004,25 @@ const s: Record<string, React.CSSProperties> = {
     marginBottom: 20,
     paddingBottom: 20,
     borderBottom: "1px solid #e0e0e0",
+  },
+  priorCard: {
+    marginBottom: 20,
+    padding: "16px 20px",
+    backgroundColor: "#fafafa",
+    borderRadius: 8,
+    border: "1px solid #e8e8e8",
+  },
+  deletePriorBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 6,
+    border: "1px solid #d32f2f",
+    backgroundColor: "#fff",
+    color: "#d32f2f",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   emptyText: {
     color: "#999",

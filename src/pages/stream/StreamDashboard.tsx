@@ -145,6 +145,8 @@ const StreamDashboard = () => {
     }));
   };
 
+  const [jdUploading, setJdUploading] = useState(false);
+
   const handlePostFormChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -159,6 +161,31 @@ const StreamDashboard = () => {
       }
       return { ...prev, [name]: value };
     });
+  };
+
+  const handleJdFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setJdUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("jd", file);
+      const res = await api.post("/company/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      const path = res.data?.jd_file_path;
+      if (path) setPostForm((prev) => ({ ...prev, jd_file_path: path }));
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      setPostMessage(msg || "JD upload failed");
+    } finally {
+      setJdUploading(false);
+      e.target.value = "";
+    }
+  };
+
+  const clearJdFile = () => {
+    setPostForm((prev) => ({ ...prev, jd_file_path: "" }));
   };
 
   const resetForm = () => {
@@ -313,13 +340,28 @@ const StreamDashboard = () => {
                 style={{ ...styles.postInput, ...styles.postTextArea }}
                 required
               />
-              <input
-                name="jd_file_path"
-                value={postForm.jd_file_path}
-                onChange={handlePostFormChange}
-                placeholder="JD Link / File Path"
-                style={styles.postInput}
-              />
+              <div style={styles.jdUploadRow}>
+                <label style={styles.jdUploadLabel}>
+                  <span style={styles.jdUploadBtn}>
+                    {jdUploading ? "Uploading…" : "Upload JD file"}
+                  </span>
+                  <input
+                    type="file"
+                    accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    onChange={handleJdFileChange}
+                    disabled={jdUploading}
+                    style={{ display: "none" }}
+                  />
+                </label>
+                {postForm.jd_file_path ? (
+                  <span style={styles.jdUploaded}>
+                    {postForm.jd_file_path.split("/").pop()}
+                    <button type="button" onClick={clearJdFile} style={styles.jdClearBtn}>Clear</button>
+                  </span>
+                ) : (
+                  <span style={styles.jdPlaceholder}>No file uploaded</span>
+                )}
+              </div>
               <input
                 name="skillsRequired"
                 value={postForm.skillsRequired}
@@ -540,7 +582,20 @@ const StreamDashboard = () => {
                   <div>Country</div>
                   <div>{displayValue(selectedCompany.country)}</div>
                   <div>JD File / Link</div>
-                  <div>{displayValue(selectedCompany.jd_file_path)}</div>
+                  <div>
+                    {selectedCompany.jd_file_path ? (
+                      <a
+                        href={`${new URL(api.defaults.baseURL!).origin}${selectedCompany.jd_file_path}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={styles.jdDownloadLink}
+                      >
+                        Download JD ({selectedCompany.jd_file_path.split("/").pop()})
+                      </a>
+                    ) : (
+                      displayValue(selectedCompany.jd_file_path)
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -625,7 +680,7 @@ const styles: Record<string, React.CSSProperties> = {
   page: {
     minHeight: "100vh",
     backgroundColor: "#f2f2f2",
-    fontFamily: "'Segoe UI', Tahoma, sans-serif",
+    fontFamily: "ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace",
     color: "#2f2f2f",
   },
   main: {
@@ -753,6 +808,48 @@ const styles: Record<string, React.CSSProperties> = {
     minHeight: 80,
     resize: "vertical",
   },
+  jdUploadRow: {
+    display: "flex",
+    alignItems: "center",
+    gap: 12,
+    marginBottom: 10,
+    flexWrap: "wrap",
+  },
+  jdUploadLabel: {
+    cursor: "pointer",
+  },
+  jdUploadBtn: {
+    display: "inline-block",
+    padding: "10px 16px",
+    fontSize: 14,
+    fontWeight: 600,
+    borderRadius: 6,
+    border: "1px solid #1a73e8",
+    backgroundColor: "#e8f0fe",
+    color: "#1a73e8",
+    pointerEvents: "none",
+  },
+  jdUploaded: {
+    fontSize: 13,
+    color: "#1f2937",
+    display: "flex",
+    alignItems: "center",
+    gap: 8,
+  },
+  jdPlaceholder: {
+    fontSize: 13,
+    color: "#64748b",
+  },
+  jdClearBtn: {
+    padding: "4px 10px",
+    fontSize: 12,
+    borderRadius: 4,
+    border: "1px solid #dc2626",
+    backgroundColor: "#fff",
+    color: "#dc2626",
+    cursor: "pointer",
+    fontWeight: 600,
+  },
   formRow: {
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
@@ -875,6 +972,11 @@ const styles: Record<string, React.CSSProperties> = {
     rowGap: 8,
     fontSize: 12,
     alignItems: "start",
+  },
+  jdDownloadLink: {
+    color: "#1a73e8",
+    fontWeight: 600,
+    textDecoration: "none",
   },
   table: {
     width: "100%",

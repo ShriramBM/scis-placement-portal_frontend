@@ -374,38 +374,51 @@ const StudentDashboard = () => {
             ← Back to list
           </button>
 
-          <div className="sd-section">
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "10px", marginBottom: "18px" }}>
-              <h2 className="sd-company-title">{selectedCompany.name}</h2>
-              {deadlinePassed && (
-                <span style={{ backgroundColor: "#ef4444", color: "#fff", fontSize: "12px", fontWeight: "bold", fontFamily: "monospace", padding: "4px 10px", borderRadius: "6px", border: "2px solid black" }}>
-                  Deadline Passed
-                </span>
-              )}
-            </div>
-            <div className="sd-kv-grid">
-              {([
-                ["Job Title",            selectedCompany.jobTitle || "—"],
-                ["Department",           selectedCompany.department || "—"],
-                ["Eligible Streams",     selectedCompany.streamsAllowed?.length ? selectedCompany.streamsAllowed.join(", ") : "All"],
-                ["CTC",                  fmtMoney(selectedCompany.package)],
-                ["Deadline",             new Date(selectedCompany.deadline).toLocaleString("en-IN")],
-                ["Website",              selectedCompany.website || "—"],
-                ["Job Location",         selectedCompany.jobLocation || "—"],
-                ["No. of Vacancies",     String(selectedCompany.no_vacancies ?? "—")],
-                ["Nature of Business",   selectedCompany.nature_of_business || "—"],
-                ["Type of Organization", selectedCompany.type_of_organization || "—"],
-                ["Address",              [selectedCompany.address, selectedCompany.state, selectedCompany.country].filter(Boolean).join(", ") || "—"],
-                ["Required Skills",      selectedCompany.skillsRequired?.length ? selectedCompany.skillsRequired.join(", ") : "—"],
-                ["JD File",              selectedCompany.jd_file_path || "—"],
-                ["Remarks",              selectedCompany.remarks || "—"],
-                ["Description",          selectedCompany.description || "—"],
-              ] as [string, string][]).map(([label, val]) => (
-                <>
-                  <div key={`l-${label}`} className="sd-kv-label">{label}</div>
-                  <div key={`v-${label}`} className="sd-kv-value">{val}</div>
-                </>
-              ))}
+          <div style={styles.section}>
+            <h2 style={styles.companyTitle}>{selectedCompany.name}</h2>
+            <div style={styles.keyValueGrid}>
+              <div>Job Title</div>
+              <div>{selectedCompany.jobTitle || "-"}</div>
+              <div>Department</div>
+              <div>{selectedCompany.department || "-"}</div>
+              <div>Eligible Streams</div>
+              <div>
+                {selectedCompany.streamsAllowed?.length
+                  ? selectedCompany.streamsAllowed.join(", ")
+                  : "All"}
+              </div>
+              <div>CTC</div>
+              <div>{fmtMoney(selectedCompany.package)}</div>
+              <div>Deadline</div>
+              <div>{new Date(selectedCompany.deadline).toLocaleString("en-IN")}</div>
+              <div>Website</div>
+              <div>{selectedCompany.website || "-"}</div>
+              <div>Job Location</div>
+              <div>{selectedCompany.jobLocation || "-"}</div>
+              <div>No. of Vacancies</div>
+              <div>{selectedCompany.no_vacancies ?? "-"}</div>
+              <div>Nature of Business</div>
+              <div>{selectedCompany.nature_of_business || "-"}</div>
+              <div>Type of Organization</div>
+              <div>{selectedCompany.type_of_organization || "-"}</div>
+              <div>Address</div>
+              <div>
+                {[selectedCompany.address, selectedCompany.state, selectedCompany.country]
+                  .filter(Boolean)
+                  .join(", ") || "-"}
+              </div>
+              <div>Required Skills</div>
+              <div>
+                {selectedCompany.skillsRequired?.length
+                  ? selectedCompany.skillsRequired.join(", ")
+                  : "-"}
+              </div>
+              <div>JD File</div>
+              <div>{selectedCompany.jd_file_path || "-"}</div>
+              <div>Remarks</div>
+              <div>{selectedCompany.remarks || "-"}</div>
+              <div>Description</div>
+              <div>{selectedCompany.description || "-"}</div>
             </div>
           </div>
 
@@ -423,204 +436,221 @@ const StudentDashboard = () => {
   );
 };
 
-// ── All styles scoped with sd- prefix ─────────────────────────────────────────
-const sdStyles = `
-  @keyframes sd-dropdown-fade {
-    0%   { opacity: 0; transform: translateY(-8px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-
-  .sd-container {
-    min-height: 100vh;
-    background-color: #ffffff;
-    padding: 36px 30px;
-    font-family: monospace;
-    color: black;
-    box-sizing: border-box;
-  }
-  .sd-title {
-    margin: 0;
-    font-size: 30px;
-    font-weight: bold;
-    font-family: monospace;
-    border-bottom: 2px solid black;
-    padding-bottom: 10px;
-    display: inline-block;
-  }
-  .sd-card {
-    background-color: #ffffff;
-    border: 2px solid black;
-    border-radius: 18px;
-    box-shadow: 8px 8px 0px black;
-    padding: 20px;
-  }
-  .sd-filter-row {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 14px;
-    align-items: center;
-  }
-  .sd-search {
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 2px solid black;
-    background-color: #fff;
-    color: #000;
-    font-family: monospace;
-    font-weight: 600;
-    font-size: 13px;
-    outline: none;
-    box-sizing: border-box;
-    flex: 2;
-    min-width: 200px;
-  }
-  .sd-table-wrap {
-    border: 2px solid black;
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  .sd-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #fff;
-  }
-  .sd-th {
-    padding: 12px 14px;
-    text-align: center;
-    border-bottom: 2px solid black;
-    background-color: #f5f5f5;
-    color: #000;
-    font-size: 12px;
-    font-weight: 700;
-    font-family: monospace;
-    letter-spacing: 0.5px;
-  }
-  .sd-td {
-    padding: 12px 14px;
-    text-align: center;
-    border-bottom: 1px solid #ddd;
-    color: #111;
-    font-size: 13px;
-    font-family: monospace;
-  }
-  .sd-row { cursor: pointer; }
-  .sd-row:hover .sd-td { background-color: #f5f5f5; }
-  .sd-empty {
-    text-align: center;
-    padding: 24px;
-    color: #888;
-    font-size: 13px;
-    font-family: monospace;
-  }
-  .sd-back-btn {
-    border: 2px solid black;
-    border-radius: 8px;
-    background-color: #ffffff;
-    padding: 8px 16px;
-    font-weight: bold;
-    font-family: monospace;
-    font-size: 14px;
-    cursor: pointer;
-    box-shadow: 4px 4px 0px black;
-    align-self: flex-start;
-    transition: all 0.2s cubic-bezier(.25,.8,.25,1);
-    color: black;
-  }
-  .sd-section {
-    background-color: #ffffff;
-    border: 2px solid black;
-    border-radius: 18px;
-    box-shadow: 8px 8px 0px black;
-    padding: 24px;
-  }
-  .sd-company-title {
-    margin: 0;
-    font-size: 26px;
-    font-weight: bold;
-    font-family: monospace;
-  }
-  .sd-kv-grid {
-    display: grid;
-    grid-template-columns: 200px 1fr;
-    column-gap: 16px;
-    row-gap: 10px;
-    font-size: 13px;
-    font-family: monospace;
-  }
-  .sd-kv-label {
-    font-weight: 700;
-    color: #333;
-    border-right: 2px solid black;
-    padding-right: 12px;
-  }
-  .sd-kv-value {
-    color: #111;
-    word-break: break-word;
-  }
-  .sd-btn-group {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  .sd-action-btn { flex-shrink: 0; }
-
-  /* ── Tablet (≤768px) ── */
-  @media (max-width: 768px) {
-    .sd-container   { padding: 20px 16px; }
-    .sd-title       { font-size: 26px; }
-    .sd-filter-row  { flex-direction: column; }
-    .sd-filter-row > * { width: 100% !important; min-width: unset !important; }
-    .sd-search      { flex: unset; }
-    .sd-kv-grid     { grid-template-columns: 140px 1fr; }
-    .sd-section     { padding: 18px; }
-  }
-
-  /* ── Mobile (≤480px) ── */
-  @media (max-width: 480px) {
-    .sd-container     { padding: 14px 10px; }
-    .sd-title         { font-size: 22px; }
-    .sd-card          { padding: 14px; border-radius: 12px; box-shadow: 4px 4px 0px black; }
-    .sd-section       { padding: 14px; border-radius: 12px; box-shadow: 4px 4px 0px black; }
-    .sd-company-title { font-size: 20px; }
-    .sd-kv-grid       { grid-template-columns: 1fr; }
-    .sd-kv-label      { border-right: none; border-bottom: 2px solid black; padding-bottom: 4px; }
-    .sd-back-btn      { width: 100%; text-align: center; }
-    .sd-btn-group     { flex-direction: column; }
-    .sd-btn-group .sd-action-btn { width: 100%; }
-
-    /* Table → card rows */
-    .sd-table thead   { display: none; }
-    .sd-table tbody   { display: flex; flex-direction: column; gap: 12px; padding: 12px; }
-    .sd-table .sd-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px 10px;
-      border: 2px solid black;
-      border-radius: 12px;
-      padding: 12px;
-      box-shadow: 4px 4px 0px black;
-    }
-    .sd-table .sd-row:hover { background-color: #f9f9f9; }
-    .sd-td {
-      border: none !important;
-      padding: 4px 0 !important;
-      text-align: left !important;
-      font-size: 12px !important;
-      display: flex !important;
-      flex-direction: column !important;
-    }
-    .sd-td::before {
-      content: attr(data-label);
-      font-size: 10px;
-      font-weight: 700;
-      color: #666;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 2px;
-    }
-    .sd-td:last-child { grid-column: 1 / -1; }
-  }
-`;
+const styles: Record<string, React.CSSProperties> = {
+  container: {
+    minHeight: "100vh",
+    backgroundColor: "#f2f2f2",
+    padding: "22px",
+    color: "#1f2937",
+  },
+  loading: {
+    minHeight: "100vh",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "16px",
+    color: "#4b5563",
+    backgroundColor: "#f2f2f2",
+  },
+  header: {
+    marginBottom: "14px",
+  },
+  title: {
+    margin: 0,
+    fontSize: "30px",
+    fontWeight: 600,
+    color: "#202020",
+  },
+  subtitle: {
+    margin: "6px 0 0",
+    color: "#666",
+    fontSize: "13px",
+  },
+  filterRow: {
+    display: "flex",
+    gap: "10px",
+    flexWrap: "wrap",
+    marginBottom: "10px",
+  },
+  filterInput: {
+    padding: "10px 12px",
+    borderRadius: "8px",
+    border: "1px solid #d1d5db",
+    backgroundColor: "#fff",
+    color: "#111827",
+    minWidth: "170px",
+    outline: "none",
+    fontSize: "13px",
+  },
+  countText: {
+    fontSize: "12px",
+    color: "#64748b",
+    fontWeight: 600,
+    marginBottom: "10px",
+  },
+  empty: {
+    backgroundColor: "#fff",
+    border: "1px solid #e5e7eb",
+    borderRadius: "10px",
+    padding: "18px",
+    color: "#64748b",
+  },
+  tableWrap: {
+    overflowX: "auto",
+    border: "1px solid #e5e7eb",
+    borderRadius: "8px",
+  },
+  table: {
+    width: "100%",
+    borderCollapse: "collapse",
+    backgroundColor: "#fff",
+  },
+  th: {
+    padding: "12px",
+    textAlign: "center",
+    borderBottom: "1px solid #e5e7eb",
+    backgroundColor: "#f8fafc",
+    color: "#334155",
+    fontSize: "12px",
+    fontWeight: 700,
+  },
+  td: {
+    padding: "12px",
+    textAlign: "center",
+    borderBottom: "1px solid #eef2f7",
+    color: "#1f2937",
+    fontSize: "13px",
+  },
+  row: {
+    cursor: "pointer",
+  },
+  emptyCell: {
+    textAlign: "center",
+    padding: "20px",
+    color: "#64748b",
+    fontSize: "13px",
+  },
+  card: {
+    backgroundColor: "#fff",
+    border: "1px solid #e5e7eb",
+    borderRadius: "10px",
+    padding: "14px",
+    boxShadow: "0 2px 6px rgba(0,0,0,0.04)",
+  },
+  detailsLayout: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "12px",
+  },
+  backBtn: {
+    border: "none",
+    backgroundColor: "transparent",
+    padding: 0,
+    color: "#1f67aa",
+    fontWeight: 700,
+    cursor: "pointer",
+    fontSize: "14px",
+    textAlign: "left",
+  },
+  section: {
+    backgroundColor: "#fff",
+    border: "1px solid #e5e7eb",
+    borderRadius: "10px",
+    padding: "14px",
+    boxShadow: "0 2px 6px rgba(0,0,0,0.04)",
+  },
+  companyTitle: {
+    margin: "0 0 10px",
+    fontSize: "24px",
+    fontWeight: 600,
+    color: "#202020",
+  },
+  keyValueGrid: {
+    display: "grid",
+    gridTemplateColumns: "220px 1fr",
+    columnGap: "12px",
+    rowGap: "8px",
+    fontSize: "13px",
+  },
+  cardHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    gap: "10px",
+    marginBottom: "8px",
+  },
+  companyName: {
+    margin: 0,
+    fontSize: "20px",
+    color: "#1f2937",
+  },
+  role: {
+    margin: "3px 0 0",
+    color: "#64748b",
+    fontSize: "13px",
+  },
+  description: {
+    margin: "8px 0",
+    color: "#334155",
+    fontSize: "13px",
+    lineHeight: 1.5,
+  },
+  metaRow: {
+    display: "flex",
+    gap: "24px",
+    flexWrap: "wrap",
+    marginBottom: "8px",
+  },
+  metaLabel: {
+    display: "block",
+    color: "#64748b",
+    fontSize: "12px",
+    fontWeight: 600,
+  },
+  metaValue: {
+    color: "#111827",
+    fontSize: "13px",
+    fontWeight: 600,
+  },
+  buttonGroup: {
+    display: "flex",
+    gap: "10px",
+    marginTop: "10px",
+    flexWrap: "wrap",
+  },
+  actionBtn: {
+    border: "none",
+    padding: "8px 14px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontWeight: 700,
+    fontSize: "12px",
+  },
+  accept: {
+    backgroundColor: "#22c55e",
+    color: "#fff",
+  },
+  reject: {
+    backgroundColor: "#ef4444",
+    color: "#fff",
+  },
+  ignore: {
+    backgroundColor: "#f59e0b",
+    color: "#fff",
+  },
+  deadlineText: {
+    color: "#dc2626",
+    margin: "6px 0",
+    fontWeight: "bold" as const,
+  },
+  statusPill: {
+    padding: "4px 10px",
+    borderRadius: "999px",
+    fontSize: "12px",
+    fontWeight: 700,
+    letterSpacing: "0.2px",
+    display: "inline-block",
+  },
+};
 
 export default StudentDashboard;
