@@ -88,14 +88,14 @@ const Login = () => {
           style={styles.button}
           className="login-button"
           onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = "0px 0px 0px black";
+            e.currentTarget.style.boxShadow = "0px 0px 0px #5f7aa2";
             e.currentTarget.style.transform = "translate(4px,4px)";
-            e.currentTarget.style.backgroundColor = "#e8e8e8";
+            e.currentTarget.style.backgroundColor = "#9ee8d8";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = "4px 4px 0px black";
+            e.currentTarget.style.boxShadow = "4px 4px 0px #5f7aa2";
             e.currentTarget.style.transform = "translate(0px,0px)";
-            e.currentTarget.style.backgroundColor = "#ffffff";
+            e.currentTarget.style.backgroundColor = "#b8f2e6";
           }}
         >
           Login
@@ -120,7 +120,7 @@ const Login = () => {
 const styles = {
   container: {
     height: "100vh",
-    backgroundColor: "#ffffff",
+    backgroundColor: "#f6f4ff",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -129,19 +129,19 @@ const styles = {
     padding: "20px",
   },
   card: {
-    backgroundColor: "#ffffff",
+    backgroundColor: "#fffdf8",
     padding: "35px",
     borderRadius: "18px",
     width: "420px",
     display: "flex",
     flexDirection: "column" as const,
     gap: "15px",
-    border: "2px solid black",
-    boxShadow: "8px 8px 0px black",
+    border: "2px solid #9aa6d1",
+    boxShadow: "8px 8px 0px #b8c0e6",
     animation: "popIn 0.4s ease-out",
   },
   title: {
-    color: "black",
+    color: "#4b4f7a",
     fontSize: "28px",
     fontWeight: "bold" as const,
     marginBottom: "5px",
@@ -150,10 +150,11 @@ const styles = {
   input: {
     padding: "12px",
     borderRadius: "8px",
-    border: "2px solid black",
+    border: "2px solid #9aa6d1",
     fontSize: "15px",
     fontFamily: "monospace",
-    backgroundColor: "white",
+    backgroundColor: "#f8faff",
+    color: "#3f4566",
     outline: "none",
     fontWeight: 600,
     letterSpacing: "0.5px",
@@ -161,31 +162,31 @@ const styles = {
   },
   button: {
     padding: "12px",
-    backgroundColor: "#ffffff",
-    color: "black",
-    border: "2px solid black",
+    backgroundColor: "#b8f2e6",
+    color: "#2f3f5f",
+    border: "2px solid #5f7aa2",
     borderRadius: "8px",
     cursor: "pointer",
     fontWeight: "bold" as const,
-    boxShadow: "4px 4px 0px black",
+    boxShadow: "4px 4px 0px #5f7aa2",
     fontSize: "15px",
     transition: "all 0.3s cubic-bezier(.25,.8,.25,1)",
     fontFamily: "monospace",
   },
   error: {
-    color: "red",
+    color: "#c75b7a",
     fontSize: "14px",
     minHeight: "18px",
     fontFamily: "monospace",
   },
   prompt: {
-    color: "black",
+    color: "#4b4f7a",
     fontSize: "14px",
     textAlign: "center" as const,
     fontFamily: "monospace",
   },
   link: {
-    color: "black",
+    color: "#5f7aa2",
     cursor: "pointer",
     fontWeight: "bold" as const,
     textDecoration: "none",

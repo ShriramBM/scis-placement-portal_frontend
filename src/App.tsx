@@ -8,7 +8,7 @@ import Layout from './components/Layout'
 import StudentProfile from './pages/student/StudentProfile'
 import MyApplications from './pages/student/MyApplications'
 import Applicants from './pages/stream/Applicants'
-import StreamHome from './pages/stream/StreamHome'
+import Students from './pages/stream/Students'
 import StreamLayout from './pages/stream/StreamLayout'
 import CoordinatorLayout from './pages/pc/CoordinatorLayout'
 import ApplicationsReview from './pages/pc/ApplicationsReview'
@@ -20,7 +20,6 @@ function App() {
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/stream" element={<StreamDashboard />} />
       <Route
   path="/student"
   element={
@@ -48,8 +47,9 @@ function App() {
   }
 />
     <Route path="/stream" element={<StreamLayout />}>
-     <Route index element={<StreamHome />} />
+     <Route index element={<StreamDashboard />} />
     <Route path="applicants" element={<Applicants />} />
+    <Route path="students" element={<Students />} />
     </Route>
 
 <Route path="/coordinator" element={<CoordinatorLayout />}>

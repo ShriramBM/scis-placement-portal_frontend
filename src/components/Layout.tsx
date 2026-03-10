@@ -18,12 +18,12 @@ const styles = {
   container: {
     display: "flex",
     minHeight: "100vh",
-    backgroundColor: "#0f172a",
-    color: "white",
+    backgroundColor: "#f2f2f2",
+    color: "#111827",
   },
   content: {
     flex: 1,
-    padding: "20px",
+    padding: 0,
   },
 };
 
