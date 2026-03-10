@@ -121,6 +121,36 @@ const Students = () => {
     }
   };
 
+  const handlePlace = async (e: React.MouseEvent | undefined, studentId: number) => {
+    e?.stopPropagation();
+    try {
+      await api.put(`/student/${studentId}/placed`);
+      setStudents((prev) =>
+        prev.map((s) => (s.id === studentId ? { ...s, placed: true } : s))
+      );
+      if (selectedStudent?.id === studentId) {
+        setSelectedStudent((prev) => (prev ? { ...prev, placed: true } : null));
+      }
+    } catch {
+      alert("Failed to mark as placed");
+    }
+  };
+
+  const handleUnplace = async (e: React.MouseEvent | undefined, studentId: number) => {
+    e?.stopPropagation();
+    try {
+      await api.put(`/student/${studentId}/unplaced`);
+      setStudents((prev) =>
+        prev.map((s) => (s.id === studentId ? { ...s, placed: false } : s))
+      );
+      if (selectedStudent?.id === studentId) {
+        setSelectedStudent((prev) => (prev ? { ...prev, placed: false } : null));
+      }
+    } catch {
+      alert("Failed to mark as unplaced");
+    }
+  };
+
   const filteredStudents = useMemo(() => {
     const search = filters.search.trim().toLowerCase();
     return students.filter((student) => {
@@ -210,6 +240,7 @@ const Students = () => {
                     <th style={styles.th}>Phone</th>
                     <th style={styles.th}>Placed</th>
                     <th style={styles.th}>Blocked</th>
+                    <th style={styles.th}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -237,6 +268,27 @@ const Students = () => {
                         <span style={student.blocked ? styles.badTag : styles.goodTag}>
                           {student.blocked ? "YES" : "NO"}
                         </span>
+                      </td>
+                      <td style={styles.td} onClick={(e) => e.stopPropagation()}>
+                        <div style={styles.actionCell}>
+                          {student.placed ? (
+                            <button
+                              type="button"
+                              onClick={(e) => handleUnplace(e, student.id)}
+                              style={styles.unplaceBtn}
+                            >
+                              Unplace
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={(e) => handlePlace(e, student.id)}
+                              style={styles.placeBtn}
+                            >
+                              Place
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -281,6 +333,25 @@ const Students = () => {
                   <div>Permanent Address</div><div>{selectedStudent.studentProfile?.permanentAddress || "-"}</div>
                   <div>Placed</div><div>{selectedStudent.placed ? "YES" : "NO"}</div>
                   <div>Blocked</div><div>{selectedStudent.blocked ? "YES" : "NO"}</div>
+                </div>
+                <div style={styles.detailActions}>
+                  {selectedStudent.placed ? (
+                    <button
+                      type="button"
+                      onClick={() => handleUnplace(undefined, selectedStudent.id)}
+                      style={styles.unplaceBtn}
+                    >
+                      Unplace
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => handlePlace(undefined, selectedStudent.id)}
+                      style={styles.placeBtn}
+                    >
+                      Place
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -467,6 +538,37 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: 700,
     backgroundColor: "#f1f5f9",
     color: "#64748b",
+  },
+  actionCell: {
+    display: "flex",
+    gap: 8,
+    justifyContent: "center",
+    flexWrap: "wrap",
+  },
+  placeBtn: {
+    padding: "6px 12px",
+    borderRadius: 6,
+    border: "none",
+    backgroundColor: "#22c55e",
+    color: "#fff",
+    fontWeight: 600,
+    fontSize: 12,
+    cursor: "pointer",
+  },
+  unplaceBtn: {
+    padding: "6px 12px",
+    borderRadius: 6,
+    border: "none",
+    backgroundColor: "#f59e0b",
+    color: "#fff",
+    fontWeight: 600,
+    fontSize: 12,
+    cursor: "pointer",
+  },
+  detailActions: {
+    marginTop: 12,
+    display: "flex",
+    gap: 10,
   },
   detailsLayout: {
     display: "flex",

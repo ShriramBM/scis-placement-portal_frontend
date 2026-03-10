@@ -12,7 +12,6 @@ import Students from './pages/stream/Students'
 import StreamLayout from './pages/stream/StreamLayout'
 import CoordinatorLayout from './pages/pc/CoordinatorLayout'
 import ApplicationsReview from './pages/pc/ApplicationsReview'
-import CoordinatorLogin from './pages/pc/CoordinatorLogin'
 import StudentManagement from './pages/pc/StudentManagment'
 function App() {
 
@@ -54,9 +53,8 @@ function App() {
 
 <Route path="/coordinator" element={<CoordinatorLayout />}>
   <Route index element={<ApplicationsReview />} />
-    <Route path="management" element={<StudentManagement />} />
-</Route>
-<Route path="/coordinator/login" element={<CoordinatorLogin />} /> 
+  <Route path="management" element={<StudentManagement />} />
+</Route> 
 
     </Routes>
   )
