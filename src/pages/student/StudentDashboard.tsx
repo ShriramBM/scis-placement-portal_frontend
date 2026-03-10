@@ -162,9 +162,10 @@ const StudentDashboard = () => {
 const styles = {
   container: {
     minHeight: "100vh",
-    backgroundColor: "#0f172a",
+    backgroundColor: "#ffffff",
     padding: "30px",
-    color: "white",
+    color: "black",
+    fontFamily: "monospace",
   },
   title: {
     marginBottom: "20px",
@@ -207,4 +208,4 @@ const styles = {
   },
 };
 
-export default StudentDashboard;
+export default StudentDashboard
