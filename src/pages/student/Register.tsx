@@ -8,7 +8,6 @@ const CustomSelect = ({
   onChange, 
   options, 
   placeholder = "Select",
-  required = false,
   style = {}
 }: { 
   name: string;
@@ -16,7 +15,6 @@ const CustomSelect = ({
   onChange: (name: string, value: string) => void;
   options: { value: string; label: string }[];
   placeholder?: string;
-  required?: boolean;
   style?: React.CSSProperties;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,11 +44,11 @@ const CustomSelect = ({
           justifyContent: "space-between",
           alignItems: "center",
           paddingRight: "12px",
-          backgroundColor: "#ffffff",
+          backgroundColor: "#f8faff",
         }}
       >
         <span style={{ 
-          color: value ? "#000000" : "#666",
+          color: value ? "#3f4566" : "#8d96b8",
           fontFamily: "monospace",
           fontWeight: 600,
         }}>
@@ -74,10 +72,10 @@ const CustomSelect = ({
               }}
               style={{
                 ...styles.dropdownItem,
-                backgroundColor: value === option.value ? "#f0f0f0" : "#ffffff",
+                backgroundColor: value === option.value ? "#d9f7ef" : "#f8faff",
               }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#e0e0e0"}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = value === option.value ? "#f0f0f0" : "#ffffff"}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#c8f2e7"}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = value === option.value ? "#d9f7ef" : "#f8faff"}
             >
               {option.label}
             </div>
@@ -218,7 +216,6 @@ const Register = () => {
               onChange={handleSelectChange}
               options={streamOptions}
               placeholder="Select Stream"
-              required
             />
           </div>
         )}
@@ -257,14 +254,14 @@ const Register = () => {
           type="submit"
           style={styles.button}
           onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = "0px 0px 0px black";
+            e.currentTarget.style.boxShadow = "0px 0px 0px #5f7aa2";
             e.currentTarget.style.transform = "translate(4px,4px)";
-            e.currentTarget.style.backgroundColor = "#e8e8e8";
+            e.currentTarget.style.backgroundColor = "#9ee8d8";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = "4px 4px 0px black";
+            e.currentTarget.style.boxShadow = "4px 4px 0px #5f7aa2";
             e.currentTarget.style.transform = "translate(0px,0px)";
-            e.currentTarget.style.backgroundColor = "#ffffff";
+            e.currentTarget.style.backgroundColor = "#b8f2e6";
           }}
         >
           Register
@@ -277,7 +274,7 @@ const Register = () => {
 const styles = {
   container: {
     height: "100vh",
-    backgroundColor: "#ffffff",
+    backgroundColor: "#f6f4ff",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -286,7 +283,7 @@ const styles = {
     padding: "20px",
   },
   card: {
-    backgroundColor: "#ffffff",
+    backgroundColor: "#fffdf8",
     padding: "30px",
     borderRadius: "18px",
     width: "420px",
@@ -295,12 +292,12 @@ const styles = {
     display: "flex",
     flexDirection: "column" as const,
     gap: "12px",
-    border: "2px solid black",
-    boxShadow: "8px 8px 0px black",
+    border: "2px solid #9aa6d1",
+    boxShadow: "8px 8px 0px #b8c0e6",
     animation: "popIn 0.4s ease-out",
   },
   title: {
-    color: "black",
+    color: "#4b4f7a",
     fontSize: "28px",
     fontWeight: "bold" as const,
     fontFamily: "monospace",
@@ -308,10 +305,11 @@ const styles = {
   input: {
     padding: "12px",
     borderRadius: "8px",
-    border: "2px solid black",
+    border: "2px solid #9aa6d1",
     fontSize: "15px",
     fontFamily: "monospace",
-    backgroundColor: "white",
+    backgroundColor: "#f8faff",
+    color: "#3f4566",
     outline: "none",
     fontWeight: 600,
     letterSpacing: "0.5px",
@@ -324,26 +322,26 @@ const styles = {
   },
   button: {
     padding: "12px",
-    backgroundColor: "#ffffff",
-    color: "black",
-    border: "2px solid black",
+    backgroundColor: "#b8f2e6",
+    color: "#2f3f5f",
+    border: "2px solid #5f7aa2",
     borderRadius: "8px",
     cursor: "pointer",
     fontWeight: "bold" as const,
-    boxShadow: "4px 4px 0px black",
+    boxShadow: "4px 4px 0px #5f7aa2",
     fontSize: "15px",
     transition: "all 0.3s cubic-bezier(.25,.8,.25,1)",
     fontFamily: "monospace",
   },
   error: {
-    color: "red",
+    color: "#c75b7a",
     fontSize: "14px",
     minHeight: "18px",
     fontFamily: "monospace",
   },
   success: {
-    color: "green",
-    fontSize: "10px",
+    color: "#3c8f6b",
+    fontSize: "12px",
     minHeight: "18px",
     fontFamily: "monospace",
   },
@@ -352,10 +350,10 @@ const styles = {
     top: "calc(100% + 4px)",
     left: 0,
     right: 0,
-    backgroundColor: "#ffffff",
-    border: "2px solid black",
+    backgroundColor: "#f8faff",
+    border: "2px solid #9aa6d1",
     borderRadius: "12px",
-    boxShadow: "4px 4px 0px black",
+    boxShadow: "4px 4px 0px #b8c0e6",
     zIndex: 10,
     overflow: "hidden",
     animation: "dropdownFade 0.2s ease",
@@ -366,8 +364,8 @@ const styles = {
     fontSize: "15px",
     fontFamily: "monospace",
     fontWeight: 600,
-    color: "black",
-    borderBottom: "1px solid #ccc",
+    color: "#3f4566",
+    borderBottom: "1px solid #d6def7",
     transition: "background-color 0.2s ease",
   },
 };

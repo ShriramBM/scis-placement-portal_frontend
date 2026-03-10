@@ -7,24 +7,33 @@ interface Props {
 
 const Layout = ({ children }: Props) => {
   return (
-    <div style={styles.container}>
+    <div className="layout-root">
+      <style>{`
+        .layout-root {
+          display: flex;
+          flex-direction: row;
+          min-height: 100vh;
+          background-color: #ffffff;
+          color: #111827;
+        }
+        .layout-content {
+          flex: 1;
+          min-width: 0;
+          overflow-x: hidden;
+          padding: 0;
+        }
+
+        /* Mobile: stack vertically so sidebar becomes top bar */
+        @media (max-width: 600px) {
+          .layout-root {
+            flex-direction: column;
+          }
+        }
+      `}</style>
       <Sidebar />
-      <div style={styles.content}>{children}</div>
+      <div className="layout-content">{children}</div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    display: "flex",
-    minHeight: "100vh",
-    backgroundColor: "#0f172a",
-    color: "white",
-  },
-  content: {
-    flex: 1,
-    padding: "20px",
-  },
 };
 
 export default Layout;
