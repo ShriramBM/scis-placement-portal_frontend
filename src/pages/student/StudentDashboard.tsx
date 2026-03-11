@@ -414,20 +414,7 @@ const StudentDashboard = () => {
                   : "-"}
               </div>
               <div>JD File</div>
-              <div>
-                {selectedCompany.jd_file_path ? (
-                  <a
-                    href={`${new URL(api.defaults.baseURL!).origin}${selectedCompany.jd_file_path}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={styles.jdDownloadLink}
-                  >
-                    Download JD ({selectedCompany.jd_file_path.split("/").pop()})
-                  </a>
-                ) : (
-                  "-"
-                )}
-              </div>
+              <div>{selectedCompany.jd_file_path || "-"}</div>
               <div>Remarks</div>
               <div>{selectedCompany.remarks || "-"}</div>
               <div>Description</div>
@@ -584,11 +571,6 @@ const styles: Record<string, React.CSSProperties> = {
     columnGap: "12px",
     rowGap: "8px",
     fontSize: "13px",
-  },
-  jdDownloadLink: {
-    color: "#1a73e8",
-    fontWeight: 600,
-    textDecoration: "none",
   },
   cardHeader: {
     display: "flex",
