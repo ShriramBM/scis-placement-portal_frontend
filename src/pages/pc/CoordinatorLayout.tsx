@@ -5,7 +5,7 @@ const CoordinatorLayout = () => {
   return (
     <div style={styles.container}>
       <CoordinatorSidebar />
-      <div style={styles.content}>
+      <div style={styles.content} className="main-content">
         <Outlet />
       </div>
     </div>

@@ -13,8 +13,9 @@ const Layout = ({ children }: Props) => {
           display: flex;
           flex-direction: row;
           min-height: 100vh;
-          background-color: #ffffff;
-          color: #111827;
+          background-color: #f2f2f2;
+          color: #000;
+          font-family: monospace;
         }
         .layout-content {
           flex: 1;
@@ -31,7 +32,7 @@ const Layout = ({ children }: Props) => {
         }
       `}</style>
       <Sidebar />
-      <div className="layout-content">{children}</div>
+      <div className="layout-content main-content">{children}</div>
     </div>
   );
 };

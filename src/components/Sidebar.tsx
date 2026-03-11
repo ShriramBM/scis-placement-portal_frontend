@@ -40,7 +40,6 @@ const Sidebar = () => {
           display: flex;
           flex-direction: column;
           gap: 12px;
-          flex: 1;
         }
         .sb-btn {
           padding: 12px 14px;

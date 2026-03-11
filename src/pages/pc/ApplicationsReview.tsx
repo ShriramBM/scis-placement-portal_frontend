@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import api from "../../services/api";
 
 interface Application {
@@ -10,6 +10,98 @@ interface Application {
     studentProfile: { rollNo: string; batchYear?: number; stream?: string };
   };
 }
+
+const CustomSelect = ({
+  name,
+  value,
+  onChange,
+  options,
+  placeholder = "Select",
+}: {
+  name: string;
+  value: string;
+  onChange: (name: string, value: string) => void;
+  options: { value: string; label: string }[];
+  placeholder?: string;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const selected = options.find((o) => o.value === value);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setIsOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  return (
+    <div ref={ref} style={{ position: "relative", minWidth: "170px", flex: 1 }}>
+      <div
+        onClick={() => setIsOpen((p) => !p)}
+        style={{
+          padding: "10px 12px",
+          borderRadius: "8px",
+          border: "2px solid black",
+          backgroundColor: "#fff",
+          color: "#000",
+          fontFamily: "monospace",
+          fontWeight: 600,
+          fontSize: "13px",
+          outline: "none",
+          boxSizing: "border-box",
+          cursor: "pointer",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          userSelect: "none",
+        }}
+      >
+        <span style={{ color: value ? "#000" : "#666" }}>
+          {selected ? selected.label : placeholder}
+        </span>
+        <span style={{ fontSize: "11px", transform: isOpen ? "rotate(180deg)" : "rotate(0)", transition: "transform 0.2s" }}>▼</span>
+      </div>
+      {isOpen && (
+        <div style={{
+          position: "absolute",
+          top: "calc(100% + 4px)",
+          left: 0,
+          right: 0,
+          backgroundColor: "#ffffff",
+          border: "2px solid black",
+          borderRadius: "12px",
+          boxShadow: "4px 4px 0px black",
+          zIndex: 100,
+          overflow: "hidden",
+        }}>
+          {options.map((opt) => (
+            <div
+              key={opt.value}
+              onClick={() => { onChange(name, opt.value); setIsOpen(false); }}
+              style={{
+                padding: "10px 12px",
+                cursor: "pointer",
+                fontSize: "13px",
+                fontFamily: "monospace",
+                fontWeight: 600,
+                color: "black",
+                borderBottom: "1px solid #ccc",
+                backgroundColor: value === opt.value ? "#f0f0f0" : "#fff",
+                transition: "background-color 0.15s ease",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#e0e0e0")}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = value === opt.value ? "#f0f0f0" : "#fff")}
+            >
+              {opt.label}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const statusStyle = (status: string): React.CSSProperties => {
   switch (status) {
@@ -31,6 +123,11 @@ const statusStyle = (status: string): React.CSSProperties => {
 const ApplicationsReview = () => {
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState({
+    search: "",
+    company: "",
+    status: "",
+  });
 
   useEffect(() => {
     fetchApplications();
@@ -46,6 +143,28 @@ const ApplicationsReview = () => {
       setLoading(false);
     }
   };
+
+  const handleFilterChange = (name: string, value: string) =>
+    setFilters((prev) => ({ ...prev, [name]: value }));
+
+  const uniqueCompanies = useMemo(
+    () => [...new Set(applications.map((app) => app.company?.name).filter(Boolean))].sort() as string[],
+    [applications]
+  );
+
+  const filteredApplications = useMemo(() => {
+    const search = filters.search.trim().toLowerCase();
+    return applications.filter((app) => {
+      if (search) {
+        const name = (app.student?.name ?? "").toLowerCase();
+        const rollNo = (app.student?.studentProfile?.rollNo ?? "").toLowerCase();
+        if (!name.includes(search) && !rollNo.includes(search)) return false;
+      }
+      if (filters.company && (app.company?.name ?? "") !== filters.company) return false;
+      if (filters.status && app.status !== filters.status) return false;
+      return true;
+    });
+  }, [applications, filters]);
 
   const selectStudent = async (id: number) => {
     try {
@@ -72,11 +191,44 @@ const ApplicationsReview = () => {
       </div>
 
       <div style={styles.card}>
-        <div style={styles.countRow}>
-          <span style={styles.countText}>
-            Total: {applications.length} application(s)
-          </span>
+        <div style={styles.filterRow}>
+          <input
+            name="search"
+            value={filters.search}
+            onChange={(e) => handleFilterChange("search", e.target.value)}
+            placeholder="Search name or roll no"
+            style={styles.searchInput}
+          />
+          <CustomSelect
+            name="company"
+            value={filters.company}
+            onChange={handleFilterChange}
+            placeholder="All Companies"
+            options={[
+              { value: "", label: "All Companies" },
+              ...uniqueCompanies.map((c) => ({ value: c, label: c })),
+            ]}
+          />
+          <CustomSelect
+            name="status"
+            value={filters.status}
+            onChange={handleFilterChange}
+            placeholder="All Status"
+            options={[
+              { value: "", label: "All Status" },
+              { value: "APPLIED", label: "APPLIED" },
+              { value: "REJECTED", label: "REJECTED" },
+              { value: "IGNORED", label: "IGNORED" },
+              { value: "SHORTLISTED", label: "SHORTLISTED" },
+              { value: "SELECTED", label: "SELECTED" },
+            ]}
+          />
         </div>
+
+        <p style={styles.countText}>
+          Showing {filteredApplications.length} of {applications.length} application(s)
+        </p>
+
         <div style={styles.tableWrap}>
           <table style={styles.table}>
             <thead>
@@ -89,14 +241,14 @@ const ApplicationsReview = () => {
               </tr>
             </thead>
             <tbody>
-              {applications.length === 0 ? (
+              {filteredApplications.length === 0 ? (
                 <tr>
                   <td colSpan={5} style={styles.emptyCell}>
-                    No applications to review.
+                    {applications.length === 0 ? "No applications to review." : "No applications match current filters."}
                   </td>
                 </tr>
               ) : (
-                applications.map((app) => (
+                filteredApplications.map((app) => (
                   <tr key={app.id} style={styles.row}>
                     <td style={styles.td}>
                       {app.student?.name ?? "—"}
@@ -126,7 +278,7 @@ const ApplicationsReview = () => {
                           Select
                         </button>
                       ) : (
-                        <span style={{ color: "#22c55e", fontWeight: 600 }}>
+                        <span style={{ color: "#15803d", fontWeight: 700, fontFamily: "monospace" }}>
                           Selected
                         </span>
                       )}
@@ -145,93 +297,124 @@ const ApplicationsReview = () => {
 const styles: Record<string, React.CSSProperties> = {
   container: {
     backgroundColor: "#f2f2f2",
-    color: "#1f2937",
+    color: "#000",
     minHeight: "100vh",
     padding: "22px",
+    fontFamily: "monospace",
   },
   header: {
     marginBottom: "14px",
   },
   title: {
     margin: 0,
-    fontSize: "30px",
-    fontWeight: 600,
-    color: "#202020",
+    fontSize: "28px",
+    fontWeight: 700,
+    color: "#000",
+    fontFamily: "monospace",
   },
   subTitle: {
     margin: "6px 0 0",
-    color: "#666",
+    color: "#555",
     fontSize: "13px",
+    fontFamily: "monospace",
   },
   card: {
     backgroundColor: "#fff",
-    border: "1px solid #e5e7eb",
-    borderRadius: "10px",
-    padding: "14px",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.04)",
+    border: "2px solid black",
+    borderRadius: "18px",
+    padding: "24px",
+    boxShadow: "8px 8px 0px black",
   },
-  countRow: {
+  filterRow: {
     display: "flex",
-    justifyContent: "space-between",
-    marginBottom: "10px",
+    gap: "12px",
+    flexWrap: "wrap",
+    marginBottom: "16px",
+    alignItems: "center",
+  },
+  searchInput: {
+    padding: "10px 12px",
+    borderRadius: "8px",
+    border: "2px solid black",
+    backgroundColor: "#fff",
+    color: "#000",
+    fontFamily: "monospace",
+    fontWeight: 600,
+    fontSize: "13px",
+    outline: "none",
+    minWidth: "200px",
+    flex: 1,
+    boxSizing: "border-box",
   },
   countText: {
     fontSize: "12px",
-    color: "#64748b",
-    fontWeight: 600,
+    color: "#555",
+    fontWeight: 700,
+    fontFamily: "monospace",
+    marginBottom: "12px",
   },
   tableWrap: {
     overflowX: "auto",
-    border: "1px solid #e5e7eb",
-    borderRadius: "8px",
+    border: "2px solid black",
+    borderRadius: "12px",
+    boxShadow: "4px 4px 0px black",
   },
   table: {
     width: "100%",
     borderCollapse: "collapse" as const,
     backgroundColor: "#fff",
+    fontFamily: "monospace",
   },
   th: {
-    padding: "12px",
-    textAlign: "center" as const,
-    borderBottom: "1px solid #e5e7eb",
-    backgroundColor: "#f8fafc",
-    color: "#334155",
+    padding: "12px 14px",
+    textAlign: "left" as const,
+    borderBottom: "2px solid black",
+    backgroundColor: "#f0f0f0",
+    color: "#000",
     fontSize: "12px",
     fontWeight: 700 as const,
+    fontFamily: "monospace",
   },
   td: {
-    padding: "12px",
-    textAlign: "center" as const,
-    borderBottom: "1px solid #eef2f7",
-    color: "#1f2937",
+    padding: "12px 14px",
+    textAlign: "left" as const,
+    borderBottom: "1px solid #e0e0e0",
+    color: "#000",
     fontSize: "13px",
+    fontFamily: "monospace",
   },
   row: {
     backgroundColor: "#fff",
   },
   statusPill: {
     padding: "4px 10px",
-    borderRadius: "999px",
+    borderRadius: "6px",
     fontSize: "12px",
     fontWeight: 700,
     letterSpacing: "0.2px",
     display: "inline-block",
+    border: "1.5px solid",
+    fontFamily: "monospace",
   },
   emptyCell: {
     textAlign: "center",
     padding: "20px",
-    color: "#64748b",
+    color: "#555",
     fontSize: "13px",
+    fontFamily: "monospace",
+    fontWeight: 600,
   },
   selectBtn: {
     padding: "6px 14px",
-    borderRadius: "6px",
-    border: "none",
-    backgroundColor: "#22c55e",
+    borderRadius: "8px",
+    border: "2px solid black",
+    backgroundColor: "#000",
     color: "#fff",
-    fontWeight: 600,
+    fontWeight: 700,
     fontSize: "12px",
     cursor: "pointer",
+    fontFamily: "monospace",
+    boxShadow: "2px 2px 0px #333",
   },
   loading: {
     minHeight: "100vh",
@@ -239,8 +422,10 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: "center",
     justifyContent: "center",
     fontSize: "16px",
-    color: "#4b5563",
+    color: "#000",
     backgroundColor: "#f2f2f2",
+    fontFamily: "monospace",
+    fontWeight: 700,
   },
 };
 

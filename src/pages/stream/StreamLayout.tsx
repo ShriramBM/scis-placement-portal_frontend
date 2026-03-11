@@ -5,7 +5,7 @@ const StreamLayout = () => {
   return (
     <div style={styles.container}>
       <StreamSidebar />
-      <div style={styles.content}>
+      <div style={styles.content} className="main-content">
         <Outlet />
       </div>
     </div>

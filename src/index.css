@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-body, #root {
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
   font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  color: #000;
+  background-color: #f2f2f2;
+}
+
+/* Remove top spacing from all page content areas */
+.main-content > *,
+.layout-content > *,
+.page-root {
+  padding-top: 0 !important;
 }

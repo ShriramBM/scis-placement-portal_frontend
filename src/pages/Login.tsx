@@ -57,7 +57,7 @@ const Login = () => {
   `;
 
   return (
-    <div style={styles.container}>
+    <div style={styles.container} className="page-root">
       <form onSubmit={handleLogin} style={styles.card} className="login-card">
         <h2 style={styles.title} className="login-title">SCIS Placement Login</h2>
 
@@ -88,14 +88,14 @@ const Login = () => {
           style={styles.button}
           className="login-button"
           onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = "0px 0px 0px #5f7aa2";
+            e.currentTarget.style.boxShadow = "0px 0px 0px black";
             e.currentTarget.style.transform = "translate(4px,4px)";
-            e.currentTarget.style.backgroundColor = "#9ee8d8";
+            e.currentTarget.style.backgroundColor = "#f0f0f0";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = "4px 4px 0px #5f7aa2";
+            e.currentTarget.style.boxShadow = "4px 4px 0px black";
             e.currentTarget.style.transform = "translate(0px,0px)";
-            e.currentTarget.style.backgroundColor = "#b8f2e6";
+            e.currentTarget.style.backgroundColor = "#fff";
           }}
         >
           Login
@@ -112,6 +112,16 @@ const Login = () => {
             Register
           </span>
         </p>
+        <p style={styles.prompt}>
+          <span
+            style={styles.link}
+            onClick={() => navigate("/")}
+            onMouseOver={(e) => (e.currentTarget.style.textDecoration = "underline")}
+            onMouseOut={(e) => (e.currentTarget.style.textDecoration = "none")}
+          >
+            ← Back to Home
+          </span>
+        </p>
       </form>
     </div>
   );
@@ -120,7 +130,7 @@ const Login = () => {
 const styles = {
   container: {
     height: "100vh",
-    backgroundColor: "#f6f4ff",
+    backgroundColor: "#f2f2f2",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -129,19 +139,19 @@ const styles = {
     padding: "20px",
   },
   card: {
-    backgroundColor: "#fffdf8",
+    backgroundColor: "#fff",
     padding: "35px",
     borderRadius: "18px",
     width: "420px",
     display: "flex",
     flexDirection: "column" as const,
     gap: "15px",
-    border: "2px solid #9aa6d1",
-    boxShadow: "8px 8px 0px #b8c0e6",
+    border: "2px solid black",
+    boxShadow: "8px 8px 0px black",
     animation: "popIn 0.4s ease-out",
   },
   title: {
-    color: "#4b4f7a",
+    color: "#000",
     fontSize: "28px",
     fontWeight: "bold" as const,
     marginBottom: "5px",
@@ -150,11 +160,11 @@ const styles = {
   input: {
     padding: "12px",
     borderRadius: "8px",
-    border: "2px solid #9aa6d1",
+    border: "2px solid black",
     fontSize: "15px",
     fontFamily: "monospace",
-    backgroundColor: "#f8faff",
-    color: "#3f4566",
+    backgroundColor: "#fff",
+    color: "#000",
     outline: "none",
     fontWeight: 600,
     letterSpacing: "0.5px",
@@ -162,34 +172,35 @@ const styles = {
   },
   button: {
     padding: "12px",
-    backgroundColor: "#b8f2e6",
-    color: "#2f3f5f",
-    border: "2px solid #5f7aa2",
+    backgroundColor: "#fff",
+    color: "#000",
+    border: "2px solid black",
     borderRadius: "8px",
     cursor: "pointer",
     fontWeight: "bold" as const,
-    boxShadow: "4px 4px 0px #5f7aa2",
+    boxShadow: "4px 4px 0px black",
     fontSize: "15px",
-    transition: "all 0.3s cubic-bezier(.25,.8,.25,1)",
+    transition: "all 0.2s cubic-bezier(.25,.8,.25,1)",
     fontFamily: "monospace",
   },
   error: {
-    color: "#c75b7a",
+    color: "#b91c1c",
     fontSize: "14px",
     minHeight: "18px",
     fontFamily: "monospace",
+    fontWeight: 600,
   },
   prompt: {
-    color: "#4b4f7a",
+    color: "#333",
     fontSize: "14px",
     textAlign: "center" as const,
     fontFamily: "monospace",
   },
   link: {
-    color: "#5f7aa2",
+    color: "#000",
     cursor: "pointer",
     fontWeight: "bold" as const,
-    textDecoration: "none",
+    textDecoration: "underline",
   },
 };
 

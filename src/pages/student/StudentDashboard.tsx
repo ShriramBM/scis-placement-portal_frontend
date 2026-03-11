@@ -175,6 +175,133 @@ const ActionBtn = ({
   </button>
 );
 
+// ── Student Dashboard Styles ───────────────────────────────────────────────────
+const sdStyles = `
+  @keyframes sd-dropdown-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .sd-container {
+    min-height: 100vh;
+    background-color: #f2f2f2;
+    padding: 22px;
+    color: #1f2937;
+    font-family: monospace;
+  }
+  .sd-title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #202020;
+    font-family: monospace;
+  }
+  .sd-card {
+    background-color: #fff;
+    border: 2px solid black;
+    border-radius: 18px;
+    box-shadow: 8px 8px 0px black;
+    padding: 24px;
+  }
+  .sd-filter-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    align-items: center;
+  }
+  .sd-search {
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 2px solid black;
+    background-color: #fff;
+    color: #000;
+    font-family: monospace;
+    font-weight: 600;
+    font-size: 13px;
+    outline: none;
+    min-width: 200px;
+    flex: 1;
+    box-sizing: border-box;
+  }
+  .sd-search::placeholder {
+    color: #666;
+  }
+  .sd-table-wrap {
+    overflow-x: auto;
+    border: 2px solid black;
+    border-radius: 12px;
+    box-shadow: 4px 4px 0px black;
+  }
+  .sd-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    font-family: monospace;
+  }
+  .sd-th {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 2px solid black;
+    background-color: #f0f0f0;
+    color: #000;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: monospace;
+  }
+  .sd-td {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+    color: #1f2937;
+    font-size: 13px;
+    font-family: monospace;
+  }
+  .sd-row {
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+  }
+  .sd-row:hover {
+    background-color: #f5f5f5;
+  }
+  .sd-empty {
+    text-align: center;
+    padding: 24px;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: monospace;
+  }
+  .sd-back-btn {
+    align-self: flex-start;
+    padding: 10px 16px;
+    border: 2px solid black;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #000;
+    font-family: monospace;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 4px 4px 0px black;
+    transition: all 0.2s cubic-bezier(.25,.8,.25,1);
+  }
+  .sd-section {
+    background-color: #fff;
+    border: 2px solid black;
+    border-radius: 18px;
+    box-shadow: 8px 8px 0px black;
+    padding: 24px;
+  }
+  .sd-btn-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .sd-action-btn:focus {
+    outline: none;
+  }
+`;
+
 // ── Main Component ─────────────────────────────────────────────────────────────
 const StudentDashboard = () => {
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -344,7 +471,7 @@ const StudentDashboard = () => {
                           <td className="sd-td" data-label="Company"><strong>{company.name}</strong></td>
                           <td className="sd-td" data-label="Title">{company.jobTitle || "—"}</td>
                           <td className="sd-td" data-label="CTC">{fmtMoney(company.package)}</td>
-                          <td className="sd-td" data-label="Eligibility">{company.streamsAllowed?.length ? company.streamsAllowed.join(", ") : "All"}</td>
+                          <td className="sd-td" data-label="Eligibility">{company.department === "MCA" ? "MCA" : (company.streamsAllowed?.length ? company.streamsAllowed.join(", ") : "All streams")}</td>
                           <td className="sd-td" data-label="Deadline" style={{ color: expired ? "#ef4444" : "inherit", fontWeight: expired ? 700 : 400 }}>
                             {new Date(company.deadline).toLocaleString("en-IN")}
                             {expired && <span style={{ display: "block", fontSize: "10px", fontWeight: 700, color: "#ef4444", fontFamily: "monospace", marginTop: "2px" }}>Expired</span>}
@@ -381,11 +508,13 @@ const StudentDashboard = () => {
               <div>{selectedCompany.jobTitle || "-"}</div>
               <div>Department</div>
               <div>{selectedCompany.department || "-"}</div>
-              <div>Eligible Streams</div>
+              <div>Eligibility</div>
               <div>
-                {selectedCompany.streamsAllowed?.length
-                  ? selectedCompany.streamsAllowed.join(", ")
-                  : "All"}
+                {selectedCompany.department === "MCA"
+                  ? "MCA"
+                  : (selectedCompany.streamsAllowed?.length
+                    ? selectedCompany.streamsAllowed.join(", ")
+                    : "All streams")}
               </div>
               <div>CTC</div>
               <div>{fmtMoney(selectedCompany.package)}</div>

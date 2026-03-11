@@ -4,18 +4,56 @@ import api from "../../services/api";
 interface Application {
   id: number;
   status: string;
+  companyId: number;
   company: {
+    id: number;
     name: string;
+    deadline: string;
   };
   student: {
     name: string;
+    email: string;
     studentProfile: {
       rollNo: string;
       batchYear: number;
       stream?: string;
-      cgpa: number;
+      cgpa?: number;
     };
   };
+}
+
+const CSV_HEADERS = [
+  "REG NUMBER",
+  "NAME",
+  "PHONE NUMBER",
+  "EMAIL ID",
+  "College",
+  "Course",
+  "Year of Passing",
+  "10th CGPA %",
+  "12th CGPA %",
+  "UG CGPA %",
+  "PG CGPA %",
+  "Resume",
+];
+
+function escapeCsvCell(value: string | number): string {
+  const s = String(value ?? "");
+  if (s.includes(",") || s.includes('"') || s.includes("\n")) return `"${s.replace(/"/g, '""')}"`;
+  return s;
+}
+
+function downloadCsv(filename: string, rows: string[][]) {
+  const header = CSV_HEADERS.join(",");
+  const body = rows.map((row) => row.map(escapeCsvCell).join(",")).join("\n");
+  const csv = header + "\n" + body;
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${filename.replace(/[^a-zA-Z0-9-_ ]/g, "_")}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 const statusStyle = (status: string): React.CSSProperties => {
@@ -72,6 +110,62 @@ const Applicants = () => {
     [applications]
   );
 
+  const companiesPastDeadline = useMemo(() => {
+    const now = Date.now();
+    const byId = new Map<number, { id: number; name: string; deadline: string }>();
+    applications.forEach((app) => {
+      const d = new Date(app.company.deadline).getTime();
+      if (d < now) byId.set(app.company.id, { id: app.company.id, name: app.company.name, deadline: app.company.deadline });
+    });
+    return Array.from(byId.values());
+  }, [applications]);
+
+  const [generatingFor, setGeneratingFor] = useState<number | null>(null);
+
+  const handleGenerateSheet = async (companyId: number, companyName: string) => {
+    setGeneratingFor(companyId);
+    try {
+      const res = await api.get(`/application/company/${companyId}/export`);
+      const { applicants } = res.data as {
+        companyName: string;
+        applicants: Array<{
+          regNumber: string;
+          name: string;
+          phone: string;
+          email: string;
+          college: string;
+          course: string;
+          yearOfPassing: string | number;
+          tenthCgpaPct: string | number;
+          twelfthCgpaPct: string | number;
+          ugCgpaPct: string | number;
+          pgCgpaPct: string | number;
+          resume: string;
+        }>;
+      };
+      const rows = (applicants || []).map((a) => [
+        a.regNumber,
+        a.name,
+        a.phone,
+        a.email,
+        a.college,
+        a.course,
+        String(a.yearOfPassing),
+        String(a.tenthCgpaPct),
+        String(a.twelfthCgpaPct),
+        String(a.ugCgpaPct),
+        String(a.pgCgpaPct),
+        a.resume,
+      ]);
+      downloadCsv(companyName, rows);
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      alert(msg || "Failed to generate sheet");
+    } finally {
+      setGeneratingFor(null);
+    }
+  };
+
   const filteredApplications = applications.filter((app) => {
     const profile = app.student.studentProfile;
 
@@ -102,6 +196,35 @@ const Applicants = () => {
           View and filter applications by batch, stream, company, and status.
         </p>
       </div>
+
+      {companiesPastDeadline.length > 0 && (
+        <div style={styles.card}>
+          <h3 style={{ margin: "0 0 12px 0", fontSize: "1rem" }}>Generate applicant sheet</h3>
+          <p style={{ margin: "0 0 12px 0", color: "#666", fontSize: "0.9rem" }}>
+            Companies whose deadline has passed. Generate and download a CSV of applicants (REG NUMBER, NAME, PHONE, EMAIL, College, Course, Year of Passing, 10th/12th/UG/PG CGPA %, Resume). File name: company name.
+          </p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+            {companiesPastDeadline.map((c) => (
+              <button
+                key={c.id}
+                type="button"
+                onClick={() => handleGenerateSheet(c.id, c.name)}
+                disabled={generatingFor === c.id}
+                style={{
+                  ...styles.filterInput,
+                  padding: "8px 14px",
+                  cursor: generatingFor === c.id ? "wait" : "pointer",
+                  background: "#111",
+                  color: "#fff",
+                  border: "1px solid #333",
+                }}
+              >
+                {generatingFor === c.id ? "Generating…" : `Generate: ${c.name}`}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div style={styles.card}>
         <div style={styles.filterContainer}>
@@ -214,30 +337,33 @@ const Applicants = () => {
 const styles: Record<string, React.CSSProperties> = {
   container: {
     backgroundColor: "#f2f2f2",
-    color: "#1f2937",
+    color: "#000",
     minHeight: "100vh",
     padding: "22px",
+    fontFamily: "monospace",
   },
   header: {
     marginBottom: "14px",
   },
   title: {
     margin: 0,
-    fontSize: "30px",
-    fontWeight: 600,
-    color: "#202020",
+    fontSize: "28px",
+    fontWeight: 700,
+    color: "#000",
+    fontFamily: "monospace",
   },
   subTitle: {
     margin: "6px 0 0",
-    color: "#666",
+    color: "#555",
     fontSize: "13px",
+    fontFamily: "monospace",
   },
   card: {
     backgroundColor: "#fff",
-    border: "1px solid #e5e7eb",
-    borderRadius: "10px",
-    padding: "14px",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.04)",
+    border: "2px solid black",
+    borderRadius: "18px",
+    padding: "24px",
+    boxShadow: "8px 8px 0px black",
   },
   filterContainer: {
     display: "flex",
@@ -248,12 +374,14 @@ const styles: Record<string, React.CSSProperties> = {
   filterInput: {
     padding: "10px 12px",
     borderRadius: "8px",
-    border: "1px solid #d1d5db",
+    border: "2px solid black",
     backgroundColor: "#fff",
-    color: "#111827",
+    color: "#000",
     minWidth: "170px",
     outline: "none",
     fontSize: "13px",
+    fontFamily: "monospace",
+    fontWeight: 600,
   },
   countRow: {
     display: "flex",
@@ -262,51 +390,60 @@ const styles: Record<string, React.CSSProperties> = {
   },
   countText: {
     fontSize: "12px",
-    color: "#64748b",
-    fontWeight: 600,
+    color: "#555",
+    fontWeight: 700,
+    fontFamily: "monospace",
   },
   tableWrap: {
     overflowX: "auto",
-    border: "1px solid #e5e7eb",
-    borderRadius: "8px",
+    border: "2px solid black",
+    borderRadius: "12px",
+    boxShadow: "4px 4px 0px black",
   },
   table: {
     width: "100%",
     borderCollapse: "collapse" as const,
     backgroundColor: "#fff",
+    fontFamily: "monospace",
   },
   th: {
-    padding: "12px",
-    textAlign: "center" as const,
-    borderBottom: "1px solid #e5e7eb",
-    backgroundColor: "#f8fafc",
-    color: "#334155",
+    padding: "12px 14px",
+    textAlign: "left" as const,
+    borderBottom: "2px solid black",
+    backgroundColor: "#f0f0f0",
+    color: "#000",
     fontSize: "12px",
     fontWeight: 700 as const,
+    fontFamily: "monospace",
   },
   td: {
-    padding: "12px",
-    textAlign: "center" as const,
-    borderBottom: "1px solid #eef2f7",
-    color: "#1f2937",
+    padding: "12px 14px",
+    textAlign: "left" as const,
+    borderBottom: "1px solid #e0e0e0",
+    color: "#000",
     fontSize: "13px",
+    fontFamily: "monospace",
   },
   row: {
     backgroundColor: "#fff",
   },
   statusPill: {
     padding: "4px 10px",
-    borderRadius: "999px",
+    borderRadius: "6px",
     fontSize: "12px",
     fontWeight: 700,
     letterSpacing: "0.2px",
     display: "inline-block",
+    border: "1.5px solid",
+    fontFamily: "monospace",
   },
   emptyCell: {
     textAlign: "center",
     padding: "20px",
-    color: "#64748b",
+    color: "#555",
     fontSize: "13px",
+    fontFamily: "monospace",
+    fontWeight: 600,
   },
   loading: {
     minHeight: "100vh",
@@ -314,8 +451,10 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: "center",
     justifyContent: "center",
     fontSize: "16px",
-    color: "#4b5563",
+    color: "#000",
     backgroundColor: "#f2f2f2",
+    fontFamily: "monospace",
+    fontWeight: 700,
   },
 };
 

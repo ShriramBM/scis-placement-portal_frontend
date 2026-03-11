@@ -279,9 +279,9 @@ const StudentProfile = () => {
 
       {/* Breadcrumb */}
       <div style={s.breadcrumb}>
-        <span style={{ color: "#888" }}>Profile</span>
-        <span style={{ color: "#ccc", margin: "0 8px" }}>/</span>
-        <span style={{ color: "#333", fontWeight: 500 }}>
+        <span style={{ color: "#555" }}>Profile</span>
+        <span style={{ color: "#999", margin: "0 8px" }}>/</span>
+        <span style={{ color: "#000", fontWeight: 700 }}>
           {activeTab === "personal" ? "Personal Information" : "Academic Information"}
         </span>
       </div>
@@ -291,7 +291,7 @@ const StudentProfile = () => {
         style={s.backArrow}
         onClick={() => window.history.back()}
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#333" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M19 12H5M12 19l-7-7 7-7" />
         </svg>
       </div>
@@ -306,7 +306,7 @@ const StudentProfile = () => {
           onClick={() => setActiveTab("personal")}
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-            stroke={activeTab === "personal" ? "#1a73e8" : "#888"}
+            stroke={activeTab === "personal" ? "#000" : "#555"}
             strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
             style={{ marginRight: 8, flexShrink: 0 }}>
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -322,7 +322,7 @@ const StudentProfile = () => {
           onClick={() => setActiveTab("academic")}
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-            stroke={activeTab === "academic" ? "#1a73e8" : "#888"}
+            stroke={activeTab === "academic" ? "#000" : "#555"}
             strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
             style={{ marginRight: 8, flexShrink: 0 }}>
             <rect x="3" y="3" width="18" height="18" rx="2" />
@@ -336,8 +336,8 @@ const StudentProfile = () => {
       {message.text && (
         <div style={{
           ...s.toast,
-          backgroundColor: message.type === "success" ? "#e8f5e9" : "#fce4ec",
-          color: message.type === "success" ? "#2e7d32" : "#c62828",
+          backgroundColor: message.type === "success" ? "#dcfce7" : "#fee2e2",
+          color: message.type === "success" ? "#15803d" : "#b91c1c",
         }}>
           {message.text}
         </div>
@@ -513,7 +513,7 @@ const StudentProfile = () => {
                   type="checkbox"
                   checked={sameAddress}
                   onChange={(e) => handleSameAddress(e.target.checked)}
-                  style={{ accentColor: "#1a73e8", cursor: "pointer", width: 15, height: 15 }}
+                  style={{ accentColor: "#000", cursor: "pointer", width: 15, height: 15 }}
                 />
                 Same as Postal Address
               </label>
@@ -543,14 +543,14 @@ const StudentProfile = () => {
           {/* Action Buttons */}
           <div style={s.buttonRow}>
             <button type="button" onClick={handleReset} style={s.resetBtn}
-              onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#d32f2f"; e.currentTarget.style.color = "#fff"; }}
-              onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#fff"; e.currentTarget.style.color = "#d32f2f"; }}
+              onMouseEnter={e => { e.currentTarget.style.boxShadow = "0px 0px 0px black"; e.currentTarget.style.transform = "translate(4px,4px)"; }}
+              onMouseLeave={e => { e.currentTarget.style.boxShadow = "4px 4px 0px black"; e.currentTarget.style.transform = "translate(0,0)"; }}
             >
               Reset
             </button>
             <button type="button" onClick={handleSave} disabled={saving} style={s.saveBtn}
-              onMouseEnter={e => { if (!saving) e.currentTarget.style.backgroundColor = "#1557b0"; }}
-              onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#1a73e8"; }}
+              onMouseEnter={e => { if (!saving) { e.currentTarget.style.boxShadow = "0px 0px 0px #333"; e.currentTarget.style.transform = "translate(4px,4px)"; } }}
+              onMouseLeave={e => { e.currentTarget.style.boxShadow = "4px 4px 0px #333"; e.currentTarget.style.transform = "translate(0,0)"; }}
             >
               {saving ? "Saving..." : "Save Changes"}
             </button>
@@ -700,12 +700,14 @@ const StudentProfile = () => {
                 style={{
                   padding: "8px 16px",
                   fontSize: 14,
-                  fontWeight: 600,
-                  borderRadius: 6,
-                  border: "none",
-                  backgroundColor: "#1a73e8",
+                  fontWeight: 700,
+                  borderRadius: 8,
+                  border: "2px solid black",
+                  backgroundColor: "#000",
                   color: "#fff",
                   cursor: "pointer",
+                  fontFamily: "monospace",
+                  boxShadow: "4px 4px 0px #333",
                 }}
               >
                 Add Degree
@@ -779,14 +781,14 @@ const StudentProfile = () => {
           {/* Action Buttons */}
           <div style={{ ...s.buttonRow, marginTop: 24 }}>
             <button type="button" onClick={handleReset} style={s.resetBtn}
-              onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#d32f2f"; e.currentTarget.style.color = "#fff"; }}
-              onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#fff"; e.currentTarget.style.color = "#d32f2f"; }}
+              onMouseEnter={e => { e.currentTarget.style.boxShadow = "0px 0px 0px black"; e.currentTarget.style.transform = "translate(4px,4px)"; }}
+              onMouseLeave={e => { e.currentTarget.style.boxShadow = "4px 4px 0px black"; e.currentTarget.style.transform = "translate(0,0)"; }}
             >
               Reset
             </button>
             <button type="button" onClick={handleSave} disabled={saving} style={s.saveBtn}
-              onMouseEnter={e => { if (!saving) e.currentTarget.style.backgroundColor = "#1557b0"; }}
-              onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#1a73e8"; }}
+              onMouseEnter={e => { if (!saving) { e.currentTarget.style.boxShadow = "0px 0px 0px #333"; e.currentTarget.style.transform = "translate(4px,4px)"; } }}
+              onMouseLeave={e => { e.currentTarget.style.boxShadow = "4px 4px 0px #333"; e.currentTarget.style.transform = "translate(0,0)"; }}
             >
               {saving ? "Saving..." : "Save Changes"}
             </button>
@@ -809,16 +811,17 @@ const cssAnimations = `
 
 const s: Record<string, React.CSSProperties> = {
   pageWrapper: {
-    backgroundColor: "#f5f7fa",
+    backgroundColor: "#f2f2f2",
     minHeight: "100vh",
     padding: "24px 32px",
-    fontFamily: "ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace",
-    color: "#333",
+    fontFamily: "monospace",
+    color: "#000",
     overflowY: "auto",
   },
   breadcrumb: {
     fontSize: 14,
     marginBottom: 12,
+    fontFamily: "monospace",
   },
   backArrow: {
     width: 36,
@@ -830,10 +833,12 @@ const s: Record<string, React.CSSProperties> = {
     cursor: "pointer",
     marginBottom: 16,
     transition: "background-color 0.2s",
+    border: "2px solid black",
+    backgroundColor: "#fff",
   },
   tabBar: {
     display: "flex",
-    borderBottom: "2px solid #e0e0e0",
+    borderBottom: "2px solid black",
     marginBottom: 24,
     gap: 0,
   },
@@ -845,39 +850,43 @@ const s: Record<string, React.CSSProperties> = {
     padding: "14px 0",
     cursor: "pointer",
     fontSize: 15,
-    fontWeight: 500,
-    color: "#888",
+    fontWeight: 600,
+    color: "#555",
     borderBottom: "3px solid transparent",
     marginBottom: -2,
     transition: "all 0.2s ease",
     userSelect: "none",
+    fontFamily: "monospace",
   },
   tabActive: {
-    color: "#1a73e8",
-    borderBottomColor: "#1a73e8",
-    fontWeight: 600,
+    color: "#000",
+    borderBottomColor: "#000",
+    fontWeight: 700,
   },
   toast: {
     padding: "10px 16px",
     marginBottom: 16,
     borderRadius: 8,
     fontSize: 14,
-    fontWeight: 500,
+    fontWeight: 600,
     animation: "fadeIn 0.3s ease",
+    border: "2px solid black",
+    fontFamily: "monospace",
   },
   card: {
-    backgroundColor: "#ffffff",
-    borderRadius: 12,
+    backgroundColor: "#fff",
+    borderRadius: 18,
     padding: "28px 32px",
-    boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
-    border: "1px solid #e8e8e8",
+    boxShadow: "8px 8px 0px black",
+    border: "2px solid black",
     animation: "fadeIn 0.3s ease",
   },
   statusBadge: {
-    color: "#2e7d32",
-    fontWeight: 600,
+    color: "#000",
+    fontWeight: 700,
     fontSize: 14,
     marginBottom: 24,
+    fontFamily: "monospace",
   },
   row: {
     display: "flex",
@@ -890,49 +899,55 @@ const s: Record<string, React.CSSProperties> = {
   label: {
     display: "block",
     fontSize: 13,
-    fontWeight: 600,
-    color: "#444",
+    fontWeight: 700,
+    color: "#000",
     marginBottom: 6,
+    fontFamily: "monospace",
   },
   input: {
     width: "100%",
     padding: "10px 14px",
     fontSize: 14,
-    borderRadius: 6,
-    border: "1px solid #d0d5dd",
+    borderRadius: 8,
+    border: "2px solid black",
     backgroundColor: "#fff",
-    color: "#333",
+    color: "#000",
     outline: "none",
     boxSizing: "border-box",
     transition: "border-color 0.2s, box-shadow 0.2s",
+    fontFamily: "monospace",
+    fontWeight: 600,
   },
   select: {
     width: "100%",
     padding: "10px 14px",
     fontSize: 14,
-    borderRadius: 6,
-    border: "1px solid #d0d5dd",
+    borderRadius: 8,
+    border: "2px solid black",
     backgroundColor: "#fff",
-    color: "#333",
+    color: "#000",
     outline: "none",
     boxSizing: "border-box",
     cursor: "pointer",
     appearance: "auto",
+    fontFamily: "monospace",
+    fontWeight: 600,
   },
   disabledInput: {
-    backgroundColor: "#f0f2f5",
+    backgroundColor: "#f0f0f0",
     color: "#555",
     cursor: "not-allowed",
-    border: "1px solid #e0e0e0",
+    border: "2px solid #999",
   },
   checkboxLabel: {
     display: "flex",
     alignItems: "center",
     gap: 6,
     fontSize: 13,
-    color: "#555",
+    color: "#000",
     cursor: "pointer",
-    fontWeight: 400,
+    fontWeight: 600,
+    fontFamily: "monospace",
   },
   buttonRow: {
     display: "flex",
@@ -940,95 +955,107 @@ const s: Record<string, React.CSSProperties> = {
     gap: 12,
     marginTop: 24,
     paddingTop: 20,
-    borderTop: "1px solid #eee",
+    borderTop: "2px solid #e0e0e0",
   },
   resetBtn: {
     padding: "10px 28px",
     fontSize: 14,
-    fontWeight: 600,
-    borderRadius: 6,
-    border: "2px solid #d32f2f",
+    fontWeight: 700,
+    borderRadius: 8,
+    border: "2px solid black",
     backgroundColor: "#fff",
-    color: "#d32f2f",
+    color: "#000",
     cursor: "pointer",
     transition: "all 0.2s ease",
+    fontFamily: "monospace",
+    boxShadow: "4px 4px 0px black",
   },
   saveBtn: {
     padding: "10px 28px",
     fontSize: 14,
-    fontWeight: 600,
-    borderRadius: 6,
-    border: "none",
-    backgroundColor: "#1a73e8",
+    fontWeight: 700,
+    borderRadius: 8,
+    border: "2px solid black",
+    backgroundColor: "#000",
     color: "#fff",
     cursor: "pointer",
     transition: "all 0.2s ease",
+    fontFamily: "monospace",
+    boxShadow: "4px 4px 0px #333",
   },
 
   // Academic tab styles
   sectionTitle: {
     fontSize: 16,
     fontWeight: 700,
-    color: "#222",
+    color: "#000",
     marginBottom: 16,
     marginTop: 0,
+    fontFamily: "monospace",
   },
   tableHeader: {
     display: "flex",
     gap: 12,
     padding: "10px 8px",
-    borderBottom: "2px solid #e0e0e0",
+    borderBottom: "2px solid black",
     fontSize: 13,
-    fontWeight: 600,
-    color: "#555",
+    fontWeight: 700,
+    color: "#000",
+    fontFamily: "monospace",
   },
   tableRow: {
     display: "flex",
     gap: 12,
     padding: "10px 8px",
     alignItems: "center",
-    borderBottom: "1px solid #f0f0f0",
+    borderBottom: "1px solid #e0e0e0",
   },
   cellInput: {
     width: "100%",
     padding: "8px 10px",
     fontSize: 13,
-    borderRadius: 5,
-    border: "1px solid #d0d5dd",
+    borderRadius: 8,
+    border: "2px solid black",
     backgroundColor: "#fff",
-    color: "#333",
+    color: "#000",
     outline: "none",
     boxSizing: "border-box",
+    fontFamily: "monospace",
+    fontWeight: 600,
   },
   priorBlock: {
     marginBottom: 20,
     paddingBottom: 20,
-    borderBottom: "1px solid #e0e0e0",
+    borderBottom: "2px solid #e0e0e0",
   },
   priorCard: {
     marginBottom: 20,
     padding: "16px 20px",
-    backgroundColor: "#fafafa",
-    borderRadius: 8,
-    border: "1px solid #e8e8e8",
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    border: "2px solid black",
+    boxShadow: "4px 4px 0px black",
   },
   deletePriorBtn: {
     width: 40,
     height: 40,
-    borderRadius: 6,
-    border: "1px solid #d32f2f",
+    borderRadius: 8,
+    border: "2px solid black",
     backgroundColor: "#fff",
-    color: "#d32f2f",
+    color: "#000",
     cursor: "pointer",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    boxShadow: "2px 2px 0px black",
   },
   emptyText: {
-    color: "#999",
+    color: "#555",
     fontSize: 14,
     padding: "16px 0",
     textAlign: "center",
+    fontFamily: "monospace",
+    fontWeight: 600,
   },
   loadingBox: {
     display: "flex",
@@ -1041,7 +1068,7 @@ const s: Record<string, React.CSSProperties> = {
     width: 36,
     height: 36,
     border: "4px solid #e0e0e0",
-    borderTopColor: "#1a73e8",
+    borderTopColor: "#000",
     borderRadius: "50%",
     animation: "spin 0.8s linear infinite",
   },

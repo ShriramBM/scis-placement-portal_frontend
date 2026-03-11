@@ -44,11 +44,11 @@ const CustomSelect = ({
           justifyContent: "space-between",
           alignItems: "center",
           paddingRight: "12px",
-          backgroundColor: "#f8faff",
+          backgroundColor: "#fff",
         }}
       >
         <span style={{ 
-          color: value ? "#3f4566" : "#8d96b8",
+          color: value ? "#000" : "#666",
           fontFamily: "monospace",
           fontWeight: 600,
         }}>
@@ -72,10 +72,10 @@ const CustomSelect = ({
               }}
               style={{
                 ...styles.dropdownItem,
-                backgroundColor: value === option.value ? "#d9f7ef" : "#f8faff",
+                backgroundColor: value === option.value ? "#f0f0f0" : "#fff",
               }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#c8f2e7"}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = value === option.value ? "#d9f7ef" : "#f8faff"}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#e0e0e0"}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = value === option.value ? "#f0f0f0" : "#fff"}
             >
               {option.label}
             </div>
@@ -189,7 +189,7 @@ const Register = () => {
   `;
 
   return (
-    <div style={styles.container}>
+    <div style={styles.container} className="page-root">
       <form onSubmit={handleSubmit} style={styles.card} className="register-card">
         <h2 style={styles.title} className="register-title">Student Registration</h2>
 
@@ -254,18 +254,40 @@ const Register = () => {
           type="submit"
           style={styles.button}
           onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = "0px 0px 0px #5f7aa2";
+            e.currentTarget.style.boxShadow = "0px 0px 0px black";
             e.currentTarget.style.transform = "translate(4px,4px)";
-            e.currentTarget.style.backgroundColor = "#9ee8d8";
+            e.currentTarget.style.backgroundColor = "#f0f0f0";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = "4px 4px 0px #5f7aa2";
+            e.currentTarget.style.boxShadow = "4px 4px 0px black";
             e.currentTarget.style.transform = "translate(0px,0px)";
-            e.currentTarget.style.backgroundColor = "#b8f2e6";
+            e.currentTarget.style.backgroundColor = "#fff";
           }}
         >
           Register
         </button>
+
+        <p style={styles.prompt}>
+          Already have an account?{" "}
+          <span
+            style={styles.link}
+            onClick={() => navigate("/login")}
+            onMouseOver={(e) => (e.currentTarget.style.textDecoration = "underline")}
+            onMouseOut={(e) => (e.currentTarget.style.textDecoration = "none")}
+          >
+            Login
+          </span>
+        </p>
+        <p style={styles.prompt}>
+          <span
+            style={styles.link}
+            onClick={() => navigate("/")}
+            onMouseOver={(e) => (e.currentTarget.style.textDecoration = "underline")}
+            onMouseOut={(e) => (e.currentTarget.style.textDecoration = "none")}
+          >
+            ← Back to Home
+          </span>
+        </p>
       </form>
     </div>
   );
@@ -274,7 +296,7 @@ const Register = () => {
 const styles = {
   container: {
     height: "100vh",
-    backgroundColor: "#f6f4ff",
+    backgroundColor: "#f2f2f2",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -283,7 +305,7 @@ const styles = {
     padding: "20px",
   },
   card: {
-    backgroundColor: "#fffdf8",
+    backgroundColor: "#fff",
     padding: "30px",
     borderRadius: "18px",
     width: "420px",
@@ -292,12 +314,12 @@ const styles = {
     display: "flex",
     flexDirection: "column" as const,
     gap: "12px",
-    border: "2px solid #9aa6d1",
-    boxShadow: "8px 8px 0px #b8c0e6",
+    border: "2px solid black",
+    boxShadow: "8px 8px 0px black",
     animation: "popIn 0.4s ease-out",
   },
   title: {
-    color: "#4b4f7a",
+    color: "#000",
     fontSize: "28px",
     fontWeight: "bold" as const,
     fontFamily: "monospace",
@@ -305,11 +327,11 @@ const styles = {
   input: {
     padding: "12px",
     borderRadius: "8px",
-    border: "2px solid #9aa6d1",
+    border: "2px solid black",
     fontSize: "15px",
     fontFamily: "monospace",
-    backgroundColor: "#f8faff",
-    color: "#3f4566",
+    backgroundColor: "#fff",
+    color: "#000",
     outline: "none",
     fontWeight: 600,
     letterSpacing: "0.5px",
@@ -322,38 +344,53 @@ const styles = {
   },
   button: {
     padding: "12px",
-    backgroundColor: "#b8f2e6",
-    color: "#2f3f5f",
-    border: "2px solid #5f7aa2",
+    backgroundColor: "#fff",
+    color: "#000",
+    border: "2px solid black",
     borderRadius: "8px",
     cursor: "pointer",
     fontWeight: "bold" as const,
-    boxShadow: "4px 4px 0px #5f7aa2",
+    boxShadow: "4px 4px 0px black",
     fontSize: "15px",
-    transition: "all 0.3s cubic-bezier(.25,.8,.25,1)",
+    transition: "all 0.2s cubic-bezier(.25,.8,.25,1)",
     fontFamily: "monospace",
   },
   error: {
-    color: "#c75b7a",
+    color: "#b91c1c",
     fontSize: "14px",
     minHeight: "18px",
     fontFamily: "monospace",
+    fontWeight: 600,
   },
   success: {
-    color: "#3c8f6b",
+    color: "#15803d",
     fontSize: "12px",
     minHeight: "18px",
     fontFamily: "monospace",
+    fontWeight: 600,
+  },
+  prompt: {
+    color: "#333",
+    fontSize: "14px",
+    textAlign: "center" as const,
+    fontFamily: "monospace",
+    margin: "8px 0 0",
+  },
+  link: {
+    color: "#000",
+    cursor: "pointer",
+    fontWeight: "bold" as const,
+    textDecoration: "none",
   },
   dropdown: {
     position: "absolute" as const,
     top: "calc(100% + 4px)",
     left: 0,
     right: 0,
-    backgroundColor: "#f8faff",
-    border: "2px solid #9aa6d1",
+    backgroundColor: "#fff",
+    border: "2px solid black",
     borderRadius: "12px",
-    boxShadow: "4px 4px 0px #b8c0e6",
+    boxShadow: "4px 4px 0px black",
     zIndex: 10,
     overflow: "hidden",
     animation: "dropdownFade 0.2s ease",
@@ -364,8 +401,8 @@ const styles = {
     fontSize: "15px",
     fontFamily: "monospace",
     fontWeight: 600,
-    color: "#3f4566",
-    borderBottom: "1px solid #d6def7",
+    color: "#000",
+    borderBottom: "1px solid #ccc",
     transition: "background-color 0.2s ease",
   },
 };
