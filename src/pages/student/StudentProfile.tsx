@@ -55,13 +55,13 @@ const DEPARTMENT_LABELS: Record<string, string> = {
   IMTECH: "Integrated M.Tech",
 };
 
-const LEVEL_LABELS: Record<string, string> = {
-  TENTH: "X",
-  TWELFTH: "XII",
-  DIPLOMA: "Diploma",
-  GRADUATION: "B.Tech / Graduation",
-  POSTGRADUATION: "M.Tech / Post Graduation",
-};
+// const LEVEL_LABELS: Record<string, string> = {
+//   TENTH: "X",
+//   TWELFTH: "XII",
+//   DIPLOMA: "Diploma",
+//   GRADUATION: "B.Tech / Graduation",
+//   POSTGRADUATION: "M.Tech / Post Graduation",
+// };
 
 const formatDateForInput = (dateStr: string | null): string => {
   if (!dateStr) return "";

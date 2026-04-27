@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "../services/api";
 import { useNavigate } from "react-router-dom";
+import "./public-pages.css";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -33,175 +34,127 @@ const Login = () => {
     }
   };
 
-  // Combined animation and responsive styles
-  const styleTag = `
-    @keyframes popIn {
-      0% { transform: scale(0.85) translateY(30px); opacity: 0; }
-      100% { transform: scale(1) translateY(0px); opacity: 1; }
-    }
-
-    /* Responsive styles for small devices (max-width: 480px) */
-    @media (max-width: 480px) {
-      .login-card {
-        width: 95% !important;
-        padding: 25px !important;
-      }
-      .login-title {
-        font-size: 24px !important;
-      }
-      input, .login-button {
-        font-size: 14px !important;
-        padding: 10px !important;
-      }
-    }
-  `;
-
   return (
-    <div style={styles.container} className="page-root">
-      <form onSubmit={handleLogin} style={styles.card} className="login-card">
-        <h2 style={styles.title} className="login-title">SCIS Placement Login</h2>
+    <div className="scis-page-root">
+      <div className="scis-top-strip">
+        <div className="scis-container scis-top-strip-inner">
+          <span>University of Hyderabad</span>
+          <span>School of Computer and Information Sciences</span>
+        </div>
+      </div>
 
-        {error && <p style={styles.error}>{error}</p>}
+      <header className="scis-header">
+        <div className="scis-container scis-header-inner">
+          <div className="scis-brand">
+            <img src="/uoh-logo.png" alt="University of Hyderabad logo" className="scis-brand-logo" />
+            <div>
+              <p className="scis-brand-title">SCIS Placements</p>
+              <p className="scis-brand-subtitle">Office of Career Services</p>
+            </div>
+          </div>
+          <nav className="scis-nav-links">
+            <button type="button" className="scis-link-btn" onClick={() => navigate("/")}>
+              Home
+            </button>
+            <button type="button" className="scis-link-btn" onClick={() => navigate("/stats")}>
+              Statistics
+            </button>
+            <button type="button" className="scis-link-btn scis-link-btn-primary scis-link-btn-active">
+              Portal Login
+            </button>
+          </nav>
+        </div>
+      </header>
 
-        <style>{styleTag}</style>
+      <main className="scis-container scis-auth-shell">
+        <section className="scis-auth-info scis-panel">
+          <p className="scis-section-kicker scis-auth-kicker">Quick Access</p>
+          <h2 className="scis-section-title">Demo credentials</h2>
+          <div className="scis-auth-creds">
+            <div>
+              <p className="scis-auth-role">Placement Coordinator</p>
+              <p>coordinator@uohyd.ac.in</p>
+              <p className="scis-auth-pass">Password: password123</p>
+            </div>
+            <div>
+              <p className="scis-auth-role">Stream Coordinator</p>
+              <p>sahil@uohyd.ac.in</p>
+              <p className="scis-auth-pass">Password: sahil123</p>
+            </div>
+            <div>
+              <p className="scis-auth-role">Student</p>
+              <p>aarav.sharma@uohyd.ac.in</p>
+              <p className="scis-auth-pass">Password: password123</p>
+            </div>
+          </div>
+        </section>
 
-        <input
-          type="email"
-          placeholder="University Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={styles.input}
-        />
+        <form onSubmit={handleLogin} className="scis-panel scis-auth-card">
+          <p className="scis-section-kicker scis-auth-kicker">Student and Staff Portal</p>
+          <h1 className="scis-page-title">SCIS Placement Login</h1>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          style={styles.input}
-        />
+          {error && <p className="scis-auth-error">{error}</p>}
 
-        <button
-          type="submit"
-          style={styles.button}
-          className="login-button"
-          onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = "0px 0px 0px black";
-            e.currentTarget.style.transform = "translate(4px,4px)";
-            e.currentTarget.style.backgroundColor = "#f0f0f0";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = "4px 4px 0px black";
-            e.currentTarget.style.transform = "translate(0px,0px)";
-            e.currentTarget.style.backgroundColor = "#fff";
-          }}
-        >
-          Login
-        </button>
+          <div className="scis-auth-field">
+            <label htmlFor="email" className="scis-filter-label">University Email</label>
+            <input
+              id="email"
+              type="email"
+              placeholder="name@uohyd.ac.in"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="scis-auth-input"
+            />
+          </div>
 
-        <p style={styles.prompt}>
-          Don't have an account?{" "}
-          <span
-            style={styles.link}
-            onClick={() => navigate("/register")}
-            onMouseOver={(e) => (e.currentTarget.style.textDecoration = "underline")}
-            onMouseOut={(e) => (e.currentTarget.style.textDecoration = "none")}
-          >
-            Register
-          </span>
-        </p>
-        <p style={styles.prompt}>
-          <span
-            style={styles.link}
-            onClick={() => navigate("/")}
-            onMouseOver={(e) => (e.currentTarget.style.textDecoration = "underline")}
-            onMouseOut={(e) => (e.currentTarget.style.textDecoration = "none")}
-          >
-            ← Back to Home
-          </span>
-        </p>
-      </form>
+          <div className="scis-auth-field">
+            <label htmlFor="password" className="scis-filter-label">Password</label>
+            <input
+              id="password"
+              type="password"
+              placeholder="Enter password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="scis-auth-input"
+            />
+          </div>
+
+          <button type="submit" className="scis-auth-submit">
+            Login
+          </button>
+
+          <p className="scis-page-intro scis-auth-links">
+            Don&apos;t have an account?{" "}
+            <button type="button" className="scis-inline-btn" onClick={() => navigate("/register")}>
+              Register
+            </button>
+          </p>
+          <button type="button" className="scis-inline-btn scis-auth-home-link" onClick={() => navigate("/")}>
+            Back to Home
+          </button>
+        </form>
+      </main>
+
+      <footer className="scis-footer">
+        <div className="scis-container scis-footer-grid">
+          <div>
+            <h4>Contact</h4>
+            <p>SCIS Building, University of Hyderabad</p>
+            <p>officescis@uohyd.ac.in</p>
+            <p>+91-040-23134101</p>
+          </div>
+          <div>
+            <h4>Quick Links</h4>
+            <button type="button" className="scis-inline-btn" onClick={() => navigate("/stats")}>
+              Placement Statistics
+            </button>
+          </div>
+        </div>
+      </footer>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    height: "100vh",
-    backgroundColor: "#f2f2f2",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    fontFamily: "monospace",
-    overflowY: "auto" as const,
-    padding: "20px",
-  },
-  card: {
-    backgroundColor: "#fff",
-    padding: "35px",
-    borderRadius: "18px",
-    width: "420px",
-    display: "flex",
-    flexDirection: "column" as const,
-    gap: "15px",
-    border: "2px solid black",
-    boxShadow: "8px 8px 0px black",
-    animation: "popIn 0.4s ease-out",
-  },
-  title: {
-    color: "#000",
-    fontSize: "28px",
-    fontWeight: "bold" as const,
-    marginBottom: "5px",
-    fontFamily: "monospace",
-  },
-  input: {
-    padding: "12px",
-    borderRadius: "8px",
-    border: "2px solid black",
-    fontSize: "15px",
-    fontFamily: "monospace",
-    backgroundColor: "#fff",
-    color: "#000",
-    outline: "none",
-    fontWeight: 600,
-    letterSpacing: "0.5px",
-    boxSizing: "border-box" as const,
-  },
-  button: {
-    padding: "12px",
-    backgroundColor: "#fff",
-    color: "#000",
-    border: "2px solid black",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontWeight: "bold" as const,
-    boxShadow: "4px 4px 0px black",
-    fontSize: "15px",
-    transition: "all 0.2s cubic-bezier(.25,.8,.25,1)",
-    fontFamily: "monospace",
-  },
-  error: {
-    color: "#b91c1c",
-    fontSize: "14px",
-    minHeight: "18px",
-    fontFamily: "monospace",
-    fontWeight: 600,
-  },
-  prompt: {
-    color: "#333",
-    fontSize: "14px",
-    textAlign: "center" as const,
-    fontFamily: "monospace",
-  },
-  link: {
-    color: "#000",
-    cursor: "pointer",
-    fontWeight: "bold" as const,
-    textDecoration: "underline",
-  },
 };
 
 export default Login;

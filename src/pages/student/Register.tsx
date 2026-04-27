@@ -1,95 +1,10 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
-
-const CustomSelect = ({ 
-  name, 
-  value, 
-  onChange, 
-  options, 
-  placeholder = "Select",
-  style = {}
-}: { 
-  name: string;
-  value: string;
-  onChange: (name: string, value: string) => void;
-  options: { value: string; label: string }[];
-  placeholder?: string;
-  style?: React.CSSProperties;
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const selectedOption = options.find(opt => opt.value === value);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  return (
-    <div ref={containerRef} style={{ position: "relative", ...style }}>
-      <div
-        className="custom-select-trigger"
-        onClick={() => setIsOpen(!isOpen)}
-        style={{
-          ...styles.input,
-          cursor: "pointer",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          paddingRight: "12px",
-          backgroundColor: "#fff",
-        }}
-      >
-        <span style={{ 
-          color: value ? "#000" : "#666",
-          fontFamily: "monospace",
-          fontWeight: 600,
-        }}>
-          {selectedOption ? selectedOption.label : placeholder}
-        </span>
-        <span style={{ 
-          transform: isOpen ? "rotate(180deg)" : "rotate(0)",
-          transition: "transform 0.2s ease",
-          fontSize: "12px",
-        }}>▼</span>
-      </div>
-
-      {isOpen && (
-        <div style={styles.dropdown}>
-          {options.map((option) => (
-            <div
-              key={option.value}
-              onClick={() => {
-                onChange(name, option.value);
-                setIsOpen(false);
-              }}
-              style={{
-                ...styles.dropdownItem,
-                backgroundColor: value === option.value ? "#f0f0f0" : "#fff",
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#e0e0e0"}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = value === option.value ? "#f0f0f0" : "#fff"}
-            >
-              {option.label}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
+import "../public-pages.css";
 
 const Register = () => {
   const navigate = useNavigate();
-
-  // Compute current year and set range for batch year (±5 years = 10-year span)
   const currentYear = new Date().getFullYear();
   const minBatchYear = currentYear - 10;
   const maxBatchYear = currentYear;
@@ -108,12 +23,9 @@ const Register = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSelectChange = (name: string, value: string) => {
-    setForm({ ...form, [name]: value });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -124,287 +36,151 @@ const Register = () => {
     try {
       await api.post("/auth/register", form);
       setSuccess("Registration successful! Redirecting to login...");
-      setTimeout(() => navigate("/"), 1500);
+      setTimeout(() => navigate("/login"), 1500);
     } catch (err: any) {
       setError(err.response?.data?.message || "Registration failed");
     }
   };
 
-  const departmentOptions = [
-    { value: "MCA", label: "MCA" },
-    { value: "MTECH", label: "MTECH" },
-    { value: "IMTECH", label: "IMTECH" },
-  ];
-
-  const streamOptions = [
-    { value: "CSE", label: "CSE" },
-    { value: "AI", label: "AI" },
-    { value: "IT", label: "IT" },
-  ];
-
-  // Combined keyframes, responsive styles, and number input spinner removal
-  const styleTag = `
-    @keyframes popIn {
-      0% { transform: scale(0.85) translateY(30px); opacity: 0; }
-      100% { transform: scale(1) translateY(0px); opacity: 1; }
-    }
-    @keyframes fadeSlide {
-      0% { opacity: 0; transform: translateY(-8px); }
-      100% { opacity: 1; transform: translateY(0px); }
-    }
-    @keyframes dropdownFade {
-      0% { opacity: 0; transform: translateY(-10px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Responsive styles for small devices (max-width: 480px) */
-    @media (max-width: 480px) {
-      .form-row {
-        flex-direction: column !important;
-        gap: 12px !important;
-      }
-      .register-card {
-        width: 95% !important;
-        padding: 20px !important;
-      }
-      .register-title {
-        font-size: 24px !important;
-      }
-      input, .custom-select-trigger {
-        font-size: 14px !important;
-        padding: 10px !important;
-      }
-    }
-
-    /* Hide spinner arrows on number inputs */
-    input[type=number]::-webkit-inner-spin-button, 
-    input[type=number]::-webkit-outer-spin-button { 
-      -webkit-appearance: none; 
-      margin: 0; 
-    }
-    input[type=number] {
-      -moz-appearance: textfield;
-      appearance: textfield;
-    }
-  `;
-
   return (
-    <div style={styles.container} className="page-root">
-      <form onSubmit={handleSubmit} style={styles.card} className="register-card">
-        <h2 style={styles.title} className="register-title">Student Registration</h2>
-
-        {error && <p style={styles.error}>{error}</p>}
-        {success && <p style={styles.success}>{success}</p>}
-        <style>{styleTag}</style>
-
-        <input name="name" placeholder="Full Name" onChange={handleChange} required style={styles.input} />
-        <input name="email" type="email" placeholder="University Email" onChange={handleChange} required style={styles.input} />
-        <input name="password" type="password" placeholder="Password" onChange={handleChange} required style={styles.input} />
-
-        <CustomSelect
-          name="department"
-          value={form.department}
-          onChange={handleSelectChange}
-          options={departmentOptions}
-        />
-
-        {form.department === "MTECH" && (
-          <div style={{ animation: "fadeSlide 0.35s ease" }}>
-            <CustomSelect
-              name="stream"
-              value={form.stream}
-              onChange={handleSelectChange}
-              options={streamOptions}
-              placeholder="Select Stream"
-            />
-          </div>
-        )}
-
-        <input
-          name="rollNo"
-          placeholder="Roll Number"
-          onChange={handleChange}
-          required
-          style={styles.input}
-        />
-
-        {/* Row for phone and batch year - will stack on small screens */}
-        <div style={styles.row} className="form-row">
-          <input
-            name="phone"
-            placeholder="Phone Number"
-            onChange={handleChange}
-            required
-            style={{ ...styles.input, flex: 1 }}
-          />
-          <input
-            name="batchYear"
-            type="number"
-            placeholder={String(currentYear)} // Show current year as placeholder
-            onChange={handleChange}
-            min={minBatchYear}
-            max={maxBatchYear}
-            title={`Batch year must be between ${minBatchYear} and ${maxBatchYear}`}
-            required
-            style={{ ...styles.input, flex: 1 }}
-          />
+    <div className="scis-page-root">
+      <div className="scis-top-strip">
+        <div className="scis-container scis-top-strip-inner">
+          <span>University of Hyderabad</span>
+          <span>School of Computer and Information Sciences</span>
         </div>
+      </div>
 
-        <button
-          type="submit"
-          style={styles.button}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = "0px 0px 0px black";
-            e.currentTarget.style.transform = "translate(4px,4px)";
-            e.currentTarget.style.backgroundColor = "#f0f0f0";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = "4px 4px 0px black";
-            e.currentTarget.style.transform = "translate(0px,0px)";
-            e.currentTarget.style.backgroundColor = "#fff";
-          }}
-        >
-          Register
-        </button>
+      <header className="scis-header">
+        <div className="scis-container scis-header-inner">
+          <div className="scis-brand">
+            <img src="/uoh-logo.png" alt="University of Hyderabad logo" className="scis-brand-logo" />
+            <div>
+              <p className="scis-brand-title">SCIS Placements</p>
+              <p className="scis-brand-subtitle">Office of Career Services</p>
+            </div>
+          </div>
+          <nav className="scis-nav-links">
+            <button type="button" className="scis-link-btn" onClick={() => navigate("/")}>
+              Home
+            </button>
+            <button type="button" className="scis-link-btn" onClick={() => navigate("/stats")}>
+              Statistics
+            </button>
+            <button type="button" className="scis-link-btn scis-link-btn-primary" onClick={() => navigate("/login")}>
+              Portal Login
+            </button>
+          </nav>
+        </div>
+      </header>
 
-        <p style={styles.prompt}>
-          Already have an account?{" "}
-          <span
-            style={styles.link}
-            onClick={() => navigate("/login")}
-            onMouseOver={(e) => (e.currentTarget.style.textDecoration = "underline")}
-            onMouseOut={(e) => (e.currentTarget.style.textDecoration = "none")}
-          >
-            Login
-          </span>
-        </p>
-        <p style={styles.prompt}>
-          <span
-            style={styles.link}
-            onClick={() => navigate("/")}
-            onMouseOver={(e) => (e.currentTarget.style.textDecoration = "underline")}
-            onMouseOut={(e) => (e.currentTarget.style.textDecoration = "none")}
-          >
-            ← Back to Home
-          </span>
-        </p>
-      </form>
+      <main className="scis-container scis-auth-shell scis-auth-shell-single">
+        <form onSubmit={handleSubmit} className="scis-panel scis-auth-card scis-register-card">
+          <p className="scis-section-kicker scis-auth-kicker">Student Portal</p>
+          <h1 className="scis-page-title">Create Account</h1>
+
+          {error && <p className="scis-auth-error">{error}</p>}
+          {success && <p className="scis-auth-success">{success}</p>}
+
+          <div className="scis-auth-field">
+            <label htmlFor="name" className="scis-filter-label">Full Name</label>
+            <input id="name" name="name" placeholder="Enter full name" onChange={handleChange} required className="scis-auth-input" />
+          </div>
+
+          <div className="scis-auth-field">
+            <label htmlFor="email" className="scis-filter-label">University Email</label>
+            <input id="email" name="email" type="email" placeholder="name@uohyd.ac.in" onChange={handleChange} required className="scis-auth-input" />
+          </div>
+
+          <div className="scis-auth-field">
+            <label htmlFor="password" className="scis-filter-label">Password</label>
+            <input id="password" name="password" type="password" placeholder="Create password" onChange={handleChange} required className="scis-auth-input" />
+          </div>
+
+          <div className="scis-auth-two-col">
+            <div className="scis-auth-field">
+              <label htmlFor="department" className="scis-filter-label">Department</label>
+              <select id="department" name="department" value={form.department} onChange={handleChange} className="scis-auth-input scis-auth-select">
+                <option value="MCA">MCA</option>
+                <option value="MTECH">MTECH</option>
+                <option value="IMTECH">IMTECH</option>
+              </select>
+            </div>
+
+            {form.department === "MTECH" && (
+              <div className="scis-auth-field">
+                <label htmlFor="stream" className="scis-filter-label">Stream</label>
+                <select id="stream" name="stream" value={form.stream} onChange={handleChange} className="scis-auth-input scis-auth-select">
+                  <option value="">Select stream</option>
+                  <option value="CSE">CSE</option>
+                  <option value="AI">AI</option>
+                  <option value="IT">IT</option>
+                </select>
+              </div>
+            )}
+          </div>
+
+          <div className="scis-auth-field">
+            <label htmlFor="rollNo" className="scis-filter-label">Roll Number</label>
+            <input id="rollNo" name="rollNo" placeholder="Enter roll number" onChange={handleChange} required className="scis-auth-input" />
+          </div>
+
+          <div className="scis-auth-two-col">
+            <div className="scis-auth-field">
+              <label htmlFor="phone" className="scis-filter-label">Phone Number</label>
+              <input id="phone" name="phone" placeholder="10-digit number" onChange={handleChange} required className="scis-auth-input" />
+            </div>
+            <div className="scis-auth-field">
+              <label htmlFor="batchYear" className="scis-filter-label">Batch Year</label>
+              <input
+                id="batchYear"
+                name="batchYear"
+                type="number"
+                placeholder={String(currentYear)}
+                onChange={handleChange}
+                min={minBatchYear}
+                max={maxBatchYear}
+                title={`Batch year must be between ${minBatchYear} and ${maxBatchYear}`}
+                required
+                className="scis-auth-input scis-auth-number-input"
+              />
+            </div>
+          </div>
+
+          <button type="submit" className="scis-auth-submit">
+            Register
+          </button>
+
+          <p className="scis-page-intro scis-auth-links">
+            Already have an account?{" "}
+            <button type="button" className="scis-inline-btn" onClick={() => navigate("/login")}>
+              Login
+            </button>
+          </p>
+          <button type="button" className="scis-inline-btn scis-auth-home-link" onClick={() => navigate("/")}>
+            Back to Home
+          </button>
+        </form>
+      </main>
+
+      <footer className="scis-footer">
+        <div className="scis-container scis-footer-grid">
+          <div>
+            <h4>Contact</h4>
+            <p>SCIS Building, University of Hyderabad</p>
+            <p>officescis@uohyd.ac.in</p>
+            <p>+91-040-23134101</p>
+          </div>
+          <div>
+            <h4>Quick Links</h4>
+            <button type="button" className="scis-inline-btn" onClick={() => navigate("/stats")}>
+              Placement Statistics
+            </button>
+          </div>
+        </div>
+      </footer>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    height: "100vh",
-    backgroundColor: "#f2f2f2",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    fontFamily: "monospace",
-    overflowY: "auto" as const,
-    padding: "20px",
-  },
-  card: {
-    backgroundColor: "#fff",
-    padding: "30px",
-    borderRadius: "18px",
-    width: "420px",
-    maxHeight: "90vh",
-    overflowY: "auto" as const,
-    display: "flex",
-    flexDirection: "column" as const,
-    gap: "12px",
-    border: "2px solid black",
-    boxShadow: "8px 8px 0px black",
-    animation: "popIn 0.4s ease-out",
-  },
-  title: {
-    color: "#000",
-    fontSize: "28px",
-    fontWeight: "bold" as const,
-    fontFamily: "monospace",
-  },
-  input: {
-    padding: "12px",
-    borderRadius: "8px",
-    border: "2px solid black",
-    fontSize: "15px",
-    fontFamily: "monospace",
-    backgroundColor: "#fff",
-    color: "#000",
-    outline: "none",
-    fontWeight: 600,
-    letterSpacing: "0.5px",
-    boxSizing: "border-box" as const,
-  },
-  row: {
-    display: "flex",
-    gap: "12px",
-    width: "100%",
-  },
-  button: {
-    padding: "12px",
-    backgroundColor: "#fff",
-    color: "#000",
-    border: "2px solid black",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontWeight: "bold" as const,
-    boxShadow: "4px 4px 0px black",
-    fontSize: "15px",
-    transition: "all 0.2s cubic-bezier(.25,.8,.25,1)",
-    fontFamily: "monospace",
-  },
-  error: {
-    color: "#b91c1c",
-    fontSize: "14px",
-    minHeight: "18px",
-    fontFamily: "monospace",
-    fontWeight: 600,
-  },
-  success: {
-    color: "#15803d",
-    fontSize: "12px",
-    minHeight: "18px",
-    fontFamily: "monospace",
-    fontWeight: 600,
-  },
-  prompt: {
-    color: "#333",
-    fontSize: "14px",
-    textAlign: "center" as const,
-    fontFamily: "monospace",
-    margin: "8px 0 0",
-  },
-  link: {
-    color: "#000",
-    cursor: "pointer",
-    fontWeight: "bold" as const,
-    textDecoration: "none",
-  },
-  dropdown: {
-    position: "absolute" as const,
-    top: "calc(100% + 4px)",
-    left: 0,
-    right: 0,
-    backgroundColor: "#fff",
-    border: "2px solid black",
-    borderRadius: "12px",
-    boxShadow: "4px 4px 0px black",
-    zIndex: 10,
-    overflow: "hidden",
-    animation: "dropdownFade 0.2s ease",
-  },
-  dropdownItem: {
-    padding: "10px 12px",
-    cursor: "pointer",
-    fontSize: "15px",
-    fontFamily: "monospace",
-    fontWeight: 600,
-    color: "#000",
-    borderBottom: "1px solid #ccc",
-    transition: "background-color 0.2s ease",
-  },
 };
 
 export default Register;

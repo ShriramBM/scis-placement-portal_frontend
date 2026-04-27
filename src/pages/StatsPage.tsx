@@ -15,6 +15,7 @@ import {
   PieChart,
   Pie,
 } from "recharts";
+import "./public-pages.css";
 
 interface YearRow {
   degree: string;
@@ -34,78 +35,86 @@ interface CompanyHire {
   count: number;
 }
 
+interface InternshipDegreeStat {
+  degree: string;
+  internshipCount: number;
+  avgStipendK: number;
+  maxStipendK: number;
+}
+
+interface InternshipCompany {
+  name: string;
+  count: number;
+  avgStipendK: number;
+}
+
 interface YearData {
   year: string;
   rows: YearRow[];
   companyHires: CompanyHire[];
+  internshipByDegree: InternshipDegreeStat[];
+  internshipCompanies: InternshipCompany[];
 }
 
 const STATS_DATA: YearData[] = [
   {
     year: "2024-25",
     rows: [
-      { degree: "MCA", students: 48, registered: 48, placedCount: 41, higherStudiesCount: 4, notPlacedCount: 3, placedPct: 85.42, higherStudiesPct: 8.33, notPlacedPct: 6.25, medianLpa: 28 },
-      { degree: "MTech (CSE)", students: 55, registered: 55, placedCount: 48, higherStudiesCount: 5, notPlacedCount: 2, placedPct: 87.27, higherStudiesPct: 9.09, notPlacedPct: 3.64, medianLpa: 32 },
-      { degree: "MTech (AI)", students: 40, registered: 40, placedCount: 36, higherStudiesCount: 3, notPlacedCount: 1, placedPct: 90.0, higherStudiesPct: 7.5, notPlacedPct: 2.5, medianLpa: 30 },
-      { degree: "IMTech", students: 28, registered: 28, placedCount: 23, higherStudiesCount: 3, notPlacedCount: 2, placedPct: 82.14, higherStudiesPct: 10.71, notPlacedPct: 7.14, medianLpa: 26 },
+      { degree: "MCA", students: 40, registered: 35, placedCount: 18, higherStudiesCount: 0, notPlacedCount: 17, placedPct: 51.43, higherStudiesPct: 0, notPlacedPct: 48.57, medianLpa: 9 },
+      { degree: "MTech (CSE)", students: 20, registered: 17, placedCount: 14, higherStudiesCount: 0, notPlacedCount: 3, placedPct: 82.35, higherStudiesPct: 0, notPlacedPct: 17.65, medianLpa: 12 },
+      { degree: "MTech (AI)", students: 20, registered: 18, placedCount: 1, higherStudiesCount: 0, notPlacedCount: 17, placedPct: 5.56, higherStudiesPct: 0, notPlacedPct: 94.44, medianLpa: 6 },
+      { degree: "IMTech", students: 60, registered: 50, placedCount: 11, higherStudiesCount: 0, notPlacedCount: 39, placedPct: 22.0, higherStudiesPct: 0, notPlacedPct: 78.0, medianLpa: 14.8 },
     ],
     companyHires: [
-      { name: "TCS", count: 18 },
-      { name: "Infosys", count: 14 },
-      { name: "Wipro", count: 12 },
-      { name: "Amazon", count: 10 },
-      { name: "Microsoft", count: 8 },
-      { name: "Accenture", count: 9 },
-      { name: "Capgemini", count: 7 },
-      { name: "Deloitte", count: 6 },
-      { name: "Oracle", count: 5 },
-      { name: "Intel", count: 4 },
-      { name: "Others", count: 35 },
+      { name: "Launched", count: 8 },
+      { name: "Lloyds", count: 4 },
+      { name: "Marvell", count: 3 },
+      { name: "Teradata", count: 3 },
+      { name: "Cognizant GenC", count: 3 },
+      { name: "Quadratyx", count: 3 },
+      { name: "Blaize", count: 2 },
+      { name: "Micron", count: 2 },
+      { name: "Aps Building Solution", count: 2 },
+      { name: "Netelixir", count: 2 },
+      { name: "GE", count: 2 },
+      { name: "TCS", count: 2 },
+      { name: "Citco", count: 1 },
+      { name: "Curious Ed", count: 1 },
+      { name: "Dheyo AI", count: 1 },
+      { name: "Ola Krutrim", count: 1 },
+      { name: "Paraxzen", count: 1 },
+      { name: "ServiceNow", count: 1 },
     ],
-  },
-  {
-    year: "2023-24",
-    rows: [
-      { degree: "MCA", students: 45, registered: 45, placedCount: 37, higherStudiesCount: 5, notPlacedCount: 3, placedPct: 82.22, higherStudiesPct: 11.11, notPlacedPct: 6.67, medianLpa: 26 },
-      { degree: "MTech (CSE)", students: 52, registered: 52, placedCount: 44, higherStudiesCount: 5, notPlacedCount: 3, placedPct: 84.62, higherStudiesPct: 9.62, notPlacedPct: 5.77, medianLpa: 29 },
-      { degree: "MTech (AI)", students: 38, registered: 38, placedCount: 33, higherStudiesCount: 3, notPlacedCount: 2, placedPct: 86.84, higherStudiesPct: 7.89, notPlacedPct: 5.26, medianLpa: 28 },
-      { degree: "IMTech", students: 25, registered: 25, placedCount: 20, higherStudiesCount: 3, notPlacedCount: 2, placedPct: 80.0, higherStudiesPct: 12.0, notPlacedPct: 8.0, medianLpa: 24 },
+    internshipByDegree: [
+      { degree: "MCA", internshipCount: 11, avgStipendK: 24.18, maxStipendK: 36 },
+      { degree: "MTech (CSE)", internshipCount: 12, avgStipendK: 42.92, maxStipendK: 50 },
+      { degree: "MTech (AI)", internshipCount: 0, avgStipendK: 0, maxStipendK: 0 },
+      { degree: "IMTech", internshipCount: 17, avgStipendK: 33.53, maxStipendK: 45 },
     ],
-    companyHires: [
-      { name: "TCS", count: 16 },
-      { name: "Infosys", count: 13 },
-      { name: "Wipro", count: 11 },
-      { name: "Amazon", count: 8 },
-      { name: "HCL", count: 7 },
-      { name: "Accenture", count: 8 },
-      { name: "Cognizant", count: 6 },
-      { name: "Oracle", count: 5 },
-      { name: "Others", count: 38 },
-    ],
-  },
-  {
-    year: "2022-23",
-    rows: [
-      { degree: "MCA", students: 43, registered: 43, placedCount: 34, higherStudiesCount: 6, notPlacedCount: 3, placedPct: 79.07, higherStudiesPct: 13.95, notPlacedPct: 6.98, medianLpa: 24 },
-      { degree: "MTech (CSE)", students: 50, registered: 50, placedCount: 41, higherStudiesCount: 6, notPlacedCount: 3, placedPct: 82.0, higherStudiesPct: 12.0, notPlacedPct: 6.0, medianLpa: 27 },
-      { degree: "MTech (AI)", students: 35, registered: 35, placedCount: 29, higherStudiesCount: 4, notPlacedCount: 2, placedPct: 82.86, higherStudiesPct: 11.43, notPlacedPct: 5.71, medianLpa: 26 },
-      { degree: "IMTech", students: 23, registered: 23, placedCount: 18, higherStudiesCount: 3, notPlacedCount: 2, placedPct: 78.26, higherStudiesPct: 13.04, notPlacedPct: 8.7, medianLpa: 22 },
-    ],
-    companyHires: [
-      { name: "TCS", count: 14 },
-      { name: "Infosys", count: 12 },
-      { name: "Wipro", count: 10 },
-      { name: "Capgemini", count: 8 },
-      { name: "Tech Mahindra", count: 6 },
-      { name: "L&T Infotech", count: 5 },
-      { name: "Others", count: 37 },
+    internshipCompanies: [
+      { name: "TCS", count: 7, avgStipendK: 15 },
+      { name: "GE", count: 7, avgStipendK: 45 },
+      { name: "Intel", count: 5, avgStipendK: 45 },
+      { name: "Marvell", count: 4, avgStipendK: 45 },
+      { name: "Citco", count: 3, avgStipendK: 50 },
+      { name: "Caelius Consulting", count: 2, avgStipendK: 25 },
+      { name: "Praxzen LLC", count: 2, avgStipendK: 20 },
+      { name: "Zelis", count: 2, avgStipendK: 25 },
+      { name: "Merck Life Science", count: 2, avgStipendK: 36 },
+      { name: "Bosch", count: 1, avgStipendK: 35 },
+      { name: "Coschool", count: 1, avgStipendK: 12 },
+      { name: "Launched Global", count: 1, avgStipendK: 20 },
+      { name: "Lloyds", count: 1, avgStipendK: 15 },
+      { name: "Micron", count: 1, avgStipendK: 22 },
+      { name: "Novartis", count: 1, avgStipendK: 35 },
+      { name: "Progress", count: 1, avgStipendK: 40 },
     ],
   },
 ];
 
 const DEGREE_OPTIONS = ["All", "MCA", "MTech (CSE)", "MTech (AI)", "IMTech"];
-const COLORS = ["#000", "#333", "#555", "#777", "#999"];
-const PIE_COLORS = ["#000", "#333", "#555", "#777", "#999", "#bbb", "#ddd"];
+const COLORS = ["#1d4ed8", "#2563eb", "#3b82f6", "#60a5fa", "#93c5fd"];
+const PIE_COLORS = ["#1d4ed8", "#2563eb", "#3b82f6", "#60a5fa", "#93c5fd", "#bfdbfe", "#dbeafe"];
 
 const StatsPage = () => {
   const navigate = useNavigate();
@@ -114,10 +123,7 @@ const StatsPage = () => {
   const yearData = STATS_DATA[selectedYear];
 
   const filteredRows = useMemo(
-    () =>
-      degreeFilter === "All"
-        ? yearData.rows
-        : yearData.rows.filter((r) => r.degree === degreeFilter),
+    () => (degreeFilter === "All" ? yearData.rows : yearData.rows.filter((r) => r.degree === degreeFilter)),
     [yearData, degreeFilter]
   );
 
@@ -127,9 +133,6 @@ const StatsPage = () => {
         name: r.degree,
         "Placement %": r.placedPct,
         "Median CTC (LPA)": r.medianLpa,
-        placedCount: r.placedCount,
-        higherStudiesCount: r.higherStudiesCount,
-        notPlacedCount: r.notPlacedCount,
       })),
     [filteredRows]
   );
@@ -139,9 +142,9 @@ const StatsPage = () => {
     const higher = filteredRows.reduce((s, r) => s + r.higherStudiesCount, 0);
     const notPlaced = filteredRows.reduce((s, r) => s + r.notPlacedCount, 0);
     return [
-      { name: "Placed", value: placed, fill: "#000" },
-      { name: "Higher Studies", value: higher, fill: "#333" },
-      { name: "Not Placed", value: notPlaced, fill: "#777" },
+      { name: "Placed", value: placed, fill: "#1d4ed8" },
+      { name: "Higher Studies", value: higher, fill: "#60a5fa" },
+      { name: "Not Placed", value: notPlaced, fill: "#93c5fd" },
     ].filter((d) => d.value > 0);
   }, [filteredRows]);
 
@@ -155,108 +158,111 @@ const StatsPage = () => {
     [filteredRows]
   );
 
-  const companyChartData = useMemo(() => yearData.companyHires, [yearData]);
-
-  const trendData = useMemo(() => {
-    return STATS_DATA[0].rows.map((_, i) => ({
-      degree: STATS_DATA[0].rows[i].degree,
-      "2022-23": STATS_DATA[2].rows[i].placedPct,
-      "2023-24": STATS_DATA[1].rows[i].placedPct,
-      "2024-25": STATS_DATA[0].rows[i].placedPct,
-    }));
-  }, []);
+  const trendData = useMemo(
+    () =>
+      STATS_DATA[0].rows.map((row) => ({
+        degree: row.degree,
+        "2024-25": row.placedPct,
+      })),
+    []
+  );
 
   const renderCustomPieLabel = ({ name = "", percent = 0 }: { name?: string; percent?: number }) =>
     `${name} ${(percent * 100).toFixed(0)}%`;
 
   return (
-    <div style={s.page} className="page-root">
-      <nav style={s.topNav}>
-        <div style={s.topNavLeft}>
-          <button type="button" style={s.navBtn} onClick={() => navigate("/")}>
-            Home
-          </button>
-          <button type="button" style={s.navBtn} onClick={() => navigate("/stats")}>
-            Stats
-          </button>
+    <div className="scis-page-root">
+      <div className="scis-top-strip">
+        <div className="scis-container scis-top-strip-inner">
+          <span>University of Hyderabad</span>
+          <span>School of Computer and Information Sciences</span>
         </div>
-        <div style={s.topNavRight}>
-          <button type="button" style={s.navBtn} onClick={() => navigate("/login")}>
-            Login
-          </button>
-        </div>
-      </nav>
+      </div>
 
-      <main style={s.main}>
-        <h1 style={s.title}>Placement Statistics</h1>
-        <p style={s.intro}>
-          The training and placement cell coordinates the placement activity for SCIS. View exact placement percentage, higher studies count, and company-wise hires for <strong>MCA</strong>, <strong>MTech (CSE)</strong>, <strong>MTech (AI)</strong>, and <strong>IMTech</strong>.
-        </p>
-
-        {/* Filters */}
-        <div style={s.filterRow}>
-          <div style={s.filterGroup}>
-            <label style={s.filterLabel}>Year</label>
-            <div style={s.tabRow}>
-              {STATS_DATA.map((y, i) => (
-                <button
-                  key={y.year}
-                  type="button"
-                  style={{
-                    ...s.yearTab,
-                    ...(selectedYear === i ? s.yearTabActive : {}),
-                  }}
-                  onClick={() => setSelectedYear(i)}
-                >
-                  {y.year}
-                </button>
-              ))}
+      <header className="scis-header">
+        <div className="scis-container scis-header-inner">
+          <div className="scis-brand">
+            <img src="/uoh-logo.png" alt="University of Hyderabad logo" className="scis-brand-logo" />
+            <div>
+              <p className="scis-brand-title">SCIS Placement Analytics</p>
+              <p className="scis-brand-subtitle">Training and Placement Cell</p>
             </div>
           </div>
-          <div style={s.filterGroup}>
-            <label style={s.filterLabel}>Degree</label>
-            <select
-              value={degreeFilter}
-              onChange={(e) => setDegreeFilter(e.target.value)}
-              style={s.select}
-            >
-              {DEGREE_OPTIONS.map((opt) => (
-                <option key={opt} value={opt}>{opt}</option>
-              ))}
-            </select>
-          </div>
+          <nav className="scis-nav-links">
+            <button type="button" className="scis-link-btn" onClick={() => navigate("/")}>Home</button>
+            <button type="button" className="scis-link-btn scis-link-btn-active">Statistics</button>
+            <button type="button" className="scis-link-btn scis-link-btn-primary" onClick={() => navigate("/login")}>
+              Portal Login
+            </button>
+          </nav>
         </div>
+      </header>
 
-        {/* Table with exact counts */}
-        <section style={s.section}>
-          <h2 style={s.sectionTitle}>Year {yearData.year} {degreeFilter !== "All" ? `— ${degreeFilter}` : ""}</h2>
-          <div style={s.tableWrap}>
-            <table style={s.table}>
+      <main className="scis-container scis-main-content">
+        <h1 className="scis-page-title">Placement Statistics</h1>
+        <p className="scis-page-intro">
+          View exact placement outcomes, median compensation, and company-wise hiring for each SCIS programme.
+        </p>
+
+        <section className="scis-panel">
+          <div className="scis-filter-grid">
+            <div>
+              <label className="scis-filter-label">Year</label>
+              <div className="scis-tab-row">
+                {STATS_DATA.map((y, i) => (
+                  <button
+                    key={y.year}
+                    type="button"
+                    className={`scis-tab ${selectedYear === i ? "scis-tab-active" : ""}`}
+                    onClick={() => setSelectedYear(i)}
+                  >
+                    {y.year}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <label className="scis-filter-label">Degree</label>
+              <select value={degreeFilter} onChange={(e) => setDegreeFilter(e.target.value)} className="scis-select">
+                {DEGREE_OPTIONS.map((opt) => (
+                  <option key={opt} value={opt}>{opt}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section className="scis-panel">
+          <h2 className="scis-section-title">
+            Year {yearData.year} {degreeFilter !== "All" ? `— ${degreeFilter}` : ""}
+          </h2>
+          <div className="scis-table-wrap">
+            <table className="scis-table">
               <thead>
                 <tr>
-                  <th style={s.th}>Degree</th>
-                  <th style={s.th}># Students</th>
-                  <th style={s.th}># Registered</th>
-                  <th style={s.th}># Placed</th>
-                  <th style={s.th}># Higher Studies</th>
-                  <th style={s.th}># Not Placed</th>
-                  <th style={s.th}>% Placed</th>
-                  <th style={s.th}>% Higher Studies</th>
-                  <th style={s.th}>Median CTC (LPA)</th>
+                  <th>Degree</th>
+                  <th># Students</th>
+                  <th># Registered</th>
+                  <th># Placed</th>
+                  <th># Higher Studies</th>
+                  <th># Not Placed</th>
+                  <th>% Placed</th>
+                  <th>% Higher Studies</th>
+                  <th>Median CTC (LPA)</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredRows.map((row) => (
-                  <tr key={row.degree} style={s.tr}>
-                    <td style={s.td}>{row.degree}</td>
-                    <td style={s.td}>{row.students}</td>
-                    <td style={s.td}>{row.registered}</td>
-                    <td style={s.td}>{row.placedCount}</td>
-                    <td style={s.td}>{row.higherStudiesCount}</td>
-                    <td style={s.td}>{row.notPlacedCount}</td>
-                    <td style={s.td}>{row.placedPct.toFixed(2)} %</td>
-                    <td style={s.td}>{row.higherStudiesPct.toFixed(2)} %</td>
-                    <td style={s.td}>{row.medianLpa}</td>
+                  <tr key={row.degree}>
+                    <td>{row.degree}</td>
+                    <td>{row.students}</td>
+                    <td>{row.registered}</td>
+                    <td>{row.placedCount}</td>
+                    <td>{row.higherStudiesCount}</td>
+                    <td>{row.notPlacedCount}</td>
+                    <td>{row.placedPct.toFixed(2)}%</td>
+                    <td>{row.higherStudiesPct.toFixed(2)}%</td>
+                    <td>{row.medianLpa}</td>
                   </tr>
                 ))}
               </tbody>
@@ -264,109 +270,88 @@ const StatsPage = () => {
           </div>
         </section>
 
-        {/* Pie charts & bar charts */}
-        <section style={s.section}>
-          <h2 style={s.sectionTitle}>Visualization — {yearData.year}</h2>
+        <section className="scis-panel">
+          <h2 className="scis-section-title">Visualization — {yearData.year}</h2>
 
-          <div style={s.chartGrid}>
-            <div style={s.chartCard}>
-              <h3 style={s.chartTitle}>Outcome: Placed vs Higher Studies vs Not Placed</h3>
-              <div style={s.chartWrap}>
+          <div className="scis-chart-grid">
+            <div className="scis-chart-card">
+              <h3 className="scis-chart-title">Outcome Split</h3>
+              <div className="scis-chart-wrap">
                 <ResponsiveContainer width="100%" height={280}>
                   <PieChart>
-                    <Pie
-                      data={pieOutcomeData}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={100}
-                      label={renderCustomPieLabel}
-                      stroke="#000"
-                      strokeWidth={2}
-                    >
+                    <Pie data={pieOutcomeData} dataKey="value" nameKey="name" outerRadius={100} label={renderCustomPieLabel}>
                       {pieOutcomeData.map((_, i) => (
                         <Cell key={i} fill={pieOutcomeData[i].fill} />
                       ))}
                     </Pie>
-                    <Tooltip formatter={(v) => [v ?? 0, "Count"]} contentStyle={{ fontFamily: "monospace", border: "2px solid black" }} />
-                    <Legend wrapperStyle={{ fontFamily: "monospace", fontWeight: 700 }} />
+                    <Tooltip formatter={(v) => [v ?? 0, "Count"]} />
+                    <Legend />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
             </div>
 
-            <div style={s.chartCard}>
-              <h3 style={s.chartTitle}>Placed Students by Degree</h3>
-              <div style={s.chartWrap}>
+            <div className="scis-chart-card">
+              <h3 className="scis-chart-title">Placed Students by Degree</h3>
+              <div className="scis-chart-wrap">
                 <ResponsiveContainer width="100%" height={280}>
                   <PieChart>
-                    <Pie
-                      data={pieDegreeData}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={100}
-                      label={renderCustomPieLabel}
-                      stroke="#000"
-                      strokeWidth={2}
-                    >
+                    <Pie data={pieDegreeData} dataKey="value" nameKey="name" outerRadius={100} label={renderCustomPieLabel}>
                       {pieDegreeData.map((_, i) => (
                         <Cell key={i} fill={pieDegreeData[i].fill} />
                       ))}
                     </Pie>
-                    <Tooltip formatter={(v) => [v ?? 0, "Hired"]} contentStyle={{ fontFamily: "monospace", border: "2px solid black" }} />
-                    <Legend wrapperStyle={{ fontFamily: "monospace", fontWeight: 700 }} />
+                    <Tooltip formatter={(v) => [v ?? 0, "Hired"]} />
+                    <Legend />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
             </div>
           </div>
 
-          <div style={s.chartCard}>
-            <h3 style={s.chartTitle}>Company-wise Hires (How many each company hired)</h3>
-            <div style={{ ...s.chartWrap, height: "320px" }}>
+          <div className="scis-chart-card">
+            <h3 className="scis-chart-title">Company-wise Hires</h3>
+            <div className="scis-chart-wrap scis-chart-wrap-tall">
               <ResponsiveContainer width="100%" height={320}>
-                <BarChart data={companyChartData} layout="vertical" margin={{ top: 8, right: 24, left: 80, bottom: 8 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
-                  <XAxis type="number" tick={{ fontFamily: "monospace", fontSize: 11 }} stroke="#000" />
-                  <YAxis type="category" dataKey="name" tick={{ fontFamily: "monospace", fontSize: 11, fontWeight: 700 }} stroke="#000" width={70} />
-                  <Tooltip contentStyle={{ fontFamily: "monospace", border: "2px solid black" }} />
-                  <Bar dataKey="count" name="Hires" fill="#000" stroke="#000" strokeWidth={2} radius={[0, 4, 4, 0]} />
+                <BarChart data={yearData.companyHires} layout="vertical" margin={{ top: 8, right: 24, left: 90, bottom: 8 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#dbeafe" />
+                  <XAxis type="number" stroke="#1e3a8a" />
+                  <YAxis type="category" dataKey="name" stroke="#1e3a8a" width={80} />
+                  <Tooltip />
+                  <Bar dataKey="count" name="Hires" fill="#2563eb" radius={[0, 6, 6, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
           </div>
 
-          <div style={s.chartGrid}>
-            <div style={s.chartCard}>
-              <h3 style={s.chartTitle}>Placement % by Degree</h3>
-              <div style={s.chartWrap}>
+          <div className="scis-chart-grid">
+            <div className="scis-chart-card">
+              <h3 className="scis-chart-title">Placement % by Degree</h3>
+              <div className="scis-chart-wrap">
                 <ResponsiveContainer width="100%" height={280}>
-                  <BarChart data={chartDataByDegree} margin={{ top: 12, right: 12, left: 12, bottom: 12 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
-                    <XAxis dataKey="name" tick={{ fontFamily: "monospace", fontSize: 11, fontWeight: 700 }} stroke="#000" />
-                    <YAxis tick={{ fontFamily: "monospace", fontSize: 11 }} stroke="#000" domain={[0, 100]} />
-                    <Tooltip contentStyle={{ fontFamily: "monospace", border: "2px solid black" }} />
-                    <Bar dataKey="Placement %" fill="#000" stroke="#000" strokeWidth={2} radius={[4, 4, 0, 0]} />
+                  <BarChart data={chartDataByDegree}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#dbeafe" />
+                    <XAxis dataKey="name" stroke="#1e3a8a" />
+                    <YAxis domain={[0, 100]} stroke="#1e3a8a" />
+                    <Tooltip />
+                    <Bar dataKey="Placement %" fill="#1d4ed8" radius={[6, 6, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
             </div>
 
-            <div style={s.chartCard}>
-              <h3 style={s.chartTitle}>Median CTC (LPA) by Degree</h3>
-              <div style={s.chartWrap}>
+            <div className="scis-chart-card">
+              <h3 className="scis-chart-title">Median CTC (LPA)</h3>
+              <div className="scis-chart-wrap">
                 <ResponsiveContainer width="100%" height={280}>
-                  <BarChart data={chartDataByDegree} margin={{ top: 12, right: 12, left: 12, bottom: 12 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
-                    <XAxis dataKey="name" tick={{ fontFamily: "monospace", fontSize: 11, fontWeight: 700 }} stroke="#000" />
-                    <YAxis tick={{ fontFamily: "monospace", fontSize: 11 }} stroke="#000" />
-                    <Tooltip contentStyle={{ fontFamily: "monospace", border: "2px solid black" }} />
-                    <Bar dataKey="Median CTC (LPA)" radius={[4, 4, 0, 0]}>
+                  <BarChart data={chartDataByDegree}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#dbeafe" />
+                    <XAxis dataKey="name" stroke="#1e3a8a" />
+                    <YAxis stroke="#1e3a8a" />
+                    <Tooltip />
+                    <Bar dataKey="Median CTC (LPA)" radius={[6, 6, 0, 0]}>
                       {chartDataByDegree.map((_, i) => (
-                        <Cell key={i} fill={COLORS[i % COLORS.length]} stroke="#000" strokeWidth={2} />
+                        <Cell key={i} fill={COLORS[i % COLORS.length]} />
                       ))}
                     </Bar>
                   </BarChart>
@@ -375,39 +360,82 @@ const StatsPage = () => {
             </div>
           </div>
 
-          <div style={s.chartCard}>
-            <h3 style={s.chartTitle}>Placement % Trend (2022-23 to 2024-25)</h3>
-            <div style={s.chartWrap}>
+          <div className="scis-chart-card">
+            <h3 className="scis-chart-title">Placement % Trend</h3>
+            <div className="scis-chart-wrap">
               <ResponsiveContainer width="100%" height={280}>
-                <LineChart data={trendData} margin={{ top: 12, right: 12, left: 12, bottom: 12 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
-                  <XAxis dataKey="degree" tick={{ fontFamily: "monospace", fontSize: 11, fontWeight: 700 }} stroke="#000" />
-                  <YAxis tick={{ fontFamily: "monospace", fontSize: 11 }} stroke="#000" domain={[70, 100]} />
-                  <Tooltip contentStyle={{ fontFamily: "monospace", border: "2px solid black" }} />
-                  <Legend wrapperStyle={{ fontFamily: "monospace", fontWeight: 700 }} />
-                  <Line type="monotone" dataKey="2022-23" stroke="#000" strokeWidth={2} dot={{ fill: "#000", strokeWidth: 2 }} />
-                  <Line type="monotone" dataKey="2023-24" stroke="#333" strokeWidth={2} dot={{ fill: "#333", strokeWidth: 2 }} />
-                  <Line type="monotone" dataKey="2024-25" stroke="#555" strokeWidth={2} dot={{ fill: "#555", strokeWidth: 2 }} />
+                <LineChart data={trendData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#dbeafe" />
+                  <XAxis dataKey="degree" stroke="#1e3a8a" />
+                  <YAxis stroke="#1e3a8a" />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="2024-25" stroke="#1d4ed8" strokeWidth={3} dot={{ fill: "#1d4ed8" }} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
           </div>
 
-          {/* Company-wise table */}
-          <h3 style={s.subSectionTitle}>Company-wise Hire Count — {yearData.year}</h3>
-          <div style={s.tableWrap}>
-            <table style={s.table}>
+          <h3 className="scis-sub-title">Company-wise Hire Count</h3>
+          <div className="scis-table-wrap">
+            <table className="scis-table">
               <thead>
                 <tr>
-                  <th style={s.th}>Company</th>
-                  <th style={s.th}># Hired</th>
+                  <th>Company</th>
+                  <th># Hired</th>
                 </tr>
               </thead>
               <tbody>
                 {yearData.companyHires.map((c) => (
                   <tr key={c.name}>
-                    <td style={s.td}>{c.name}</td>
-                    <td style={s.td}>{c.count}</td>
+                    <td>{c.name}</td>
+                    <td>{c.count}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h3 className="scis-sub-title">Internships (with stipend)</h3>
+          <div className="scis-table-wrap">
+            <table className="scis-table">
+              <thead>
+                <tr>
+                  <th>Degree</th>
+                  <th># Internships</th>
+                  <th>Avg Stipend (K / month)</th>
+                  <th>Max Stipend (K / month)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {yearData.internshipByDegree.map((row) => (
+                  <tr key={row.degree}>
+                    <td>{row.degree}</td>
+                    <td>{row.internshipCount}</td>
+                    <td>{row.avgStipendK.toFixed(2)}</td>
+                    <td>{row.maxStipendK.toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h3 className="scis-sub-title">Internship Company-wise Snapshot</h3>
+          <div className="scis-table-wrap">
+            <table className="scis-table">
+              <thead>
+                <tr>
+                  <th>Company</th>
+                  <th># Interns</th>
+                  <th>Avg Stipend (K / month)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {yearData.internshipCompanies.map((row) => (
+                  <tr key={row.name}>
+                    <td>{row.name}</td>
+                    <td>{row.count}</td>
+                    <td>{row.avgStipendK.toFixed(2)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -417,172 +445,6 @@ const StatsPage = () => {
       </main>
     </div>
   );
-};
-
-const s: Record<string, React.CSSProperties> = {
-  page: {
-    minHeight: "100vh",
-    backgroundColor: "#f2f2f2",
-    fontFamily: "monospace",
-    color: "#000"
-  },
-  topNav: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "20px 28px",
-    backgroundColor: "#fff",
-    borderBottom: "2px solid black",
-    boxShadow: "0 4px 0 black",
-  },
-  topNavLeft: { display: "flex", alignItems: "center", gap: "12px" },
-  topNavRight: { display: "flex", alignItems: "center", gap: "12px" },
-  navBtn: {
-    padding: "10px 18px",
-    backgroundColor: "#fff",
-    color: "#000",
-    border: "2px solid black",
-    borderRadius: "8px",
-    fontSize: "14px",
-    fontWeight: 700,
-    cursor: "pointer",
-    boxShadow: "2px 2px 0px black",
-    transition: "all 0.2s ease",
-  },
-  main: {
-    maxWidth: "1100px",
-    margin: "0 auto",
-    padding: 0,
-  },
-  title: {
-    margin: "24px 0 12px",
-    fontSize: "28px",
-    fontWeight: 700,
-    color: "#000",
-  },
-  intro: {
-    margin: "0 0 24px",
-    fontSize: "15px",
-    lineHeight: 1.6,
-    color: "#000",
-  },
-  filterRow: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "24px",
-    alignItems: "flex-end",
-    marginBottom: "24px",
-    padding: "20px",
-    backgroundColor: "#fff",
-    border: "2px solid black",
-    borderRadius: "12px",
-    boxShadow: "4px 4px 0px black",
-  },
-  filterGroup: { display: "flex", flexDirection: "column", gap: "8px" },
-  filterLabel: { fontSize: "12px", fontWeight: 700, color: "#000" },
-  tabRow: {
-    display: "flex",
-    gap: "8px",
-    flexWrap: "wrap",
-  },
-  yearTab: {
-    padding: "10px 20px",
-    backgroundColor: "#fff",
-    color: "#000",
-    border: "2px solid black",
-    borderRadius: "8px",
-    fontSize: "14px",
-    fontWeight: 700,
-    cursor: "pointer",
-    boxShadow: "2px 2px 0px black",
-    transition: "all 0.2s ease",
-  },
-  yearTabActive: {
-    backgroundColor: "#000",
-    color: "#fff",
-    boxShadow: "2px 2px 0px #333",
-  },
-  select: {
-    padding: "10px 14px",
-    border: "2px solid black",
-    borderRadius: "8px",
-    fontSize: "14px",
-    fontWeight: 700,
-    fontFamily: "monospace",
-    backgroundColor: "#fff",
-    minWidth: "160px",
-  },
-  section: {
-    backgroundColor: "#fff",
-    border: "2px solid black",
-    borderRadius: "18px",
-    padding: "24px",
-    marginBottom: "24px",
-    boxShadow: "8px 8px 0px black",
-  },
-  sectionTitle: {
-    margin: "0 0 16px",
-    fontSize: "20px",
-    fontWeight: 700,
-    color: "#000",
-  },
-  subSectionTitle: {
-    margin: "24px 0 12px",
-    fontSize: "16px",
-    fontWeight: 700,
-    color: "#000",
-  },
-  tableWrap: {
-    overflowX: "auto",
-    border: "2px solid black",
-    borderRadius: "12px",
-    boxShadow: "4px 4px 0px black",
-  },
-  table: {
-    width: "100%",
-    borderCollapse: "collapse",
-    fontFamily: "monospace",
-  },
-  th: {
-    padding: "12px 14px",
-    textAlign: "left",
-    borderBottom: "2px solid black",
-    backgroundColor: "#f0f0f0",
-    color: "#000",
-    fontSize: "12px",
-    fontWeight: 700,
-  },
-  td: {
-    padding: "12px 14px",
-    borderBottom: "1px solid #e0e0e0",
-    color: "#000",
-    fontSize: "13px",
-  },
-  tr: {},
-  chartGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-    gap: "20px",
-    marginBottom: "20px",
-  },
-  chartCard: {
-    backgroundColor: "#fff",
-    border: "2px solid black",
-    borderRadius: "12px",
-    padding: "20px",
-    marginBottom: "20px",
-    boxShadow: "4px 4px 0px black",
-  },
-  chartTitle: {
-    margin: "0 0 12px",
-    fontSize: "16px",
-    fontWeight: 700,
-    color: "#000",
-  },
-  chartWrap: {
-    width: "100%",
-    height: "280px",
-  },
 };
 
 export default StatsPage;

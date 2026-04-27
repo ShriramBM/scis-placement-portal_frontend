@@ -121,6 +121,7 @@ const Applicants = () => {
   }, [applications]);
 
   const [generatingFor, setGeneratingFor] = useState<number | null>(null);
+  const [selectedCompanyForSheet, setSelectedCompanyForSheet] = useState<string>("");
 
   const handleGenerateSheet = async (companyId: number, companyName: string) => {
     setGeneratingFor(companyId);
@@ -201,27 +202,40 @@ const Applicants = () => {
         <div style={styles.card}>
           <h3 style={{ margin: "0 0 12px 0", fontSize: "1rem" }}>Generate applicant sheet</h3>
           <p style={{ margin: "0 0 12px 0", color: "#666", fontSize: "0.9rem" }}>
-            Companies whose deadline has passed. Generate and download a CSV of applicants (REG NUMBER, NAME, PHONE, EMAIL, College, Course, Year of Passing, 10th/12th/UG/PG CGPA %, Resume). File name: company name.
+            Select a company (deadline passed) and generate a CSV of applicants (REG NUMBER, NAME, PHONE, EMAIL, College, Course, Year of Passing, 10th/12th/UG/PG CGPA %, Resume). File name: company name.
           </p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-            {companiesPastDeadline.map((c) => (
-              <button
-                key={c.id}
-                type="button"
-                onClick={() => handleGenerateSheet(c.id, c.name)}
-                disabled={generatingFor === c.id}
-                style={{
-                  ...styles.filterInput,
-                  padding: "8px 14px",
-                  cursor: generatingFor === c.id ? "wait" : "pointer",
-                  background: "#111",
-                  color: "#fff",
-                  border: "1px solid #333",
-                }}
-              >
-                {generatingFor === c.id ? "Generating…" : `Generate: ${c.name}`}
-              </button>
-            ))}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", alignItems: "center" }}>
+            <select
+              value={selectedCompanyForSheet}
+              onChange={(e) => setSelectedCompanyForSheet(e.target.value)}
+              style={styles.filterInput}
+            >
+              <option value="">Select company…</option>
+              {companiesPastDeadline.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+            <button
+              type="button"
+              onClick={() => {
+                const id = selectedCompanyForSheet ? parseInt(selectedCompanyForSheet, 10) : 0;
+                const company = companiesPastDeadline.find((c) => c.id === id);
+                if (company) handleGenerateSheet(company.id, company.name);
+              }}
+              disabled={!selectedCompanyForSheet || generatingFor !== null}
+              style={{
+                ...styles.filterInput,
+                padding: "8px 14px",
+                cursor: !selectedCompanyForSheet || generatingFor !== null ? "not-allowed" : "pointer",
+                background: selectedCompanyForSheet && !generatingFor ? "#111" : "#ccc",
+                color: "#fff",
+                border: "1px solid #333",
+              }}
+            >
+              {generatingFor !== null ? "Generating…" : "Generate sheet"}
+            </button>
           </div>
         </div>
       )}
