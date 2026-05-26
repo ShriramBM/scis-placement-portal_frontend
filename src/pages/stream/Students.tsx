@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import api from "../../services/api";
+import DashboardStats from "../../components/DashboardStats";
+import Pagination from "../../components/Pagination";
+import { usePagination } from "../../hooks/usePagination";
 
 interface StudentListItem {
   id: number;
@@ -103,12 +106,6 @@ const Students = () => {
     }
   };
 
-  const handleFilterChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setFilters({ ...filters, [e.target.name]: e.target.value });
-  };
-
   const openStudentDetails = async (studentId: number) => {
     setDetailsLoading(true);
     try {
@@ -177,6 +174,34 @@ const Students = () => {
     });
   }, [students, filters]);
 
+  const {
+    paginatedItems: paginatedStudents,
+    page: studentPage,
+    setPage: setStudentPage,
+    totalPages: studentTotalPages,
+    from: studentFrom,
+    to: studentTo,
+    total: studentTotal,
+    resetPage: resetStudentPage,
+  } = usePagination(filteredStudents);
+
+  const dashboardStats = useMemo(
+    () => [
+      { label: "Total students", value: students.length },
+      { label: "Placed", value: students.filter((s) => s.placed).length },
+      { label: "Blocked", value: students.filter((s) => s.blocked).length },
+      { label: "Matching filters", value: filteredStudents.length },
+    ],
+    [students, filteredStudents.length]
+  );
+
+  const handleFilterChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    setFilters({ ...filters, [e.target.name]: e.target.value });
+    resetStudentPage();
+  };
+
   if (loading) {
     return <div style={styles.loading}>Loading students...</div>;
   }
@@ -189,6 +214,8 @@ const Students = () => {
             <h2 style={styles.title}>All Students</h2>
             <p style={styles.subtitle}>Click a row to view full profile details.</p>
           </div>
+
+          <DashboardStats stats={dashboardStats} />
 
           <div style={styles.card}>
             <div style={styles.filterContainer}>
@@ -224,7 +251,9 @@ const Students = () => {
             </div>
 
             <div style={styles.countText}>
-              Showing {filteredStudents.length} of {students.length} students
+              {studentTotal === 0
+                ? `No students match filters (${students.length} total)`
+                : `Showing ${studentFrom}–${studentTo} of ${studentTotal} filtered (${students.length} total)`}
             </div>
 
             <div style={styles.tableWrap}>
@@ -244,7 +273,14 @@ const Students = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredStudents.map((student) => (
+                  {paginatedStudents.length === 0 ? (
+                    <tr>
+                      <td colSpan={10} style={styles.emptyCell}>
+                        No students match the filters.
+                      </td>
+                    </tr>
+                  ) : (
+                  paginatedStudents.map((student) => (
                     <tr
                       key={student.id}
                       style={styles.row}
@@ -291,10 +327,19 @@ const Students = () => {
                         </div>
                       </td>
                     </tr>
-                  ))}
+                  )))}
                 </tbody>
               </table>
             </div>
+            <Pagination
+              page={studentPage}
+              totalPages={studentTotalPages}
+              total={studentTotal}
+              from={studentFrom}
+              to={studentTo}
+              onPageChange={setStudentPage}
+              itemLabel="students"
+            />
           </div>
         </>
       ) : (
@@ -434,11 +479,9 @@ const Students = () => {
 
 const styles: Record<string, React.CSSProperties> = {
   container: {
-    backgroundColor: "#f2f2f2",
+    backgroundColor: "transparent",
     color: "#000",
-    minHeight: "100vh",
-    padding: "22px",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   header: {
     marginBottom: 14,
@@ -448,20 +491,19 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: "28px",
     fontWeight: 700,
     color: "#000",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   subtitle: {
     margin: "6px 0 0",
     color: "#555",
     fontSize: 13,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   card: {
     backgroundColor: "#fff",
-    border: "2px solid black",
-    borderRadius: 18,
-    padding: 24,
-    boxShadow: "8px 8px 0px black",
+    border: "none",
+    borderRadius: 12,
+    padding: "24px 0",
   },
   filterContainer: {
     display: "flex",
@@ -472,13 +514,13 @@ const styles: Record<string, React.CSSProperties> = {
   filterInput: {
     padding: "10px 12px",
     borderRadius: 8,
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     backgroundColor: "#fff",
     color: "#000",
     minWidth: 170,
     outline: "none",
     fontSize: 13,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   countText: {
@@ -486,29 +528,28 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#555",
     fontWeight: 700,
     marginBottom: 10,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   tableWrap: {
     overflowX: "auto",
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     borderRadius: 12,
-    boxShadow: "4px 4px 0px black",
   },
   table: {
     width: "100%",
     borderCollapse: "collapse",
     backgroundColor: "#fff",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   th: {
     padding: 12,
     textAlign: "left",
-    borderBottom: "2px solid black",
+    borderBottom: "1px solid #e2e8f0",
     backgroundColor: "#f0f0f0",
     color: "#000",
     fontSize: 12,
     fontWeight: 700,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   td: {
     padding: 12,
@@ -517,7 +558,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#000",
     fontSize: 13,
     verticalAlign: "top",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   row: {
     cursor: "pointer",
@@ -531,7 +572,7 @@ const styles: Record<string, React.CSSProperties> = {
     backgroundColor: "#dcfce7",
     color: "#15803d",
     border: "1.5px solid #15803d",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   badTag: {
     display: "inline-block",
@@ -542,7 +583,7 @@ const styles: Record<string, React.CSSProperties> = {
     backgroundColor: "#fee2e2",
     color: "#b91c1c",
     border: "1.5px solid #b91c1c",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   dimTag: {
     display: "inline-block",
@@ -553,7 +594,7 @@ const styles: Record<string, React.CSSProperties> = {
     backgroundColor: "#f1f5f9",
     color: "#64748b",
     border: "1.5px solid #64748b",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   actionCell: {
     display: "flex",
@@ -564,26 +605,24 @@ const styles: Record<string, React.CSSProperties> = {
   placeBtn: {
     padding: "6px 12px",
     borderRadius: 8,
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     backgroundColor: "#000",
     color: "#fff",
     fontWeight: 700,
     fontSize: 12,
     cursor: "pointer",
-    fontFamily: "monospace",
-    boxShadow: "2px 2px 0px #333",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   unplaceBtn: {
     padding: "6px 12px",
     borderRadius: 8,
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     backgroundColor: "#fff",
     color: "#000",
     fontWeight: 700,
     fontSize: 12,
     cursor: "pointer",
-    fontFamily: "monospace",
-    boxShadow: "2px 2px 0px black",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   detailActions: {
     marginTop: 12,
@@ -606,35 +645,34 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: 700,
     cursor: "pointer",
     fontSize: 14,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   section: {
     backgroundColor: "#fff",
-    border: "2px solid black",
-    borderRadius: 18,
-    padding: 24,
-    boxShadow: "8px 8px 0px black",
+    border: "none",
+    borderRadius: 12,
+    padding: "24px 0",
   },
   sectionTitle: {
     margin: "0 0 10px",
     fontSize: 18,
     color: "#000",
     fontWeight: 700,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   grid: {
     display: "grid",
     gridTemplateColumns: "220px 1fr",
     gap: "8px 12px",
     fontSize: 13,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   emptyCell: {
     textAlign: "center",
     padding: 20,
     color: "#555",
     fontSize: 13,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   loading: {
@@ -644,18 +682,18 @@ const styles: Record<string, React.CSSProperties> = {
     justifyContent: "center",
     fontSize: 16,
     color: "#000",
-    backgroundColor: "#f2f2f2",
-    fontFamily: "monospace",
+    backgroundColor: "#ffffff",
+    fontFamily: "Arial, Helvetica, sans-serif",
     fontWeight: 700,
   },
   loadingInner: {
     backgroundColor: "#fff",
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     borderRadius: 12,
     padding: 20,
     color: "#000",
     fontSize: 14,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
 };

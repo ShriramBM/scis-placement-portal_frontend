@@ -1,6 +1,8 @@
 import { useState } from "react";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
+import PublicSiteHeader from "../../components/PublicSiteHeader";
+import PublicSiteFooter from "../../components/PublicSiteFooter";
 import "../public-pages.css";
 
 const Register = () => {
@@ -44,35 +46,7 @@ const Register = () => {
 
   return (
     <div className="scis-page-root">
-      <div className="scis-top-strip">
-        <div className="scis-container scis-top-strip-inner">
-          <span>University of Hyderabad</span>
-          <span>School of Computer and Information Sciences</span>
-        </div>
-      </div>
-
-      <header className="scis-header">
-        <div className="scis-container scis-header-inner">
-          <div className="scis-brand">
-            <img src="/uoh-logo.png" alt="University of Hyderabad logo" className="scis-brand-logo" />
-            <div>
-              <p className="scis-brand-title">SCIS Placements</p>
-              <p className="scis-brand-subtitle">Office of Career Services</p>
-            </div>
-          </div>
-          <nav className="scis-nav-links">
-            <button type="button" className="scis-link-btn" onClick={() => navigate("/")}>
-              Home
-            </button>
-            <button type="button" className="scis-link-btn" onClick={() => navigate("/stats")}>
-              Statistics
-            </button>
-            <button type="button" className="scis-link-btn scis-link-btn-primary" onClick={() => navigate("/login")}>
-              Portal Login
-            </button>
-          </nav>
-        </div>
-      </header>
+      <PublicSiteHeader activeNav="login" />
 
       <main className="scis-container scis-auth-shell scis-auth-shell-single">
         <form onSubmit={handleSubmit} className="scis-panel scis-auth-card scis-register-card">
@@ -163,22 +137,7 @@ const Register = () => {
         </form>
       </main>
 
-      <footer className="scis-footer">
-        <div className="scis-container scis-footer-grid">
-          <div>
-            <h4>Contact</h4>
-            <p>SCIS Building, University of Hyderabad</p>
-            <p>officescis@uohyd.ac.in</p>
-            <p>+91-040-23134101</p>
-          </div>
-          <div>
-            <h4>Quick Links</h4>
-            <button type="button" className="scis-inline-btn" onClick={() => navigate("/stats")}>
-              Placement Statistics
-            </button>
-          </div>
-        </div>
-      </footer>
+      <PublicSiteFooter />
     </div>
   );
 };

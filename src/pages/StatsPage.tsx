@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   BarChart,
   Bar,
@@ -15,6 +14,8 @@ import {
   PieChart,
   Pie,
 } from "recharts";
+import PublicSiteHeader from "../components/PublicSiteHeader";
+import PublicSiteFooter from "../components/PublicSiteFooter";
 import "./public-pages.css";
 
 interface YearRow {
@@ -113,11 +114,10 @@ const STATS_DATA: YearData[] = [
 ];
 
 const DEGREE_OPTIONS = ["All", "MCA", "MTech (CSE)", "MTech (AI)", "IMTech"];
-const COLORS = ["#1d4ed8", "#2563eb", "#3b82f6", "#60a5fa", "#93c5fd"];
-const PIE_COLORS = ["#1d4ed8", "#2563eb", "#3b82f6", "#60a5fa", "#93c5fd", "#bfdbfe", "#dbeafe"];
+const COLORS = ["#1a365d", "#8b0000", "#b91c1c", "#94a3b8", "#475569"];
+const PIE_COLORS = ["#1a365d", "#8b0000", "#b91c1c", "#c53030", "#94a3b8", "#cbd5e1", "#e2e8f0"];
 
 const StatsPage = () => {
-  const navigate = useNavigate();
   const [selectedYear, setSelectedYear] = useState(0);
   const [degreeFilter, setDegreeFilter] = useState("All");
   const yearData = STATS_DATA[selectedYear];
@@ -142,9 +142,9 @@ const StatsPage = () => {
     const higher = filteredRows.reduce((s, r) => s + r.higherStudiesCount, 0);
     const notPlaced = filteredRows.reduce((s, r) => s + r.notPlacedCount, 0);
     return [
-      { name: "Placed", value: placed, fill: "#1d4ed8" },
-      { name: "Higher Studies", value: higher, fill: "#60a5fa" },
-      { name: "Not Placed", value: notPlaced, fill: "#93c5fd" },
+      { name: "Placed", value: placed, fill: "#1a365d" },
+      { name: "Higher Studies", value: higher, fill: "#8b0000" },
+      { name: "Not Placed", value: notPlaced, fill: "#94a3b8" },
     ].filter((d) => d.value > 0);
   }, [filteredRows]);
 
@@ -172,31 +172,11 @@ const StatsPage = () => {
 
   return (
     <div className="scis-page-root">
-      <div className="scis-top-strip">
-        <div className="scis-container scis-top-strip-inner">
-          <span>University of Hyderabad</span>
-          <span>School of Computer and Information Sciences</span>
-        </div>
-      </div>
-
-      <header className="scis-header">
-        <div className="scis-container scis-header-inner">
-          <div className="scis-brand">
-            <img src="/uoh-logo.png" alt="University of Hyderabad logo" className="scis-brand-logo" />
-            <div>
-              <p className="scis-brand-title">SCIS Placement Analytics</p>
-              <p className="scis-brand-subtitle">Training and Placement Cell</p>
-            </div>
-          </div>
-          <nav className="scis-nav-links">
-            <button type="button" className="scis-link-btn" onClick={() => navigate("/")}>Home</button>
-            <button type="button" className="scis-link-btn scis-link-btn-active">Statistics</button>
-            <button type="button" className="scis-link-btn scis-link-btn-primary" onClick={() => navigate("/login")}>
-              Portal Login
-            </button>
-          </nav>
-        </div>
-      </header>
+      <PublicSiteHeader
+        activeNav="stats"
+        brandTitle="SCIS Placement Analytics"
+        brandSubtitle="Training and Placement Cell"
+      />
 
       <main className="scis-container scis-main-content">
         <h1 className="scis-page-title">Placement Statistics</h1>
@@ -314,11 +294,11 @@ const StatsPage = () => {
             <div className="scis-chart-wrap scis-chart-wrap-tall">
               <ResponsiveContainer width="100%" height={320}>
                 <BarChart data={yearData.companyHires} layout="vertical" margin={{ top: 8, right: 24, left: 90, bottom: 8 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#dbeafe" />
-                  <XAxis type="number" stroke="#1e3a8a" />
-                  <YAxis type="category" dataKey="name" stroke="#1e3a8a" width={80} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                  <XAxis type="number" stroke="#1a365d" />
+                  <YAxis type="category" dataKey="name" stroke="#1a365d" width={80} />
                   <Tooltip />
-                  <Bar dataKey="count" name="Hires" fill="#2563eb" radius={[0, 6, 6, 0]} />
+                  <Bar dataKey="count" name="Hires" fill="#8b0000" radius={[0, 6, 6, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -330,11 +310,11 @@ const StatsPage = () => {
               <div className="scis-chart-wrap">
                 <ResponsiveContainer width="100%" height={280}>
                   <BarChart data={chartDataByDegree}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#dbeafe" />
-                    <XAxis dataKey="name" stroke="#1e3a8a" />
-                    <YAxis domain={[0, 100]} stroke="#1e3a8a" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                    <XAxis dataKey="name" stroke="#1a365d" />
+                    <YAxis domain={[0, 100]} stroke="#1a365d" />
                     <Tooltip />
-                    <Bar dataKey="Placement %" fill="#1d4ed8" radius={[6, 6, 0, 0]} />
+                    <Bar dataKey="Placement %" fill="#1a365d" radius={[6, 6, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -345,9 +325,9 @@ const StatsPage = () => {
               <div className="scis-chart-wrap">
                 <ResponsiveContainer width="100%" height={280}>
                   <BarChart data={chartDataByDegree}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#dbeafe" />
-                    <XAxis dataKey="name" stroke="#1e3a8a" />
-                    <YAxis stroke="#1e3a8a" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                    <XAxis dataKey="name" stroke="#1a365d" />
+                    <YAxis stroke="#1a365d" />
                     <Tooltip />
                     <Bar dataKey="Median CTC (LPA)" radius={[6, 6, 0, 0]}>
                       {chartDataByDegree.map((_, i) => (
@@ -365,12 +345,12 @@ const StatsPage = () => {
             <div className="scis-chart-wrap">
               <ResponsiveContainer width="100%" height={280}>
                 <LineChart data={trendData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#dbeafe" />
-                  <XAxis dataKey="degree" stroke="#1e3a8a" />
-                  <YAxis stroke="#1e3a8a" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                  <XAxis dataKey="degree" stroke="#1a365d" />
+                  <YAxis stroke="#1a365d" />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="2024-25" stroke="#1d4ed8" strokeWidth={3} dot={{ fill: "#1d4ed8" }} />
+                  <Line type="monotone" dataKey="2024-25" stroke="#8b0000" strokeWidth={3} dot={{ fill: "#8b0000" }} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -443,6 +423,8 @@ const StatsPage = () => {
           </div>
         </section>
       </main>
+
+      <PublicSiteFooter />
     </div>
   );
 };

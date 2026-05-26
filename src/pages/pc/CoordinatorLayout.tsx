@@ -1,28 +1,16 @@
 import { Outlet } from "react-router-dom";
 import CoordinatorSidebar from "./CoordinatorSidebar";
+import "../../styles/portal-layout.css";
 
 const CoordinatorLayout = () => {
   return (
-    <div style={styles.container}>
+    <div className="portal-layout">
       <CoordinatorSidebar />
-      <div style={styles.content} className="main-content">
+      <div className="portal-layout__main main-content">
         <Outlet />
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    display: "flex",
-    minHeight: "100vh",
-    backgroundColor: "#f2f2f2",
-  },
-  content: {
-    flex: 1,
-    padding: "0",
-    color: "#111827",
-  },
 };
 
 export default CoordinatorLayout;

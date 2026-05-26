@@ -1,0 +1,25 @@
+.portal-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #ffffff;
+  font-family: Arial, Helvetica, "Segoe UI", sans-serif;
+  color: #1e293b;
+}
+
+.portal-layout__main {
+  flex: 1;
+  min-width: 0;
+  overflow-x: hidden;
+  padding: 28px 28px 24px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+  .portal-layout {
+    flex-direction: column;
+  }
+
+  .portal-layout__main {
+    padding: 20px 16px;
+  }
+}

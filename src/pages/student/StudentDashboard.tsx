@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState, useRef } from "react";
 import api from "../../services/api";
+import DashboardStats from "../../components/DashboardStats";
+import Pagination from "../../components/Pagination";
+import { usePagination } from "../../hooks/usePagination";
 
 interface Company {
   id: number;
@@ -64,11 +67,11 @@ const CustomSelect = ({
         onClick={() => setIsOpen((p) => !p)}
         style={{
           padding: "10px 12px",
-          borderRadius: "8px",
-          border: "2px solid black",
+          borderRadius: "6px",
+          border: "1px solid #e2e8f0",
           backgroundColor: "#fff",
-          color: "#000",
-          fontFamily: "monospace",
+          color: "#1e293b",
+          fontFamily: "Arial, Helvetica, sans-serif",
           fontWeight: 600,
           fontSize: "13px",
           outline: "none",
@@ -92,9 +95,8 @@ const CustomSelect = ({
           left: 0,
           right: 0,
           backgroundColor: "#ffffff",
-          border: "2px solid black",
-          borderRadius: "12px",
-          boxShadow: "4px 4px 0px black",
+          border: "1px solid #e2e8f0",
+          borderRadius: "8px",
           zIndex: 100,
           overflow: "hidden",
           animation: "sd-dropdown-fade 0.2s ease",
@@ -107,10 +109,10 @@ const CustomSelect = ({
                 padding: "10px 12px",
                 cursor: "pointer",
                 fontSize: "13px",
-                fontFamily: "monospace",
+                fontFamily: "Arial, Helvetica, sans-serif",
                 fontWeight: 600,
-                color: "black",
-                borderBottom: "1px solid #ccc",
+                color: "#1e293b",
+                borderBottom: "1px solid #e2e8f0",
                 backgroundColor: value === opt.value ? "#f0f0f0" : "#fff",
                 transition: "background-color 0.15s ease",
               }}
@@ -146,29 +148,16 @@ const ActionBtn = ({
     className="sd-action-btn"
     style={{
       padding: "8px 16px",
-      border: `2px solid ${disabled ? "#aaa" : "black"}`,
-      borderRadius: "8px",
+      border: `1px solid ${disabled ? "#cbd5e1" : "#1a365d"}`,
+      borderRadius: "6px",
       cursor: disabled ? "not-allowed" : "pointer",
       fontWeight: "bold",
-      fontFamily: "monospace",
+      fontFamily: "Arial, Helvetica, sans-serif",
       fontSize: "14px",
       backgroundColor: bg,
       color,
-      boxShadow: disabled ? "2px 2px 0px #aaa" : "4px 4px 0px black",
       opacity: disabled ? 0.45 : 1,
-      transition: "all 0.2s cubic-bezier(.25,.8,.25,1)",
-    }}
-    onMouseEnter={(e) => {
-      if (!disabled) {
-        e.currentTarget.style.boxShadow = "0px 0px 0px black";
-        e.currentTarget.style.transform = "translate(4px,4px)";
-      }
-    }}
-    onMouseLeave={(e) => {
-      if (!disabled) {
-        e.currentTarget.style.boxShadow = "4px 4px 0px black";
-        e.currentTarget.style.transform = "translate(0,0)";
-      }
+      transition: "border-color 0.15s ease",
     }}
   >
     {children}
@@ -182,25 +171,22 @@ const sdStyles = `
     to { opacity: 1; }
   }
   .sd-container {
-    min-height: 100vh;
-    background-color: #f2f2f2;
-    padding: 22px;
-    color: #1f2937;
-    font-family: monospace;
+    background-color: transparent;
+    color: #1e293b;
+    font-family: Arial, Helvetica, sans-serif;
   }
   .sd-title {
     margin: 0;
     font-size: 28px;
     font-weight: 700;
-    color: #202020;
-    font-family: monospace;
+    color: #1a365d;
+    font-family: Arial, Helvetica, sans-serif;
   }
   .sd-card {
     background-color: #fff;
-    border: 2px solid black;
-    border-radius: 18px;
-    box-shadow: 8px 8px 0px black;
-    padding: 24px;
+    border: none;
+    border-radius: 12px;
+    padding: 24px 0;
   }
   .sd-filter-row {
     display: flex;
@@ -211,11 +197,11 @@ const sdStyles = `
   }
   .sd-search {
     padding: 10px 12px;
-    border-radius: 8px;
-    border: 2px solid black;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
     background-color: #fff;
-    color: #000;
-    font-family: monospace;
+    color: #1e293b;
+    font-family: Arial, Helvetica, sans-serif;
     font-weight: 600;
     font-size: 13px;
     outline: none;
@@ -223,45 +209,48 @@ const sdStyles = `
     flex: 1;
     box-sizing: border-box;
   }
+  .sd-search:focus {
+    border-color: #8b0000;
+    outline: 2px solid rgba(139, 0, 0, 0.15);
+  }
   .sd-search::placeholder {
-    color: #666;
+    color: #64748b;
   }
   .sd-table-wrap {
     overflow-x: auto;
-    border: 2px solid black;
-    border-radius: 12px;
-    box-shadow: 4px 4px 0px black;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
   }
   .sd-table {
     width: 100%;
     border-collapse: collapse;
     background-color: #fff;
-    font-family: monospace;
+    font-family: Arial, Helvetica, sans-serif;
   }
   .sd-th {
     padding: 12px 14px;
     text-align: left;
-    border-bottom: 2px solid black;
-    background-color: #f0f0f0;
-    color: #000;
+    border-bottom: 1px solid #e2e8f0;
+    background-color: #f0f4f8;
+    color: #1a365d;
     font-size: 12px;
     font-weight: 700;
-    font-family: monospace;
+    font-family: Arial, Helvetica, sans-serif;
   }
   .sd-td {
     padding: 12px 14px;
     text-align: left;
-    border-bottom: 1px solid #e0e0e0;
-    color: #1f2937;
+    border-bottom: 1px solid #e2e8f0;
+    color: #1e293b;
     font-size: 13px;
-    font-family: monospace;
+    font-family: Arial, Helvetica, sans-serif;
   }
   .sd-row {
     cursor: pointer;
     transition: background-color 0.15s ease;
   }
   .sd-row:hover {
-    background-color: #f5f5f5;
+    background-color: #f8fafc;
   }
   .sd-empty {
     text-align: center;
@@ -269,28 +258,30 @@ const sdStyles = `
     color: #64748b;
     font-size: 13px;
     font-weight: 700;
-    font-family: monospace;
+    font-family: Arial, Helvetica, sans-serif;
   }
   .sd-back-btn {
     align-self: flex-start;
     padding: 10px 16px;
-    border: 2px solid black;
-    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
     background-color: #ffffff;
-    color: #000;
-    font-family: monospace;
+    color: #b91c1c;
+    font-family: Arial, Helvetica, sans-serif;
     font-weight: 700;
     font-size: 14px;
     cursor: pointer;
-    box-shadow: 4px 4px 0px black;
-    transition: all 0.2s cubic-bezier(.25,.8,.25,1);
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+  .sd-back-btn:hover {
+    background-color: #f0f4f8;
+    border-color: #cbd5e1;
   }
   .sd-section {
     background-color: #fff;
-    border: 2px solid black;
-    border-radius: 18px;
-    box-shadow: 8px 8px 0px black;
-    padding: 24px;
+    border: none;
+    border-radius: 12px;
+    padding: 24px 0;
   }
   .sd-btn-group {
     display: flex;
@@ -347,7 +338,7 @@ const StudentDashboard = () => {
       case "APPLIED":     return { backgroundColor: "#dcfce7", color: "#15803d", borderColor: "#15803d" };
       case "REJECTED":    return { backgroundColor: "#fee2e2", color: "#b91c1c", borderColor: "#b91c1c" };
       case "IGNORED":     return { backgroundColor: "#fef9c3", color: "#854d0e", borderColor: "#854d0e" };
-      case "SHORTLISTED": return { backgroundColor: "#dbeafe", color: "#1d4ed8", borderColor: "#1d4ed8" };
+      case "SHORTLISTED": return { backgroundColor: "#e8eef4", color: "#1a365d", borderColor: "#1a365d" };
       case "SELECTED":    return { backgroundColor: "#ccfbf1", color: "#0f766e", borderColor: "#0f766e" };
       default:            return { backgroundColor: "#f1f5f9", color: "#64748b", borderColor: "#64748b" };
     }
@@ -388,14 +379,42 @@ const StudentDashboard = () => {
     [companies]
   );
 
-  const handleFilterChange = (name: string, value: string) =>
+  const {
+    paginatedItems: paginatedCompanies,
+    page: companyPage,
+    setPage: setCompanyPage,
+    totalPages: companyTotalPages,
+    from: companyFrom,
+    to: companyTo,
+    total: companyTotal,
+    resetPage: resetCompanyPage,
+  } = usePagination(sortedFilteredCompanies);
+
+  const dashboardStats = useMemo(() => {
+    const now = Date.now();
+    const activeCompanies = companies.filter(
+      (c) => new Date(c.deadline).getTime() >= now
+    ).length;
+    const appliedCount = applications.filter((a) => a.status === "APPLIED").length;
+    const selectedCount = applications.filter((a) => a.status === "SELECTED").length;
+    return [
+      { label: "Companies", value: companies.length },
+      { label: "Active deadlines", value: activeCompanies },
+      { label: "My applications", value: applications.length },
+      { label: "Applied", value: appliedCount, hint: selectedCount ? `${selectedCount} selected` : undefined },
+    ];
+  }, [companies, applications]);
+
+  const handleFilterChange = (name: string, value: string) => {
     setFilters((prev) => ({ ...prev, [name]: value }));
+    resetCompanyPage();
+  };
 
   if (loading) {
     return (
       <div className="sd-container">
         <style>{sdStyles}</style>
-        <div style={{ border: "2px solid black", borderRadius: "18px", boxShadow: "8px 8px 0px black", padding: "30px 40px", display: "inline-block", fontFamily: "monospace", fontWeight: 700, fontSize: "16px" }}>
+        <div style={{ borderRadius: "8px", padding: "30px 40px", display: "inline-block", fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 700, fontSize: "16px", color: "#1a365d" }}>
           Loading dashboard...
         </div>
       </div>
@@ -412,10 +431,12 @@ const StudentDashboard = () => {
         <>
           <div style={{ marginBottom: "24px" }}>
             <h1 className="sd-title">Jobs on Campus</h1>
-            <p style={{ margin: "8px 0 0", color: "#555", fontSize: "13px", fontFamily: "monospace" }}>
+            <p style={{ margin: "8px 0 0", color: "#64748b", fontSize: "13px", fontFamily: "Arial, Helvetica, sans-serif" }}>
               Newly listed companies are shown first. Expired deadlines appear at the end.
             </p>
           </div>
+
+          <DashboardStats stats={dashboardStats} />
 
           <div className="sd-card">
             <div className="sd-filter-row">
@@ -446,8 +467,10 @@ const StudentDashboard = () => {
                 ]} />
             </div>
 
-            <p style={{ fontSize: "12px", color: "#555", fontWeight: 700, fontFamily: "monospace", marginBottom: "12px" }}>
-              Showing {sortedFilteredCompanies.length} of {companies.length} companies
+            <p style={{ fontSize: "12px", color: "#64748b", fontWeight: 700, fontFamily: "Arial, Helvetica, sans-serif", marginBottom: "12px" }}>
+              {companyTotal === 0
+                ? `No companies match filters (${companies.length} total)`
+                : `Showing ${companyFrom}–${companyTo} of ${companyTotal} filtered (${companies.length} total companies)`}
             </p>
 
             <div className="sd-table-wrap">
@@ -460,10 +483,10 @@ const StudentDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {sortedFilteredCompanies.length === 0 ? (
+                  {paginatedCompanies.length === 0 ? (
                     <tr><td colSpan={6} className="sd-empty">No companies match current filters.</td></tr>
                   ) : (
-                    sortedFilteredCompanies.map((company) => {
+                    paginatedCompanies.map((company) => {
                       const status  = getStatus(company.id);
                       const expired = new Date() > new Date(company.deadline);
                       return (
@@ -474,10 +497,10 @@ const StudentDashboard = () => {
                           <td className="sd-td" data-label="Eligibility">{company.department === "MCA" ? "MCA" : (company.streamsAllowed?.length ? company.streamsAllowed.join(", ") : "All streams")}</td>
                           <td className="sd-td" data-label="Deadline" style={{ color: expired ? "#ef4444" : "inherit", fontWeight: expired ? 700 : 400 }}>
                             {new Date(company.deadline).toLocaleString("en-IN")}
-                            {expired && <span style={{ display: "block", fontSize: "10px", fontWeight: 700, color: "#ef4444", fontFamily: "monospace", marginTop: "2px" }}>Expired</span>}
+                            {expired && <span style={{ display: "block", fontSize: "10px", fontWeight: 700, color: "#b91c1c", fontFamily: "Arial, Helvetica, sans-serif", marginTop: "2px" }}>Expired</span>}
                           </td>
                           <td className="sd-td" data-label="Status">
-                            <span style={{ padding: "4px 10px", borderRadius: "6px", fontSize: "11px", fontWeight: 700, display: "inline-block", border: "1.5px solid", fontFamily: "monospace", ...statusStyle(status) }}>
+                            <span style={{ padding: "4px 10px", borderRadius: "6px", fontSize: "11px", fontWeight: 700, display: "inline-block", border: "1.5px solid", fontFamily: "Arial, Helvetica, sans-serif", ...statusStyle(status) }}>
                               {status || "NO RESPONSE"}
                             </span>
                           </td>
@@ -488,14 +511,23 @@ const StudentDashboard = () => {
                 </tbody>
               </table>
             </div>
+            <Pagination
+              page={companyPage}
+              totalPages={companyTotalPages}
+              total={companyTotal}
+              from={companyFrom}
+              to={companyTo}
+              onPageChange={setCompanyPage}
+              itemLabel="companies"
+            />
           </div>
         </>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           <button
             className="sd-back-btn"
-            onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0px 0px 0px black"; e.currentTarget.style.transform = "translate(4px,4px)"; e.currentTarget.style.backgroundColor = "#e8e8e8"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "4px 4px 0px black"; e.currentTarget.style.transform = "translate(0,0)"; e.currentTarget.style.backgroundColor = "#ffffff"; }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#f0f4f8"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
             onClick={() => setSelectedCompany(null)}
           >
             ← Back to list
@@ -552,7 +584,7 @@ const StudentDashboard = () => {
           </div>
 
           <div className="sd-section">
-            <h3 style={{ margin: "0 0 14px", fontFamily: "monospace", fontSize: "18px" }}>Your Response</h3>
+            <h3 style={{ margin: "0 0 14px", fontFamily: "Arial, Helvetica, sans-serif", fontSize: "18px", color: "#1a365d" }}>Your Response</h3>
             <div className="sd-btn-group">
               <ActionBtn disabled={deadlinePassed || getStatus(selectedCompany.id) === "APPLIED"} onClick={() => respond(selectedCompany.id, "ACCEPT")} bg="#dcfce7" color="#15803d">✓ Apply</ActionBtn>
               <ActionBtn disabled={deadlinePassed || getStatus(selectedCompany.id) === "REJECTED"} onClick={() => respond(selectedCompany.id, "REJECT")} bg="#fee2e2" color="#b91c1c">✕ Reject</ActionBtn>
@@ -568,9 +600,9 @@ const StudentDashboard = () => {
 const styles: Record<string, React.CSSProperties> = {
   container: {
     minHeight: "100vh",
-    backgroundColor: "#f2f2f2",
+    backgroundColor: "#ffffff",
     padding: "22px",
-    color: "#1f2937",
+    color: "#1e293b",
   },
   loading: {
     minHeight: "100vh",
@@ -578,8 +610,8 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: "center",
     justifyContent: "center",
     fontSize: "16px",
-    color: "#4b5563",
-    backgroundColor: "#f2f2f2",
+    color: "#64748b",
+    backgroundColor: "#ffffff",
   },
   header: {
     marginBottom: "14px",
@@ -588,7 +620,7 @@ const styles: Record<string, React.CSSProperties> = {
     margin: 0,
     fontSize: "30px",
     fontWeight: 600,
-    color: "#202020",
+    color: "#1a365d",
   },
   subtitle: {
     margin: "6px 0 0",
@@ -664,7 +696,6 @@ const styles: Record<string, React.CSSProperties> = {
     border: "1px solid #e5e7eb",
     borderRadius: "10px",
     padding: "14px",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.04)",
   },
   detailsLayout: {
     display: "flex",
@@ -686,13 +717,12 @@ const styles: Record<string, React.CSSProperties> = {
     border: "1px solid #e5e7eb",
     borderRadius: "10px",
     padding: "14px",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.04)",
   },
   companyTitle: {
     margin: "0 0 10px",
     fontSize: "24px",
     fontWeight: 600,
-    color: "#202020",
+    color: "#1a365d",
   },
   keyValueGrid: {
     display: "grid",

@@ -543,14 +543,14 @@ const StudentProfile = () => {
           {/* Action Buttons */}
           <div style={s.buttonRow}>
             <button type="button" onClick={handleReset} style={s.resetBtn}
-              onMouseEnter={e => { e.currentTarget.style.boxShadow = "0px 0px 0px black"; e.currentTarget.style.transform = "translate(4px,4px)"; }}
-              onMouseLeave={e => { e.currentTarget.style.boxShadow = "4px 4px 0px black"; e.currentTarget.style.transform = "translate(0,0)"; }}
+              onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#f0f4f8"; }}
+              onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#fff"; }}
             >
               Reset
             </button>
             <button type="button" onClick={handleSave} disabled={saving} style={s.saveBtn}
-              onMouseEnter={e => { if (!saving) { e.currentTarget.style.boxShadow = "0px 0px 0px #333"; e.currentTarget.style.transform = "translate(4px,4px)"; } }}
-              onMouseLeave={e => { e.currentTarget.style.boxShadow = "4px 4px 0px #333"; e.currentTarget.style.transform = "translate(0,0)"; }}
+              onMouseEnter={e => { if (!saving) { e.currentTarget.style.filter = "brightness(1.05)"; } }}
+              onMouseLeave={e => { e.currentTarget.style.filter = "none"; }}
             >
               {saving ? "Saving..." : "Save Changes"}
             </button>
@@ -702,11 +702,11 @@ const StudentProfile = () => {
                   fontSize: 14,
                   fontWeight: 700,
                   borderRadius: 8,
-                  border: "2px solid black",
+                  border: "1px solid #e2e8f0",
                   backgroundColor: "#000",
                   color: "#fff",
                   cursor: "pointer",
-                  fontFamily: "monospace",
+                  fontFamily: "Arial, Helvetica, sans-serif",
                   boxShadow: "4px 4px 0px #333",
                 }}
               >
@@ -781,14 +781,14 @@ const StudentProfile = () => {
           {/* Action Buttons */}
           <div style={{ ...s.buttonRow, marginTop: 24 }}>
             <button type="button" onClick={handleReset} style={s.resetBtn}
-              onMouseEnter={e => { e.currentTarget.style.boxShadow = "0px 0px 0px black"; e.currentTarget.style.transform = "translate(4px,4px)"; }}
-              onMouseLeave={e => { e.currentTarget.style.boxShadow = "4px 4px 0px black"; e.currentTarget.style.transform = "translate(0,0)"; }}
+              onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#f0f4f8"; }}
+              onMouseLeave={e => { e.currentTarget.style.backgroundColor = "#fff"; }}
             >
               Reset
             </button>
             <button type="button" onClick={handleSave} disabled={saving} style={s.saveBtn}
-              onMouseEnter={e => { if (!saving) { e.currentTarget.style.boxShadow = "0px 0px 0px #333"; e.currentTarget.style.transform = "translate(4px,4px)"; } }}
-              onMouseLeave={e => { e.currentTarget.style.boxShadow = "4px 4px 0px #333"; e.currentTarget.style.transform = "translate(0,0)"; }}
+              onMouseEnter={e => { if (!saving) { e.currentTarget.style.filter = "brightness(1.05)"; } }}
+              onMouseLeave={e => { e.currentTarget.style.filter = "none"; }}
             >
               {saving ? "Saving..." : "Save Changes"}
             </button>
@@ -811,17 +811,17 @@ const cssAnimations = `
 
 const s: Record<string, React.CSSProperties> = {
   pageWrapper: {
-    backgroundColor: "#f2f2f2",
+    backgroundColor: "#ffffff",
     minHeight: "100vh",
     padding: "24px 32px",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     color: "#000",
     overflowY: "auto",
   },
   breadcrumb: {
     fontSize: 14,
     marginBottom: 12,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   backArrow: {
     width: 36,
@@ -833,12 +833,12 @@ const s: Record<string, React.CSSProperties> = {
     cursor: "pointer",
     marginBottom: 16,
     transition: "background-color 0.2s",
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     backgroundColor: "#fff",
   },
   tabBar: {
     display: "flex",
-    borderBottom: "2px solid black",
+    borderBottom: "1px solid #e2e8f0",
     marginBottom: 24,
     gap: 0,
   },
@@ -856,11 +856,11 @@ const s: Record<string, React.CSSProperties> = {
     marginBottom: -2,
     transition: "all 0.2s ease",
     userSelect: "none",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   tabActive: {
-    color: "#000",
-    borderBottomColor: "#000",
+    color: "#1a365d",
+    borderBottomColor: "#8b0000",
     fontWeight: 700,
   },
   toast: {
@@ -870,15 +870,15 @@ const s: Record<string, React.CSSProperties> = {
     fontSize: 14,
     fontWeight: 600,
     animation: "fadeIn 0.3s ease",
-    border: "2px solid black",
-    fontFamily: "monospace",
+    border: "1px solid #e2e8f0",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   card: {
     backgroundColor: "#fff",
     borderRadius: 18,
     padding: "28px 32px",
-    boxShadow: "8px 8px 0px black",
-    border: "2px solid black",
+    boxShadow: "0 1px 3px rgba(26, 54, 93, 0.06)",
+    border: "1px solid #e2e8f0",
     animation: "fadeIn 0.3s ease",
   },
   statusBadge: {
@@ -886,7 +886,7 @@ const s: Record<string, React.CSSProperties> = {
     fontWeight: 700,
     fontSize: 14,
     marginBottom: 24,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   row: {
     display: "flex",
@@ -902,20 +902,20 @@ const s: Record<string, React.CSSProperties> = {
     fontWeight: 700,
     color: "#000",
     marginBottom: 6,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   input: {
     width: "100%",
     padding: "10px 14px",
     fontSize: 14,
     borderRadius: 8,
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     backgroundColor: "#fff",
     color: "#000",
     outline: "none",
     boxSizing: "border-box",
     transition: "border-color 0.2s, box-shadow 0.2s",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   select: {
@@ -923,14 +923,14 @@ const s: Record<string, React.CSSProperties> = {
     padding: "10px 14px",
     fontSize: 14,
     borderRadius: 8,
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     backgroundColor: "#fff",
     color: "#000",
     outline: "none",
     boxSizing: "border-box",
     cursor: "pointer",
     appearance: "auto",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   disabledInput: {
@@ -947,7 +947,7 @@ const s: Record<string, React.CSSProperties> = {
     color: "#000",
     cursor: "pointer",
     fontWeight: 600,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   buttonRow: {
     display: "flex",
@@ -962,26 +962,26 @@ const s: Record<string, React.CSSProperties> = {
     fontSize: 14,
     fontWeight: 700,
     borderRadius: 8,
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     backgroundColor: "#fff",
     color: "#000",
     cursor: "pointer",
     transition: "all 0.2s ease",
-    fontFamily: "monospace",
-    boxShadow: "4px 4px 0px black",
+    fontFamily: "Arial, Helvetica, sans-serif",
+    boxShadow: "0 1px 3px rgba(26, 54, 93, 0.06)",
   },
   saveBtn: {
     padding: "10px 28px",
     fontSize: 14,
     fontWeight: 700,
     borderRadius: 8,
-    border: "2px solid black",
-    backgroundColor: "#000",
+    border: "1px solid #6d0000",
+    backgroundColor: "#8b0000",
     color: "#fff",
     cursor: "pointer",
     transition: "all 0.2s ease",
-    fontFamily: "monospace",
-    boxShadow: "4px 4px 0px #333",
+    fontFamily: "Arial, Helvetica, sans-serif",
+    boxShadow: "0 1px 2px rgba(26, 54, 93, 0.12)",
   },
 
   // Academic tab styles
@@ -991,17 +991,17 @@ const s: Record<string, React.CSSProperties> = {
     color: "#000",
     marginBottom: 16,
     marginTop: 0,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   tableHeader: {
     display: "flex",
     gap: 12,
     padding: "10px 8px",
-    borderBottom: "2px solid black",
+    borderBottom: "1px solid #e2e8f0",
     fontSize: 13,
     fontWeight: 700,
     color: "#000",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   tableRow: {
     display: "flex",
@@ -1015,12 +1015,12 @@ const s: Record<string, React.CSSProperties> = {
     padding: "8px 10px",
     fontSize: 13,
     borderRadius: 8,
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     backgroundColor: "#fff",
     color: "#000",
     outline: "none",
     boxSizing: "border-box",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   priorBlock: {
@@ -1033,28 +1033,28 @@ const s: Record<string, React.CSSProperties> = {
     padding: "16px 20px",
     backgroundColor: "#fff",
     borderRadius: 12,
-    border: "2px solid black",
-    boxShadow: "4px 4px 0px black",
+    border: "1px solid #e2e8f0",
+    boxShadow: "0 1px 3px rgba(26, 54, 93, 0.06)",
   },
   deletePriorBtn: {
     width: 40,
     height: 40,
     borderRadius: 8,
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     backgroundColor: "#fff",
     color: "#000",
     cursor: "pointer",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    boxShadow: "2px 2px 0px black",
+    boxShadow: "0 1px 2px rgba(26, 54, 93, 0.08)",
   },
   emptyText: {
     color: "#555",
     fontSize: 14,
     padding: "16px 0",
     textAlign: "center",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   loadingBox: {
@@ -1068,7 +1068,7 @@ const s: Record<string, React.CSSProperties> = {
     width: 36,
     height: 36,
     border: "4px solid #e0e0e0",
-    borderTopColor: "#000",
+    borderTopColor: "#8b0000",
     borderRadius: "50%",
     animation: "spin 0.8s linear infinite",
   },

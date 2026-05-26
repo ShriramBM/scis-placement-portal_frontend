@@ -2,14 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --scis-maroon: #8b0000;
+  --scis-maroon-hover: #6d0000;
+  --scis-maroon-light: #a50000;
+  --scis-navy: #1a365d;
+  --scis-link-red: #b91c1c;
+  --scis-page-bg: #ffffff;
+  --scis-muted-bg: #f0f4f8;
+  --scis-border: #e2e8f0;
+  --scis-text: #1e293b;
+  --scis-font: Arial, Helvetica, "Segoe UI", sans-serif;
+  --scis-font-serif: Georgia, "Times New Roman", Times, serif;
+  --scis-font-sans: Arial, Helvetica, "Segoe UI", sans-serif;
+}
+
 html,
-body,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  /* Do not set overflow-x: hidden here — it breaks position:sticky on descendants (e.g. public nav). */
+}
+
 #root {
   margin: 0;
   padding: 0;
-  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, "DejaVu Sans Mono", monospace;
-  color: #000;
-  background-color: #f2f2f2;
+  width: 100%;
+  min-height: 100vh;
+  font-family: var(--scis-font);
+  color: var(--scis-text);
+  background-color: var(--scis-page-bg);
 }
 
 /* Remove top spacing from all page content areas */

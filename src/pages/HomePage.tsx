@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+import PublicSiteHeader from "../components/PublicSiteHeader";
+import PublicSiteFooter from "../components/PublicSiteFooter";
 import "./public-pages.css";
 
 const HomePage = () => {
@@ -6,35 +8,7 @@ const HomePage = () => {
 
   return (
     <div className="scis-page-root">
-      <div className="scis-top-strip">
-        <div className="scis-container scis-top-strip-inner">
-          <span>University of Hyderabad</span>
-          <span>School of Computer and Information Sciences</span>
-        </div>
-      </div>
-
-      <header className="scis-header">
-        <div className="scis-container scis-header-inner">
-          <div className="scis-brand">
-            <img src="/uoh-logo.png" alt="University of Hyderabad logo" className="scis-brand-logo" />
-            <div>
-              <p className="scis-brand-title">SCIS Placements</p>
-              <p className="scis-brand-subtitle">Office of Career Services</p>
-            </div>
-          </div>
-          <nav className="scis-nav-links">
-            <button type="button" className="scis-link-btn" onClick={() => navigate("/")}>
-              Home
-            </button>
-            <button type="button" className="scis-link-btn" onClick={() => navigate("/stats")}>
-              Statistics
-            </button>
-            <button type="button" className="scis-link-btn scis-link-btn-primary" onClick={() => navigate("/login")}>
-              Portal Login
-            </button>
-          </nav>
-        </div>
-      </header>
+      <PublicSiteHeader activeNav="home" />
 
       <section className="scis-hero">
         <div className="scis-container">
@@ -43,6 +17,9 @@ const HomePage = () => {
           <p className="scis-hero-subtitle">
             Connecting SCIS students with top recruiters through a structured, transparent,
             and data-driven placement process.
+          </p>
+          <p className="scis-hero-highlight">
+            *** Official career services portal for MCA, M.Tech, and Integrated M.Tech programmes ***
           </p>
           <div className="scis-hero-actions">
             <button type="button" className="scis-btn-primary" onClick={() => navigate("/login")}>
@@ -56,23 +33,32 @@ const HomePage = () => {
       </section>
 
       <main className="scis-container scis-main-content">
-        <section className="scis-card-grid">
-          <article className="scis-card">
-            <h3>Placement Brochure</h3>
-            <p>Get programme details, placement process, and student profiles curated for recruiters.</p>
-            <a href="#" className="scis-inline-link">Download brochure</a>
-          </article>
-          <article className="scis-card">
-            <h3>Internship Highlights</h3>
-            <p>Explore internship participation, stipend trends, and company engagement by programme.</p>
-            <a href="#" className="scis-inline-link">See details</a>
-          </article>
-          <article className="scis-card">
-            <h3>Recruiter Connect</h3>
-            <p>Contact the placement office to schedule pre-placement talks, tests, and interviews.</p>
-            <a href="#contact" className="scis-inline-link">Contact us</a>
-          </article>
-        </section>
+        <div className="scis-news-panel">
+          <h2>Latest from the cell</h2>
+          <section className="scis-card-grid">
+            <article className="scis-card">
+              <h3>Placement Brochure</h3>
+              <p>Get programme details, placement process, and student profiles curated for recruiters.</p>
+              <a href="#" className="scis-inline-link">
+                Download brochure
+              </a>
+            </article>
+            <article className="scis-card">
+              <h3>Internship Highlights</h3>
+              <p>Explore internship participation, stipend trends, and company engagement by programme.</p>
+              <a href="https://scis.uohyd.ac.in/isure/index.php" className="scis-inline-link">
+                See details
+              </a>
+            </article>
+            <article className="scis-card">
+              <h3>Recruiter Connect</h3>
+              <p>Contact the placement office to schedule pre-placement talks, tests, and interviews.</p>
+              <a href="#contact" className="scis-inline-link">
+                Contact us
+              </a>
+            </article>
+          </section>
+        </div>
 
         <section className="scis-panel">
           <div className="scis-panel-header">
@@ -113,31 +99,7 @@ const HomePage = () => {
         </section>
       </main>
 
-      <footer id="contact" className="scis-footer">
-        <div className="scis-container scis-footer-grid">
-          <div>
-            <h4>Contact</h4>
-            <p>SCIS Building, University of Hyderabad</p>
-            <p>officescis@uohyd.ac.in</p>
-            <p>+91-040-23134101</p>
-          </div>
-          <div>
-            <h4>Quick Links</h4>
-            <button type="button" className="scis-inline-btn" onClick={() => navigate("/stats")}>
-              Placement Statistics
-            </button>
-            <button type="button" className="scis-inline-btn" onClick={() => navigate("/login")}>
-              Student/Recruiter Login
-            </button>
-          </div>
-          <div>
-            <h4>Official Website</h4>
-            <a href="https://scis.uohyd.ac.in" target="_blank" rel="noreferrer" className="scis-inline-link">
-              scis.uohyd.ac.in
-            </a>
-          </div>
-        </div>
-      </footer>
+      <PublicSiteFooter footerId="contact" />
     </div>
   );
 };

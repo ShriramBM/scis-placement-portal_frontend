@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState, useRef } from "react";
 import api from "../../services/api";
+import DashboardStats from "../../components/DashboardStats";
+import Pagination from "../../components/Pagination";
+import { usePagination } from "../../hooks/usePagination";
 
 interface Application {
   id: number;
@@ -45,10 +48,10 @@ const CustomSelect = ({
         style={{
           padding: "10px 12px",
           borderRadius: "8px",
-          border: "2px solid black",
+          border: "1px solid #e2e8f0",
           backgroundColor: "#fff",
           color: "#000",
-          fontFamily: "monospace",
+          fontFamily: "Arial, Helvetica, sans-serif",
           fontWeight: 600,
           fontSize: "13px",
           outline: "none",
@@ -72,9 +75,8 @@ const CustomSelect = ({
           left: 0,
           right: 0,
           backgroundColor: "#ffffff",
-          border: "2px solid black",
+          border: "1px solid #e2e8f0",
           borderRadius: "12px",
-          boxShadow: "4px 4px 0px black",
           zIndex: 100,
           overflow: "hidden",
         }}>
@@ -86,7 +88,7 @@ const CustomSelect = ({
                 padding: "10px 12px",
                 cursor: "pointer",
                 fontSize: "13px",
-                fontFamily: "monospace",
+                fontFamily: "Arial, Helvetica, sans-serif",
                 fontWeight: 600,
                 color: "black",
                 borderBottom: "1px solid #ccc",
@@ -129,9 +131,6 @@ const MyApplications = () => {
     }
   };
 
-  const handleFilterChange = (name: string, value: string) =>
-    setFilters((prev) => ({ ...prev, [name]: value }));
-
   const filteredApplications = useMemo(() => {
     const now = Date.now();
     return applications.filter((app) => {
@@ -144,6 +143,32 @@ const MyApplications = () => {
       return true;
     });
   }, [applications, filters]);
+
+  const {
+    paginatedItems: paginatedApplications,
+    page: appPage,
+    setPage: setAppPage,
+    totalPages: appTotalPages,
+    from: appFrom,
+    to: appTo,
+    total: appTotal,
+    resetPage: resetAppPage,
+  } = usePagination(filteredApplications);
+
+  const dashboardStats = useMemo(
+    () => [
+      { label: "Total applications", value: applications.length },
+      { label: "Applied", value: applications.filter((a) => a.status === "APPLIED").length },
+      { label: "Selected", value: applications.filter((a) => a.status === "SELECTED").length },
+      { label: "Matching filters", value: filteredApplications.length },
+    ],
+    [applications, filteredApplications.length]
+  );
+
+  const handleFilterChange = (name: string, value: string) => {
+    setFilters((prev) => ({ ...prev, [name]: value }));
+    resetAppPage();
+  };
 
   if (loading) return <div style={styles.loading}>Loading applications...</div>;
 
@@ -160,6 +185,8 @@ const MyApplications = () => {
         <h2 style={styles.title}>My Applications</h2>
         <p style={styles.subtitle}>Track your responses and application status.</p>
       </div>
+
+      {applications.length > 0 ? <DashboardStats stats={dashboardStats} /> : null}
 
       {applications.length === 0 ? (
         <div style={styles.empty}>No applications yet.</div>
@@ -201,7 +228,9 @@ const MyApplications = () => {
           </div>
 
           <p style={styles.countText}>
-            Showing {filteredApplications.length} of {applications.length} applications
+            {appTotal === 0
+              ? `No applications match filters (${applications.length} total)`
+              : `Showing ${appFrom}–${appTo} of ${appTotal} filtered (${applications.length} total)`}
           </p>
 
           <div style={styles.tableWrap}>
@@ -215,14 +244,14 @@ const MyApplications = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredApplications.length === 0 ? (
+                {paginatedApplications.length === 0 ? (
                   <tr>
                     <td colSpan={4} style={styles.emptyCell}>
                       No applications match current filters.
                     </td>
                   </tr>
                 ) : (
-                  filteredApplications.map((app) => {
+                  paginatedApplications.map((app) => {
                     const expired = new Date() > new Date(app.company.deadline);
                     return (
                       <tr key={app.id} style={{ ...styles.tr, opacity: expired ? 0.6 : 1 }}>
@@ -251,6 +280,15 @@ const MyApplications = () => {
               </tbody>
             </table>
           </div>
+          <Pagination
+            page={appPage}
+            totalPages={appTotalPages}
+            total={appTotal}
+            from={appFrom}
+            to={appTo}
+            onPageChange={setAppPage}
+            itemLabel="applications"
+          />
         </div>
       )}
     </div>
@@ -276,10 +314,8 @@ const getStatusStyle = (status: string): React.CSSProperties => {
 
 const styles: Record<string, React.CSSProperties> = {
   container: {
-    backgroundColor: "#f2f2f2",
-    minHeight: "100vh",
-    padding: "22px",
-    fontFamily: "monospace",
+    backgroundColor: "transparent",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   loading: {
     minHeight: "100vh",
@@ -288,8 +324,8 @@ const styles: Record<string, React.CSSProperties> = {
     justifyContent: "center",
     fontSize: "16px",
     color: "#333",
-    backgroundColor: "#f2f2f2",
-    fontFamily: "monospace",
+    backgroundColor: "#ffffff",
+    fontFamily: "Arial, Helvetica, sans-serif",
     fontWeight: 700,
   },
   header: {
@@ -300,29 +336,28 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: "28px",
     fontWeight: 700,
     color: "#000",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   subtitle: {
     margin: "6px 0 0",
     color: "#555",
     fontSize: "13px",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   empty: {
     backgroundColor: "#fff",
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     borderRadius: "12px",
     padding: "18px",
     color: "#555",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   card: {
     backgroundColor: "#fff",
-    border: "2px solid black",
-    borderRadius: "18px",
-    padding: "24px",
-    boxShadow: "8px 8px 0px black",
+    border: "none",
+    borderRadius: "12px",
+    padding: "24px 0",
   },
   filterRow: {
     display: "flex",
@@ -334,10 +369,10 @@ const styles: Record<string, React.CSSProperties> = {
   searchInput: {
     padding: "10px 12px",
     borderRadius: "8px",
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     backgroundColor: "#fff",
     color: "#000",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     fontWeight: 600,
     fontSize: "13px",
     outline: "none",
@@ -349,7 +384,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: "12px",
     color: "#555",
     fontWeight: 700,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     marginBottom: "12px",
   },
   emptyCell: {
@@ -357,30 +392,29 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "24px",
     color: "#555",
     fontSize: "13px",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   tableWrap: {
     overflowX: "auto",
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     borderRadius: "12px",
-    boxShadow: "4px 4px 0px black",
   },
   table: {
     width: "100%",
     borderCollapse: "collapse" as const,
     backgroundColor: "#fff",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   th: {
     padding: "12px 14px",
     textAlign: "left" as const,
-    borderBottom: "2px solid black",
+    borderBottom: "1px solid #e2e8f0",
     backgroundColor: "#f0f0f0",
     color: "#000",
     fontSize: "12px",
     fontWeight: 700 as const,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   td: {
     padding: "12px 14px",
@@ -388,7 +422,7 @@ const styles: Record<string, React.CSSProperties> = {
     borderBottom: "1px solid #e0e0e0",
     color: "#000",
     fontSize: "13px",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   tr: {
     transition: "background 0.2s",
@@ -400,7 +434,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: "12px",
     display: "inline-block",
     border: "1.5px solid",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
 };
 

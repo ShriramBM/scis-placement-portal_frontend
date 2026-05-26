@@ -1,56 +1,145 @@
+/* SCIS / University of Hyderabad school site theme — maroon, navy, academic fonts */
+
 :root {
-  --scis-blue-900: #0f2d62;
-  --scis-blue-800: #1e3a8a;
-  --scis-blue-700: #1d4ed8;
-  --scis-blue-100: #dbeafe;
-  --scis-bg: #f7f9fc;
-  --scis-text: #1f2937;
-  --scis-muted: #6b7280;
-  --scis-border: #e5e7eb;
+  --scis-maroon: #8b0000;
+  --scis-maroon-hover: #6d0000;
+  --scis-maroon-accent: #a50000;
+  --scis-navy: #1a365d;
+  --scis-link-red: #b91c1c;
+  --scis-bg: #ffffff;
+  --scis-bg-soft: #f0f4f8;
+  --scis-text: #1e293b;
+  --scis-muted: #64748b;
+  --scis-border: #e2e8f0;
+  /* Same horizontal inset for nav, main, and footer grid (not full-bleed maroon bars). */
+  --scis-gutter: 1rem;
+  /* Official SCIS-style: serif on top maroon banner; sans elsewhere (body, nav, headings). */
+  --scis-font-serif: Georgia, "Times New Roman", Times, serif;
+  --scis-font-sans: Arial, Helvetica, "Segoe UI", sans-serif;
 }
 
 .scis-page-root {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
   min-height: 100vh;
   background: var(--scis-bg);
   color: var(--scis-text);
-  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+  font-family: var(--scis-font-sans);
 }
 
 .scis-container {
-  width: min(1150px, calc(100% - 2rem));
+  width: 100%;
+  max-width: 1150px;
   margin: 0 auto;
+  padding-left: var(--scis-gutter);
+  padding-right: var(--scis-gutter);
+  box-sizing: border-box;
 }
 
-.scis-top-strip {
-  background: var(--scis-blue-900);
+/* Maroon banner (official SCIS header style) — full viewport width, serif like scis.uohyd.ac.in */
+.scis-site-banner {
+  width: 100%;
+  margin: 0;
+  padding-top: 0.85rem;
+  background: var(--scis-maroon);
   color: #fff;
-  font-size: 0.84rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  font-family: var(--scis-font-serif);
 }
 
-.scis-top-strip-inner {
-  min-height: 38px;
+.scis-site-banner-inner {
+  min-height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  padding: 0.45rem 0 0.55rem;
+}
+
+.scis-banner-logo {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.scis-banner-titles {
+  flex: 1;
+  text-align: center;
+}
+
+.scis-banner-line1 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 400;
+  opacity: 0.95;
+}
+
+.scis-banner-line2 {
+  margin: 0.15rem 0 0;
+  font-size: clamp(1.05rem, 2.5vw, 1.45rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.scis-banner-spacer {
+  width: 56px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .scis-banner-spacer {
+    display: none;
+  }
+  .scis-banner-titles {
+    text-align: left;
+  }
+  .scis-site-banner-inner {
+    flex-wrap: wrap;
+  }
+}
+
+.scis-announcement-bar {
+  width: 100%;
+  margin: 0;
+  background: #fff;
+  border-bottom: 1px solid var(--scis-border);
+  font-size: 0.84rem;
+  color: var(--scis-muted);
+}
+
+.scis-announcement-inner {
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  padding: 0.35rem 0 0.55rem;
+  font-family: var(--scis-font-sans);
 }
 
 .scis-header {
+  width: 100%;
+  margin: 0;
   background: #fff;
   border-bottom: 1px solid var(--scis-border);
   position: sticky;
   top: 0;
   z-index: 20;
+  /* Space between announcement strip and primary nav (SCIS site spacing). */
+  padding-top: 0.85rem;
+  padding-bottom: 0.65rem;
+  font-family: var(--scis-font-sans);
 }
 
 .scis-header-inner {
-  min-height: 82px;
+  min-height: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
-  padding: 0.4rem 0;
+  padding: 0.35rem 0 0.25rem;
 }
 
 .scis-brand {
@@ -60,15 +149,20 @@
 }
 
 .scis-brand-logo {
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   object-fit: contain;
+}
+
+/* White seal on white nav: render as dark monochrome */
+.scis-brand-logo--on-light {
+  filter: brightness(0);
 }
 
 .scis-brand-title {
   margin: 0;
   font-weight: 700;
-  color: var(--scis-blue-900);
+  color: var(--scis-navy);
 }
 
 .scis-brand-subtitle {
@@ -80,99 +174,132 @@
 .scis-nav-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: 0.5rem;
 }
 
 .scis-link-btn {
   border: 1px solid transparent;
   background: transparent;
-  color: var(--scis-blue-900);
+  color: var(--scis-link-red);
   font-weight: 600;
-  padding: 0.55rem 0.85rem;
-  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
   cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
 }
 
 .scis-link-btn:hover {
-  background: #f1f5f9;
+  background: var(--scis-bg-soft);
 }
 
 .scis-link-btn-active {
-  background: #eff6ff;
-  border-color: #bfdbfe;
+  background: var(--scis-bg-soft);
+  border-color: var(--scis-border);
+  color: var(--scis-maroon);
 }
 
 .scis-link-btn-primary {
-  background: var(--scis-blue-700);
+  background: var(--scis-maroon);
   color: #fff;
 }
 
 .scis-link-btn-primary:hover {
-  background: var(--scis-blue-800);
+  background: var(--scis-maroon-hover);
+  color: #fff;
 }
 
+.scis-link-btn-primary.scis-link-btn-active {
+  border-color: var(--scis-maroon-hover);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+/* Welcome / hero — white panel, navy title (no blue gradient) */
 .scis-hero {
-  background: linear-gradient(130deg, #1e3a8a, #2563eb);
-  color: #fff;
-  padding: clamp(2.2rem, 5vw, 4rem) 0;
+  background: #fff;
+  color: var(--scis-navy);
+  padding: 0.65rem 0 clamp(1.5rem, 4vw, 2.75rem) 0;
+  border-bottom: 1px solid var(--scis-border);
 }
 
 .scis-section-kicker {
-  margin: 0 0 0.6rem;
-  font-size: 0.88rem;
-  letter-spacing: 0.08em;
+  margin: 0 0 0.5rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  opacity: 0.9;
+  color: var(--scis-maroon-accent);
+  font-weight: 700;
 }
 
 .scis-hero-title {
   margin: 0;
-  font-size: clamp(1.7rem, 4vw, 2.9rem);
+  font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+  color: var(--scis-navy);
+  font-weight: 700;
 }
 
 .scis-hero-subtitle {
   max-width: 760px;
-  margin: 0.9rem 0 0;
-  line-height: 1.6;
-  opacity: 0.96;
+  margin: 0.85rem 0 0;
+  line-height: 1.65;
+  color: #334155;
+}
+
+.scis-hero-highlight {
+  margin: 1rem 0 0;
+  text-align: center;
+  font-weight: 700;
+  color: var(--scis-maroon-accent);
+  font-size: 0.98rem;
 }
 
 .scis-hero-actions {
-  margin-top: 1.4rem;
+  margin-top: 1.25rem;
   display: flex;
-  gap: 0.8rem;
+  gap: 0.75rem;
   flex-wrap: wrap;
 }
 
 .scis-btn-primary,
 .scis-btn-secondary {
-  border-radius: 8px;
-  padding: 0.65rem 1rem;
+  border-radius: 4px;
+  padding: 0.6rem 1rem;
   font-weight: 600;
   cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
 }
 
 .scis-btn-primary {
-  border: 1px solid #fff;
-  background: #fff;
-  color: var(--scis-blue-900);
-}
-
-.scis-btn-secondary {
-  border: 1px solid #93c5fd;
-  background: transparent;
+  border: 1px solid var(--scis-maroon);
+  background: var(--scis-maroon);
   color: #fff;
 }
 
+.scis-btn-primary:hover {
+  background: var(--scis-maroon-hover);
+  border-color: var(--scis-maroon-hover);
+}
+
+.scis-btn-secondary {
+  border: 1px solid var(--scis-navy);
+  background: transparent;
+  color: var(--scis-navy);
+}
+
+.scis-btn-secondary:hover {
+  background: var(--scis-bg-soft);
+}
+
 .scis-main-content {
-  padding: 1.8rem 0 3rem;
+  padding: 1.75rem 0 3rem;
   display: grid;
   gap: 1rem;
 }
 
 .scis-page-title {
   margin: 0;
-  color: var(--scis-blue-900);
+  color: var(--scis-navy);
 }
 
 .scis-page-intro {
@@ -192,9 +319,9 @@
 .scis-chart-card {
   background: #fff;
   border: 1px solid var(--scis-border);
-  border-radius: 14px;
-  padding: 1rem;
-  box-shadow: 0 10px 20px rgba(15, 45, 98, 0.05);
+  border-radius: 8px;
+  padding: 1rem 1.1rem;
+  box-shadow: 0 1px 3px rgba(26, 54, 93, 0.06);
 }
 
 .scis-panel-header {
@@ -205,35 +332,61 @@
   flex-wrap: wrap;
 }
 
+.scis-panel-header h2 {
+  color: var(--scis-navy);
+  margin: 0;
+}
+
+.scis-card h3 {
+  color: var(--scis-navy);
+  margin-top: 0;
+}
+
+.scis-news-panel {
+  background: var(--scis-bg-soft);
+  border: 1px solid var(--scis-border);
+  border-radius: 10px;
+  padding: 1.1rem 1.2rem;
+}
+
+.scis-news-panel h2 {
+  margin: 0 0 0.75rem;
+  color: var(--scis-navy);
+  font-size: 1.1rem;
+}
+
 .scis-inline-link,
 .scis-inline-btn {
-  color: var(--scis-blue-700);
+  color: var(--scis-link-red);
   font-weight: 600;
   text-decoration: none;
   border: none;
   background: none;
   padding: 0;
   cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
 }
 
 .scis-inline-link:hover,
 .scis-inline-btn:hover {
   text-decoration: underline;
+  color: var(--scis-maroon);
 }
 
 .scis-tag-row {
-  margin-top: 0.7rem;
+  margin-top: 0.65rem;
   display: flex;
-  gap: 0.55rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
 .scis-tag {
-  background: #eff6ff;
-  color: #1e3a8a;
-  border: 1px solid #bfdbfe;
-  border-radius: 999px;
-  padding: 0.28rem 0.65rem;
+  background: #fff;
+  color: var(--scis-navy);
+  border: 1px solid var(--scis-border);
+  border-radius: 4px;
+  padding: 0.25rem 0.6rem;
   font-size: 0.82rem;
 }
 
@@ -250,9 +403,24 @@
 }
 
 .scis-footer {
-  background: #fff;
+  background: transparent;
   border-top: 1px solid var(--scis-border);
-  padding: 1.5rem 0 2rem;
+  padding: 0;
+  color: inherit;
+}
+
+/* Contact + quick links + social + copyright — one red block */
+.scis-footer-red {
+  background: #991b1b;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.scis-footer-red > .scis-container {
+  padding-top: 1.5rem;
+  padding-bottom: 1.25rem;
 }
 
 .scis-footer-grid {
@@ -261,14 +429,115 @@
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
-.scis-footer h4 {
-  color: var(--scis-blue-900);
+.scis-footer-links-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+}
+
+.scis-footer-links-col .scis-inline-btn {
+  display: inline-block;
+  text-align: left;
+}
+
+.scis-footer-red h4 {
+  color: #fff;
   margin: 0 0 0.5rem;
 }
 
-.scis-footer p {
+.scis-footer-red p {
   margin: 0.2rem 0;
-  color: #334155;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.scis-footer-red .scis-inline-btn {
+  color: #fff;
+  background: transparent;
+  border: none;
+  padding: 0.2rem 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 600;
+}
+
+.scis-footer-red .scis-inline-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  text-decoration: underline;
+}
+
+.scis-footer-red .scis-inline-link {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.scis-footer-red .scis-inline-link:hover {
+  color: #fff;
+}
+
+/* Social + copyright (same red panel; subtle divider from grid above) */
+.scis-footer-maroon {
+  background: transparent;
+  color: #fff;
+  padding: 1.25rem var(--scis-gutter) 1.75rem;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(255, 255, 255, 0.28);
+  margin: 0;
+}
+
+.scis-footer-maroon a,
+.scis-footer-maroon a:visited {
+  color: #fff;
+  text-decoration: none;
+}
+
+.scis-footer-social-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 0 0 1.15rem;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.scis-footer-social-link {
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px;
+  opacity: 0.92;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  text-decoration: none;
+}
+
+.scis-footer-social-link:hover {
+  opacity: 1;
+  transform: scale(1.08);
+  text-decoration: none;
+}
+
+.scis-footer-social-link:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.scis-footer-copy {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+.scis-footer-maroon .scis-footer-copy {
+  color: #fff;
 }
 
 .scis-filter-grid {
@@ -280,7 +549,7 @@
 
 .scis-filter-label {
   display: inline-block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.45rem;
   font-size: 0.84rem;
   font-weight: 600;
   color: #475569;
@@ -288,48 +557,50 @@
 
 .scis-tab-row {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.45rem;
   flex-wrap: wrap;
 }
 
 .scis-tab {
-  background: #f8fafc;
-  border: 1px solid #cbd5e1;
+  background: #fff;
+  border: 1px solid var(--scis-border);
   color: #334155;
-  border-radius: 8px;
-  padding: 0.5rem 0.85rem;
+  border-radius: 4px;
+  padding: 0.45rem 0.8rem;
   cursor: pointer;
+  font-family: inherit;
 }
 
 .scis-tab-active {
-  background: #dbeafe;
-  border-color: #93c5fd;
-  color: var(--scis-blue-900);
+  background: var(--scis-maroon);
+  border-color: var(--scis-maroon);
+  color: #fff;
   font-weight: 700;
 }
 
 .scis-select {
   width: 100%;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--scis-border);
+  border-radius: 4px;
+  padding: 0.55rem 0.7rem;
   background: #fff;
+  font-family: inherit;
 }
 
 .scis-section-title {
-  margin: 0 0 0.8rem;
-  color: var(--scis-blue-900);
+  margin: 0 0 0.75rem;
+  color: var(--scis-navy);
 }
 
 .scis-sub-title {
-  margin: 1.2rem 0 0.6rem;
+  margin: 1.1rem 0 0.55rem;
   color: #334155;
 }
 
 .scis-table-wrap {
   overflow-x: auto;
-  border: 1px solid #dbe2ea;
-  border-radius: 12px;
+  border: 1px solid var(--scis-border);
+  border-radius: 8px;
 }
 
 .scis-table {
@@ -339,20 +610,20 @@
 }
 
 .scis-table th {
-  background: #f1f5f9;
-  color: #1e3a8a;
+  background: var(--scis-bg-soft);
+  color: var(--scis-navy);
   font-size: 0.82rem;
 }
 
 .scis-table th,
 .scis-table td {
   text-align: left;
-  padding: 0.72rem 0.8rem;
-  border-bottom: 1px solid #e2e8f0;
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid var(--scis-border);
 }
 
 .scis-table tbody tr:hover {
-  background: #f8fbff;
+  background: #fafbfc;
 }
 
 .scis-chart-grid {
@@ -363,8 +634,8 @@
 }
 
 .scis-chart-title {
-  margin: 0 0 0.8rem;
-  color: #334155;
+  margin: 0 0 0.75rem;
+  color: var(--scis-navy);
 }
 
 .scis-chart-wrap {
@@ -392,13 +663,13 @@
 .scis-auth-card {
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
+  gap: 0.85rem;
 }
 
 .scis-auth-info {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.75rem;
 }
 
 .scis-auth-kicker {
@@ -408,7 +679,7 @@
 
 .scis-auth-creds {
   display: grid;
-  gap: 0.75rem;
+  gap: 0.7rem;
 }
 
 .scis-auth-creds p {
@@ -418,32 +689,33 @@
 
 .scis-auth-role {
   font-weight: 700;
-  color: var(--scis-blue-900);
+  color: var(--scis-navy);
 }
 
 .scis-auth-pass {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: #64748b;
 }
 
 .scis-auth-field {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.3rem;
 }
 
 .scis-auth-input {
   width: 100%;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  padding: 0.68rem 0.78rem;
+  border: 1px solid var(--scis-border);
+  border-radius: 4px;
+  padding: 0.65rem 0.75rem;
   background: #fff;
   color: #0f172a;
+  font-family: inherit;
 }
 
 .scis-auth-input:focus {
-  outline: 2px solid #bfdbfe;
-  border-color: #93c5fd;
+  outline: 2px solid rgba(139, 0, 0, 0.25);
+  border-color: var(--scis-maroon);
 }
 
 .scis-auth-select {
@@ -462,26 +734,27 @@
 }
 
 .scis-auth-submit {
-  border: 1px solid transparent;
-  background: var(--scis-blue-700);
+  border: 1px solid var(--scis-maroon);
+  background: var(--scis-maroon);
   color: #fff;
-  border-radius: 8px;
-  padding: 0.7rem 1rem;
+  border-radius: 4px;
+  padding: 0.65rem 1rem;
   font-weight: 700;
   cursor: pointer;
-  margin-top: 0.3rem;
+  margin-top: 0.25rem;
+  font-family: inherit;
 }
 
 .scis-auth-submit:hover {
-  background: var(--scis-blue-800);
+  background: var(--scis-maroon-hover);
 }
 
 .scis-auth-error,
 .scis-auth-success {
-  border-radius: 8px;
-  margin: 0.2rem 0 0;
-  padding: 0.58rem 0.75rem;
-  font-size: 0.92rem;
+  border-radius: 4px;
+  margin: 0.15rem 0 0;
+  padding: 0.55rem 0.7rem;
+  font-size: 0.9rem;
 }
 
 .scis-auth-error {
@@ -497,7 +770,7 @@
 }
 
 .scis-auth-links {
-  margin: 0.2rem 0 0;
+  margin: 0.15rem 0 0;
 }
 
 .scis-auth-home-link {
@@ -507,7 +780,7 @@
 .scis-auth-two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.8rem;
+  gap: 0.75rem;
 }
 
 .scis-register-card {

@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
+import DashboardStats from "../../components/DashboardStats";
+import Pagination from "../../components/Pagination";
+import { usePagination } from "../../hooks/usePagination";
 
 interface Company {
   id: number;
@@ -95,7 +97,6 @@ const displayValue = (value: unknown) => {
 };
 
 const StreamDashboard = () => {
-  const navigate = useNavigate();
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
@@ -131,10 +132,28 @@ const StreamDashboard = () => {
     );
   }, [companies, query]);
 
-  const logout = () => {
-    localStorage.clear();
-    navigate("/");
-  };
+  const {
+    paginatedItems: paginatedCompanies,
+    page: companyPage,
+    setPage: setCompanyPage,
+    totalPages: companyTotalPages,
+    from: companyFrom,
+    to: companyTo,
+    total: companyTotal,
+    resetPage: resetCompanyPage,
+  } = usePagination(filteredCompanies);
+
+  const dashboardStats = useMemo(() => {
+    const now = Date.now();
+    const active = companies.filter((c) => new Date(c.deadline).getTime() >= now).length;
+    const expired = companies.length - active;
+    return [
+      { label: "Total companies", value: companies.length },
+      { label: "Active listings", value: active },
+      { label: "Expired", value: expired },
+      { label: "Matching search", value: filteredCompanies.length },
+    ];
+  }, [companies, filteredCompanies.length]);
 
   const handleStreamToggle = (stream: string) => {
     setPostForm((prev) => ({
@@ -252,9 +271,6 @@ const StreamDashboard = () => {
                 ? " Create new Listing"
                 : ""}
           </div>
-          <button style={styles.logoutBtn} onClick={logout}>
-            Log out
-          </button>
         </div>
 
         {!selectedCompany && (
@@ -276,37 +292,76 @@ const StreamDashboard = () => {
 
         {!selectedCompany && tab === "listings" ? (
           <section style={styles.tableCard}>
+            <DashboardStats stats={dashboardStats} />
             <div style={styles.tableTools}>
-              <div style={styles.toolsLeft}>COLUMNS &nbsp; FILTERS &nbsp; DENSITY</div>
+              <div style={styles.toolsLeft}>Company Listings</div>
               <input
                 style={styles.search}
                 placeholder="Search..."
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  resetCompanyPage();
+                }}
               />
             </div>
+            <p style={styles.listCount}>
+              {companyTotal === 0
+                ? "No companies match your search"
+                : `Showing ${companyFrom}–${companyTo} of ${companyTotal} companies`}
+            </p>
 
-            <div style={styles.tableHeader}>
-              <div style={{ ...styles.cell, flex: 2.3 }}>Company</div>
-              <div style={{ ...styles.cell, flex: 3.2 }}>Title</div>
-              <div style={{ ...styles.cell, flex: 1.4 }}>CTC</div>
-              <div style={{ ...styles.cell, flex: 1 }}>Eligibility</div>
-              <div style={{ ...styles.cell, flex: 2 }}>Deadline</div>
+            <div style={styles.listTableWrap}>
+              <table style={styles.listTable}>
+                <thead>
+                  <tr>
+                    <th style={{ ...styles.listTh, width: "23%" }}>Company</th>
+                    <th style={{ ...styles.listTh, width: "32%" }}>Title</th>
+                    <th style={{ ...styles.listTh, width: "14%" }}>CTC</th>
+                    <th style={{ ...styles.listTh, width: "11%" }}>Eligibility</th>
+                    <th style={{ ...styles.listTh, width: "20%" }}>Deadline</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedCompanies.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} style={styles.listEmptyCell}>
+                        No companies to display.
+                      </td>
+                    </tr>
+                  ) : (
+                    paginatedCompanies.map((company) => (
+                      <tr
+                        key={company.id}
+                        style={styles.listRow}
+                        onClick={() => setSelectedCompany(company)}
+                      >
+                        <td style={styles.listTd}>{company.name}</td>
+                        <td style={styles.listTd}>{company.jobTitle || "-"}</td>
+                        <td style={styles.listTd}>{formatMoney(company.package)}</td>
+                        <td style={styles.listTd}>
+                          {company.department === "MCA"
+                            ? "MCA"
+                            : (company.streamsAllowed?.length
+                              ? company.streamsAllowed.join(", ")
+                              : "All streams")}
+                        </td>
+                        <td style={styles.listTd}>{formatDateTime(company.deadline)}</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
             </div>
-
-            {filteredCompanies.map((company) => (
-              <button
-                key={company.id}
-                style={styles.rowBtn}
-                onClick={() => setSelectedCompany(company)}
-              >
-                <div style={{ ...styles.cell, flex: 2.3 }}>{company.name}</div>
-                <div style={{ ...styles.cell, flex: 3.2 }}>{company.jobTitle || "-"}</div>
-                <div style={{ ...styles.cell, flex: 1.4 }}>{formatMoney(company.package)}</div>
-                <div style={{ ...styles.cell, flex: 1 }}>{company.department === "MCA" ? "MCA" : (company.streamsAllowed?.length ? company.streamsAllowed.join(", ") : "All streams")}</div>
-                <div style={{ ...styles.cell, flex: 2 }}>{formatDateTime(company.deadline)}</div>
-              </button>
-            ))}
+            <Pagination
+              page={companyPage}
+              totalPages={companyTotalPages}
+              total={companyTotal}
+              from={companyFrom}
+              to={companyTo}
+              onPageChange={setCompanyPage}
+              itemLabel="companies"
+            />
           </section>
         ) : null}
 
@@ -518,24 +573,12 @@ const StreamDashboard = () => {
 
         {selectedCompany ? (
           <section style={styles.detailsPage}>
-            <div style={styles.leftColumn}>
-              <button style={styles.backBtn} onClick={() => setSelectedCompany(null)}>
-                ← Jobs on Campus
-              </button>
+            <button style={styles.backBtn} onClick={() => setSelectedCompany(null)}>
+              ← Jobs on Campus
+            </button>
 
-              <div style={styles.sideCard}>
-                <h4 style={styles.sideCardTitle}>Minimum Credit Requirements</h4>
-                <p style={styles.sideCardText}>Required Credits: 20</p>
-              </div>
-
-              <div style={styles.sideCard}>
-                <h4 style={styles.sideCardTitle}>Coordinator Information</h4>
-                <p style={styles.sideCardText}>Name: Stream Coordinator</p>
-                <p style={styles.sideCardText}>Email: coordinator@uohyd.ac.in</p>
-              </div>
-            </div>
-
-            <div style={styles.rightColumn}>
+            <div style={styles.detailsLayout}>
+              <div style={styles.mainColumn}>
               <div style={styles.section}>
                 <div style={styles.sectionHeader}>
                   <h2 style={styles.companyTitle}>{selectedCompany.name}</h2>
@@ -672,6 +715,20 @@ const StreamDashboard = () => {
                   </div>
                 </div>
               </div>
+              </div>
+
+              <aside style={styles.floatingAside} aria-label="Job requirements and coordinator">
+                <div style={styles.sideCard}>
+                  <h4 style={styles.sideCardTitle}>Minimum Credit Requirements</h4>
+                  <p style={styles.sideCardText}>Required Credits: 20</p>
+                </div>
+
+                <div style={styles.sideCard}>
+                  <h4 style={styles.sideCardTitle}>Coordinator Information</h4>
+                  <p style={styles.sideCardText}>Name: Stream Coordinator</p>
+                  <p style={styles.sideCardText}>Email: coordinator@uohyd.ac.in</p>
+                </div>
+              </aside>
             </div>
           </section>
         ) : null}
@@ -682,13 +739,12 @@ const StreamDashboard = () => {
 
 const styles: Record<string, React.CSSProperties> = {
   page: {
-    minHeight: "100vh",
-    backgroundColor: "#f2f2f2",
-    fontFamily: "monospace",
+    backgroundColor: "transparent",
+    fontFamily: "Arial, Helvetica, sans-serif",
     color: "#000",
   },
   main: {
-    padding: 22,
+    padding: 0,
   },
   header: {
     display: "flex",
@@ -701,111 +757,120 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#555",
     fontWeight: 600,
   },
-  logoutBtn: {
-    border: "2px solid black",
-    backgroundColor: "#fee2e2",
-    color: "#b91c1c",
-    borderRadius: 8,
-    fontSize: 12,
-    padding: "8px 14px",
-    cursor: "pointer",
-    boxShadow: "4px 4px 0px black",
-    fontWeight: 700,
-    fontFamily: "monospace",
-  },
   tabRow: {
     display: "flex",
     gap: 8,
     marginBottom: 12,
   },
   topTab: {
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     backgroundColor: "#fff",
-    color: "#000",
+    color: "#8b0000",
     padding: "8px 14px",
     borderRadius: 8,
     cursor: "pointer",
     fontSize: 13,
     fontWeight: 700,
-    fontFamily: "monospace",
-    boxShadow: "4px 4px 0px black",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   topTabActive: {
-    backgroundColor: "#000",
+    backgroundColor: "#8b0000",
     color: "#fff",
-    boxShadow: "4px 4px 0px #555",
+    borderColor: "#6d0000",
   },
   tableCard: {
     backgroundColor: "#fff",
-    borderRadius: 18,
-    border: "2px solid black",
-    overflow: "hidden",
-    boxShadow: "8px 8px 0px black",
+    borderRadius: 12,
+    border: "none",
+    padding: "8px 0 12px",
+  },
+  listCount: {
+    margin: "14px 6px 10px",
+    fontSize: 12,
+    fontWeight: 700,
+    color: "#64748b",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   tableTools: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    borderBottom: "2px solid black",
-    padding: "10px 14px",
+    borderBottom: "1px solid #e2e8f0",
+    padding: "8px 6px 12px",
+    marginBottom: 4,
   },
   toolsLeft: {
-    fontSize: 11,
-    color: "#000",
+    fontSize: 13,
+    color: "#1a365d",
     fontWeight: 700,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   search: {
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     borderRadius: 8,
-    fontSize: 12,
-    padding: "7px 10px",
-    width: 180,
+    fontSize: 13,
+    padding: "8px 12px",
+    width: 210,
     outline: "none",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
-  tableHeader: {
-    display: "flex",
-    padding: "9px 14px",
-    borderBottom: "2px solid black",
-    fontSize: 12,
-    fontWeight: 700,
-    color: "#000",
-    fontFamily: "monospace",
-    backgroundColor: "#f0f0f0",
-  },
-  rowBtn: {
-    width: "100%",
-    display: "flex",
-    border: "none",
+  listTableWrap: {
+    overflowX: "auto",
+    border: "1px solid #e2e8f0",
+    borderRadius: 12,
     backgroundColor: "#fff",
-    borderBottom: "1px solid #e0e0e0",
-    padding: "10px 14px",
-    textAlign: "left",
-    cursor: "pointer",
-    fontFamily: "monospace",
   },
-  cell: {
+  listTable: {
+    width: "100%",
+    borderCollapse: "collapse",
+    backgroundColor: "#fff",
+    fontFamily: "Arial, Helvetica, sans-serif",
+  },
+  listTh: {
+    padding: "11px 14px",
+    textAlign: "left",
+    borderBottom: "1px solid #e2e8f0",
+    backgroundColor: "#f8fafc",
+    color: "#334155",
     fontSize: 12,
-    color: "#000",
-    overflow: "hidden",
-    whiteSpace: "nowrap",
-    textOverflow: "ellipsis",
     fontWeight: 600,
+    fontFamily: "Arial, Helvetica, sans-serif",
+    letterSpacing: "0.2px",
+  },
+  listTd: {
+    padding: "12px 14px",
+    textAlign: "left",
+    borderBottom: "1px solid #e2e8f0",
+    color: "#0f172a",
+    fontSize: 13,
+    fontWeight: 600,
+    fontFamily: "Arial, Helvetica, sans-serif",
+    whiteSpace: "nowrap",
+  },
+  listRow: {
+    cursor: "pointer",
+    transition: "background-color 0.15s ease",
+  },
+  listEmptyCell: {
+    textAlign: "center",
+    padding: "24px",
+    color: "#64748b",
+    fontSize: 13,
+    fontWeight: 600,
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   postingCard: {
     backgroundColor: "#fff",
-    border: "2px solid black",
-    borderRadius: 18,
-    padding: "18px 18px 22px",
-    boxShadow: "8px 8px 0px black",
+    border: "none",
+    borderRadius: 12,
+    padding: "18px 0 22px",
   },
   postTitle: {
     margin: "0 0 4px",
     fontSize: 28,
     fontWeight: 700,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     color: "#000",
   },
   postMandatory: {
@@ -813,11 +878,11 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#b91c1c",
     fontSize: 14,
     fontWeight: 700,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   postInput: {
     width: "100%",
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     borderRadius: 8,
     backgroundColor: "#fff",
     color: "#000",
@@ -826,7 +891,7 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: 10,
     outline: "none",
     boxSizing: "border-box",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   postTextArea: {
@@ -849,12 +914,11 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: 14,
     fontWeight: 700,
     borderRadius: 8,
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     backgroundColor: "#fff",
     color: "#000",
     pointerEvents: "none",
-    fontFamily: "monospace",
-    boxShadow: "4px 4px 0px black",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   jdUploaded: {
     fontSize: 13,
@@ -862,23 +926,23 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     alignItems: "center",
     gap: 8,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   jdPlaceholder: {
     fontSize: 13,
     color: "#555",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   jdClearBtn: {
     padding: "4px 10px",
     fontSize: 12,
     borderRadius: 8,
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     backgroundColor: "#fee2e2",
     color: "#b91c1c",
     cursor: "pointer",
     fontWeight: 700,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   formRow: {
     display: "grid",
@@ -886,7 +950,7 @@ const styles: Record<string, React.CSSProperties> = {
     gap: 10,
   },
   streamSection: {
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     backgroundColor: "#fff",
     padding: "10px 12px",
     marginBottom: 10,
@@ -896,7 +960,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: 13,
     fontWeight: 700,
     marginBottom: 8,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     color: "#000",
   },
   checkboxRow: {
@@ -910,7 +974,7 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     alignItems: "center",
     gap: 6,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   postActions: {
@@ -920,134 +984,154 @@ const styles: Record<string, React.CSSProperties> = {
     marginTop: 8,
   },
   actionBtn: {
-    border: "2px solid black",
-    backgroundColor: "#000",
+    border: "1px solid #6d0000",
+    backgroundColor: "#8b0000",
     color: "#fff",
     borderRadius: 8,
     padding: "8px 14px",
     cursor: "pointer",
     fontWeight: 700,
-    fontFamily: "monospace",
-    boxShadow: "4px 4px 0px #333",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   resetBtn: {
     backgroundColor: "#fff",
-    color: "#000",
+    color: "#8b0000",
+    border: "1px solid #8b0000",
   },
   postMessage: {
     fontSize: 13,
     color: "#000",
     margin: "2px 0 8px",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   detailsPage: {
-    display: "grid",
-    gridTemplateColumns: "220px 1fr",
-    gap: 18,
-  },
-  leftColumn: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 14,
-  },
-  rightColumn: {
     display: "flex",
     flexDirection: "column",
     gap: 16,
   },
+  detailsLayout: {
+    display: "grid",
+    gridTemplateColumns: "minmax(0, 1fr) 260px",
+    gap: 24,
+    alignItems: "start",
+  },
+  mainColumn: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 16,
+    minWidth: 0,
+  },
+  floatingAside: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 14,
+    position: "sticky",
+    top: 28,
+    alignSelf: "start",
+    width: 260,
+    flexShrink: 0,
+  },
   backBtn: {
-    border: "none",
-    backgroundColor: "transparent",
-    color: "#000",
+    alignSelf: "flex-start",
+    border: "1px solid #8b0000",
+    backgroundColor: "#fff",
+    color: "#8b0000",
     fontWeight: 700,
+    fontSize: 15,
     textAlign: "left",
-    padding: 0,
+    padding: "10px 16px",
+    borderRadius: 8,
     cursor: "pointer",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   sideCard: {
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     borderRadius: 12,
     backgroundColor: "#fff",
-    padding: 12,
-    boxShadow: "4px 4px 0px black",
+    padding: "14px 16px",
+    width: "100%",
+    boxSizing: "border-box",
   },
   sideCardTitle: {
     fontSize: 12,
     margin: "0 0 6px",
     fontWeight: 700,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   sideCardText: {
     fontSize: 11,
     margin: "4px 0",
     color: "#000",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   section: {
-    border: "2px solid black",
-    borderRadius: 18,
+    border: "none",
+    borderRadius: 12,
     backgroundColor: "#fff",
-    padding: 12,
-    boxShadow: "8px 8px 0px black",
+    padding: "16px 4px",
   },
   sectionHeader: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    borderBottom: "2px solid black",
+    borderBottom: "1px solid #e2e8f0",
     paddingBottom: 8,
     marginBottom: 10,
   },
   companyTitle: {
     margin: 0,
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: 700,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     color: "#000",
+    lineHeight: 1.25,
   },
   sectionTitle: {
-    margin: "0 0 10px",
-    fontSize: 18,
+    margin: "0 0 12px",
+    fontSize: 20,
     fontWeight: 700,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     color: "#000",
+    lineHeight: 1.3,
   },
   keyValueGrid: {
     display: "grid",
-    gridTemplateColumns: "220px 1fr",
-    columnGap: 12,
-    rowGap: 8,
-    fontSize: 12,
+    gridTemplateColumns: "240px 1fr",
+    columnGap: 16,
+    rowGap: 10,
+    fontSize: 14,
+    lineHeight: 1.5,
     alignItems: "start",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   jdDownloadLink: {
     color: "#000",
     fontWeight: 700,
+    fontSize: 14,
     textDecoration: "underline",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   table: {
     width: "100%",
     borderCollapse: "collapse",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   th: {
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     backgroundColor: "#f0f0f0",
-    fontSize: 12,
-    padding: "7px 8px",
+    fontSize: 14,
+    padding: "10px 12px",
     textAlign: "left",
     fontWeight: 700,
   },
   td: {
-    border: "2px solid black",
-    fontSize: 12,
-    padding: "7px 8px",
+    border: "1px solid #e2e8f0",
+    fontSize: 14,
+    padding: "10px 12px",
     verticalAlign: "top",
     fontWeight: 600,
+    lineHeight: 1.45,
   },
   loading: {
     minHeight: "100vh",
@@ -1055,9 +1139,9 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: "center",
     justifyContent: "center",
     color: "#000",
-    backgroundColor: "#f2f2f2",
+    backgroundColor: "#ffffff",
     fontSize: 16,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     fontWeight: 700,
   },
 };

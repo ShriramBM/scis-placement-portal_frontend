@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import api from "../../services/api";
+import DashboardStats from "../../components/DashboardStats";
+import Pagination from "../../components/Pagination";
+import { usePagination } from "../../hooks/usePagination";
 
 interface Application {
   id: number;
@@ -99,12 +102,6 @@ const Applicants = () => {
     }
   };
 
-  const handleFilterChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setFilters({ ...filters, [e.target.name]: e.target.value });
-  };
-
   const uniqueCompanies = useMemo(
     () => [...new Set(applications.map((app) => app.company.name))],
     [applications]
@@ -167,23 +164,53 @@ const Applicants = () => {
     }
   };
 
-  const filteredApplications = applications.filter((app) => {
-    const profile = app.student.studentProfile;
+  const filteredApplications = useMemo(() => {
+    return applications.filter((app) => {
+      const profile = app.student.studentProfile;
 
-    if (filters.batch && profile.batchYear.toString() !== filters.batch)
-      return false;
+      if (filters.batch && profile.batchYear.toString() !== filters.batch)
+        return false;
 
-    if (filters.stream && profile.stream !== filters.stream)
-      return false;
+      if (filters.stream && profile.stream !== filters.stream)
+        return false;
 
-    if (filters.company && app.company.name !== filters.company)
-      return false;
+      if (filters.company && app.company.name !== filters.company)
+        return false;
 
-    if (filters.status && app.status !== filters.status)
-      return false;
+      if (filters.status && app.status !== filters.status)
+        return false;
 
-    return true;
-  });
+      return true;
+    });
+  }, [applications, filters]);
+
+  const {
+    paginatedItems: paginatedApplications,
+    page: appPage,
+    setPage: setAppPage,
+    totalPages: appTotalPages,
+    from: appFrom,
+    to: appTo,
+    total: appTotal,
+    resetPage: resetAppPage,
+  } = usePagination(filteredApplications);
+
+  const dashboardStats = useMemo(
+    () => [
+      { label: "Total applications", value: applications.length },
+      { label: "Applied", value: applications.filter((a) => a.status === "APPLIED").length },
+      { label: "Selected", value: applications.filter((a) => a.status === "SELECTED").length },
+      { label: "Matching filters", value: filteredApplications.length },
+    ],
+    [applications, filteredApplications.length]
+  );
+
+  const handleFilterChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    setFilters({ ...filters, [e.target.name]: e.target.value });
+    resetAppPage();
+  };
 
   if (loading) {
     return <div style={styles.loading}>Loading applications...</div>;
@@ -197,6 +224,8 @@ const Applicants = () => {
           View and filter applications by batch, stream, company, and status.
         </p>
       </div>
+
+      <DashboardStats stats={dashboardStats} />
 
       {companiesPastDeadline.length > 0 && (
         <div style={styles.card}>
@@ -294,7 +323,9 @@ const Applicants = () => {
 
         <div style={styles.countRow}>
           <span style={styles.countText}>
-            Showing {filteredApplications.length} of {applications.length} applications
+            {appTotal === 0
+              ? `No applications match filters (${applications.length} total)`
+              : `Showing ${appFrom}–${appTo} of ${appTotal} filtered (${applications.length} total)`}
           </span>
         </div>
 
@@ -312,14 +343,14 @@ const Applicants = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredApplications.length === 0 ? (
+              {paginatedApplications.length === 0 ? (
                 <tr>
                   <td style={styles.emptyCell} colSpan={7}>
                     No applications match current filters.
                   </td>
                 </tr>
               ) : (
-                filteredApplications.map((app) => (
+                paginatedApplications.map((app) => (
                   <tr key={app.id} style={styles.row}>
                     <td style={styles.td}>{app.student.name}</td>
                     <td style={styles.td}>{app.student.studentProfile.rollNo}</td>
@@ -343,6 +374,15 @@ const Applicants = () => {
             </tbody>
           </table>
         </div>
+        <Pagination
+          page={appPage}
+          totalPages={appTotalPages}
+          total={appTotal}
+          from={appFrom}
+          to={appTo}
+          onPageChange={setAppPage}
+          itemLabel="applications"
+        />
       </div>
     </div>
   );
@@ -350,11 +390,9 @@ const Applicants = () => {
 
 const styles: Record<string, React.CSSProperties> = {
   container: {
-    backgroundColor: "#f2f2f2",
+    backgroundColor: "transparent",
     color: "#000",
-    minHeight: "100vh",
-    padding: "22px",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   header: {
     marginBottom: "14px",
@@ -363,21 +401,20 @@ const styles: Record<string, React.CSSProperties> = {
     margin: 0,
     fontSize: "28px",
     fontWeight: 700,
-    color: "#000",
-    fontFamily: "monospace",
+    color: "#1a365d",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   subTitle: {
     margin: "6px 0 0",
-    color: "#555",
+    color: "#64748b",
     fontSize: "13px",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   card: {
     backgroundColor: "#fff",
-    border: "2px solid black",
-    borderRadius: "18px",
-    padding: "24px",
-    boxShadow: "8px 8px 0px black",
+    border: "none",
+    borderRadius: "12px",
+    padding: "24px 0",
   },
   filterContainer: {
     display: "flex",
@@ -388,13 +425,13 @@ const styles: Record<string, React.CSSProperties> = {
   filterInput: {
     padding: "10px 12px",
     borderRadius: "8px",
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     backgroundColor: "#fff",
     color: "#000",
     minWidth: "170px",
     outline: "none",
     fontSize: "13px",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   countRow: {
@@ -406,29 +443,28 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: "12px",
     color: "#555",
     fontWeight: 700,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   tableWrap: {
     overflowX: "auto",
-    border: "2px solid black",
+    border: "1px solid #e2e8f0",
     borderRadius: "12px",
-    boxShadow: "4px 4px 0px black",
   },
   table: {
     width: "100%",
     borderCollapse: "collapse" as const,
     backgroundColor: "#fff",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   th: {
     padding: "12px 14px",
     textAlign: "left" as const,
-    borderBottom: "2px solid black",
+    borderBottom: "1px solid #e2e8f0",
     backgroundColor: "#f0f0f0",
     color: "#000",
     fontSize: "12px",
     fontWeight: 700 as const,
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   td: {
     padding: "12px 14px",
@@ -436,7 +472,7 @@ const styles: Record<string, React.CSSProperties> = {
     borderBottom: "1px solid #e0e0e0",
     color: "#000",
     fontSize: "13px",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   row: {
     backgroundColor: "#fff",
@@ -449,14 +485,14 @@ const styles: Record<string, React.CSSProperties> = {
     letterSpacing: "0.2px",
     display: "inline-block",
     border: "1.5px solid",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
   },
   emptyCell: {
     textAlign: "center",
     padding: "20px",
     color: "#555",
     fontSize: "13px",
-    fontFamily: "monospace",
+    fontFamily: "Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   loading: {
@@ -466,8 +502,8 @@ const styles: Record<string, React.CSSProperties> = {
     justifyContent: "center",
     fontSize: "16px",
     color: "#000",
-    backgroundColor: "#f2f2f2",
-    fontFamily: "monospace",
+    backgroundColor: "#ffffff",
+    fontFamily: "Arial, Helvetica, sans-serif",
     fontWeight: 700,
   },
 };
