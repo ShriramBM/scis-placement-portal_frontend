@@ -1,10 +1,39 @@
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PublicSiteHeader from "../components/PublicSiteHeader";
 import PublicSiteFooter from "../components/PublicSiteFooter";
+import api from "../services/api";
 import "./public-pages.css";
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const [snapshot, setSnapshot] = useState<{
+    year: string;
+    totalPlaced: number;
+    highestPackage: number;
+    topRecruiters: string[];
+  } | null>(null);
+
+  const fetchSnapshot = useCallback(async () => {
+    try {
+      const res = await api.get("/stats");
+      const latest = res.data.years?.[0];
+      if (latest) {
+        setSnapshot({
+          year: latest.year,
+          totalPlaced: latest.summary.totalPlaced,
+          highestPackage: latest.summary.highestPackage,
+          topRecruiters: latest.summary.topRecruiters,
+        });
+      }
+    } catch {
+      setSnapshot(null);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchSnapshot();
+  }, [fetchSnapshot]);
 
   return (
     <div className="scis-page-root">
@@ -68,10 +97,20 @@ const HomePage = () => {
             </button>
           </div>
           <div className="scis-tag-row">
-            <span className="scis-tag">2024-25</span>
-            <span className="scis-tag">Highest package: 46 LPA</span>
-            <span className="scis-tag">69 placements</span>
-            <span className="scis-tag">Top recruiters: Marvell, Intel, GE</span>
+            {snapshot ? (
+              <>
+                <span className="scis-tag">{snapshot.year}</span>
+                {snapshot.highestPackage > 0 && (
+                  <span className="scis-tag">Highest package: {snapshot.highestPackage} LPA</span>
+                )}
+                <span className="scis-tag">{snapshot.totalPlaced} placements</span>
+                {snapshot.topRecruiters.length > 0 && (
+                  <span className="scis-tag">Top recruiters: {snapshot.topRecruiters.join(", ")}</span>
+                )}
+              </>
+            ) : (
+              <span className="scis-tag">Placement stats update live from the portal</span>
+            )}
           </div>
         </section>
 

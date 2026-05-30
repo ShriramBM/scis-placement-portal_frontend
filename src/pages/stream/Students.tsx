@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import api from "../../services/api";
 import DashboardStats from "../../components/DashboardStats";
 import Pagination from "../../components/Pagination";
+import AddStudentModal from "../../components/AddStudentModal";
+import { getStoredProgramLabel } from "../../utils/coordinatorProgram";
 import { usePagination } from "../../hooks/usePagination";
 
 interface StudentListItem {
@@ -78,9 +80,13 @@ const Students = () => {
 
   const [filters, setFilters] = useState({
     batch: "",
-    stream: "",
     search: "",
   });
+  const [programLabel, setProgramLabel] = useState(getStoredProgramLabel());
+
+  useEffect(() => {
+    setProgramLabel(getStoredProgramLabel());
+  }, []);
 
   useEffect(() => {
     fetchInitialData();
@@ -157,10 +163,6 @@ const Students = () => {
         return false;
       }
 
-      if (filters.stream && profile.stream !== filters.stream) {
-        return false;
-      }
-
       if (
         search &&
         !student.name.toLowerCase().includes(search) &&
@@ -211,8 +213,16 @@ const Students = () => {
       {!selectedStudent ? (
         <>
           <div style={styles.header}>
-            <h2 style={styles.title}>All Students</h2>
-            <p style={styles.subtitle}>Click a row to view full profile details.</p>
+            <div>
+              <h2 style={styles.title}>{programLabel} Students</h2>
+              <p style={styles.subtitle}>Click a row to view full profile details.</p>
+            </div>
+            <AddStudentModal
+              onSuccess={async () => {
+                const studentsRes = await api.get("/student");
+                setStudents(studentsRes.data);
+              }}
+            />
           </div>
 
           <DashboardStats stats={dashboardStats} />
@@ -236,18 +246,6 @@ const Students = () => {
                 onChange={handleFilterChange}
                 style={styles.filterInput}
               />
-
-              <select
-                name="stream"
-                value={filters.stream}
-                onChange={handleFilterChange}
-                style={styles.filterInput}
-              >
-                <option value="">All Streams</option>
-                <option value="CSE">CSE</option>
-                <option value="AI">AI</option>
-                <option value="IT">IT</option>
-              </select>
             </div>
 
             <div style={styles.countText}>
@@ -485,6 +483,11 @@ const styles: Record<string, React.CSSProperties> = {
   },
   header: {
     marginBottom: 14,
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    gap: 16,
+    flexWrap: "wrap" as const,
   },
   title: {
     margin: 0,

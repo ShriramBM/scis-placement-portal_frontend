@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import api from "../../services/api";
 import DashboardStats from "../../components/DashboardStats";
 import Pagination from "../../components/Pagination";
+import AddStudentModal from "../../components/AddStudentModal";
+import { getStoredProgramLabel } from "../../utils/coordinatorProgram";
 import { usePagination } from "../../hooks/usePagination";
 
 interface Student {
@@ -23,10 +25,14 @@ const StudentManagement = () => {
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     batch: "",
-    stream: "",
     placed: "",
     blocked: "",
   });
+  const [programLabel, setProgramLabel] = useState(getStoredProgramLabel());
+
+  useEffect(() => {
+    setProgramLabel(getStoredProgramLabel());
+  }, []);
 
   useEffect(() => {
     fetchStudents();
@@ -48,7 +54,6 @@ const StudentManagement = () => {
       students.filter((student) => {
         const profile = student.studentProfile;
         if (filters.batch && profile.batchYear.toString() !== filters.batch) return false;
-        if (filters.stream && profile.stream !== filters.stream) return false;
         if (filters.placed && student.placed.toString() !== filters.placed) return false;
         if (filters.blocked && student.blocked.toString() !== filters.blocked) return false;
         return true;
@@ -127,10 +132,13 @@ const StudentManagement = () => {
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <h2 style={styles.title}>Student Management</h2>
-        <p style={styles.subTitle}>
-          View, filter, block/unblock students and mark as placed or unplaced.
-        </p>
+        <div>
+          <h2 style={styles.title}>Student Management</h2>
+          <p style={styles.subTitle}>
+            Manage {programLabel} students — view, filter, block/unblock, and mark as placed or unplaced.
+          </p>
+        </div>
+        <AddStudentModal onSuccess={fetchStudents} />
       </div>
 
       <DashboardStats stats={dashboardStats} />
@@ -145,17 +153,6 @@ const StudentManagement = () => {
             onChange={handleFilterChange}
             style={styles.filterInput}
           />
-          <select
-            name="stream"
-            value={filters.stream}
-            onChange={handleFilterChange}
-            style={styles.filterInput}
-          >
-            <option value="">All Streams</option>
-            <option value="CSE">CSE</option>
-            <option value="AI">AI</option>
-            <option value="IT">IT</option>
-          </select>
           <select
             name="placed"
             value={filters.placed}
@@ -301,6 +298,11 @@ const styles: Record<string, React.CSSProperties> = {
   },
   header: {
     marginBottom: "14px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    gap: "16px",
+    flexWrap: "wrap" as const,
   },
   title: {
     margin: 0,

@@ -3,6 +3,7 @@ import api from "../services/api";
 import { useNavigate } from "react-router-dom";
 import PublicSiteHeader from "../components/PublicSiteHeader";
 import PublicSiteFooter from "../components/PublicSiteFooter";
+import { storeCoordinatorScope } from "../utils/coordinatorProgram";
 import "./public-pages.css";
 
 const Login = () => {
@@ -21,10 +22,11 @@ const Login = () => {
         password,
       });
 
-      const { token, role } = res.data;
+      const { token, role, coordinatorDepartment, coordinatorStream } = res.data;
 
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
+      storeCoordinatorScope(coordinatorDepartment, coordinatorStream);
 
       // Role-based redirect
       if (role === "STUDENT") navigate("/student");
@@ -46,13 +48,23 @@ const Login = () => {
           <h2 className="scis-section-title">Demo credentials</h2>
           <div className="scis-auth-creds">
             <div>
-              <p className="scis-auth-role">Placement Coordinator</p>
-              <p>coordinator@scis.edu</p>
+              <p className="scis-auth-role">MCA Coordinator</p>
+              <p>mca.pc@scis.edu</p>
               <p className="scis-auth-pass">Password: password123</p>
             </div>
             <div>
-              <p className="scis-auth-role">Stream Coordinator</p>
-              <p>stream.coordinator@scis.edu</p>
+              <p className="scis-auth-role">MTech CS Coordinator</p>
+              <p>mtech.cse.pc@scis.edu</p>
+              <p className="scis-auth-pass">Password: password123</p>
+            </div>
+            <div>
+              <p className="scis-auth-role">MTech AI Coordinator</p>
+              <p>mtech.ai.pc@scis.edu</p>
+              <p className="scis-auth-pass">Password: password123</p>
+            </div>
+            <div>
+              <p className="scis-auth-role">IMTech Coordinator</p>
+              <p>imtech.pc@scis.edu</p>
               <p className="scis-auth-pass">Password: password123</p>
             </div>
             <div>
@@ -100,10 +112,7 @@ const Login = () => {
           </button>
 
           <p className="scis-page-intro scis-auth-links">
-            Don&apos;t have an account?{" "}
-            <button type="button" className="scis-inline-btn" onClick={() => navigate("/register")}>
-              Register
-            </button>
+            New student? Contact your placement coordinator to get an account.
           </p>
           <button type="button" className="scis-inline-btn scis-auth-home-link" onClick={() => navigate("/")}>
             Back to Home
