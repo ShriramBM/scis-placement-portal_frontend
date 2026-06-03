@@ -42,39 +42,7 @@ const Login = () => {
     <div className="scis-page-root">
       <PublicSiteHeader activeNav="login" />
 
-      <main className="scis-container scis-auth-shell">
-        <section className="scis-auth-info scis-panel">
-          <p className="scis-section-kicker scis-auth-kicker">Quick Access</p>
-          <h2 className="scis-section-title">Demo credentials</h2>
-          <div className="scis-auth-creds">
-            <div>
-              <p className="scis-auth-role">MCA Coordinator</p>
-              <p>mca.pc@scis.edu</p>
-              <p className="scis-auth-pass">Password: password123</p>
-            </div>
-            <div>
-              <p className="scis-auth-role">MTech CS Coordinator</p>
-              <p>mtech.cse.pc@scis.edu</p>
-              <p className="scis-auth-pass">Password: password123</p>
-            </div>
-            <div>
-              <p className="scis-auth-role">MTech AI Coordinator</p>
-              <p>mtech.ai.pc@scis.edu</p>
-              <p className="scis-auth-pass">Password: password123</p>
-            </div>
-            <div>
-              <p className="scis-auth-role">IMTech Coordinator</p>
-              <p>imtech.pc@scis.edu</p>
-              <p className="scis-auth-pass">Password: password123</p>
-            </div>
-            <div>
-              <p className="scis-auth-role">Student</p>
-              <p>aarav.sharma@uohyd.ac.in</p>
-              <p className="scis-auth-pass">Password: password123</p>
-            </div>
-          </div>
-        </section>
-
+      <main className="scis-container scis-auth-shell scis-auth-shell-single scis-auth-shell-centered">
         <form onSubmit={handleLogin} className="scis-panel scis-auth-card">
           <p className="scis-section-kicker scis-auth-kicker">Student and Staff Portal</p>
           <h1 className="scis-page-title">SCIS Placement Login</h1>

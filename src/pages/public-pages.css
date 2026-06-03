@@ -656,14 +656,28 @@
 }
 
 .scis-auth-shell-single {
-  grid-template-columns: minmax(280px, 700px);
+  grid-template-columns: minmax(280px, 420px);
   justify-content: center;
+}
+
+.scis-auth-shell-centered {
+  min-height: calc(100vh - 220px);
+  align-content: center;
+  justify-items: center;
+}
+
+.scis-auth-shell-single .scis-auth-card {
+  width: 100%;
+  max-width: 420px;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .scis-auth-card {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
+  min-width: 0;
 }
 
 .scis-auth-info {
@@ -701,10 +715,14 @@
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
+  min-width: 0;
+  width: 100%;
 }
 
 .scis-auth-input {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   border: 1px solid var(--scis-border);
   border-radius: 4px;
   padding: 0.65rem 0.75rem;
@@ -734,6 +752,8 @@
 }
 
 .scis-auth-submit {
+  width: 100%;
+  box-sizing: border-box;
   border: 1px solid var(--scis-maroon);
   background: var(--scis-maroon);
   color: #fff;
@@ -790,6 +810,10 @@
 @media (max-width: 900px) {
   .scis-auth-shell {
     grid-template-columns: 1fr;
+  }
+
+  .scis-auth-shell-single {
+    justify-items: center;
   }
 }
 
