@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -16,85 +16,25 @@ import {
 } from "recharts";
 import PublicSiteHeader from "../components/PublicSiteHeader";
 import PublicSiteFooter from "../components/PublicSiteFooter";
-import api from "../services/api";
+import { PLACEMENT_STATS_DATA } from "../data/placementStatsData";
 import "./public-pages.css";
-
-interface YearRow {
-  degree: string;
-  students: number;
-  registered: number;
-  placedCount: number;
-  higherStudiesCount: number;
-  notPlacedCount: number;
-  placedPct: number;
-  higherStudiesPct: number;
-  notPlacedPct: number;
-  medianLpa: number;
-}
-
-interface CompanyHire {
-  name: string;
-  count: number;
-}
-
-interface YearData {
-  year: string;
-  batchYear: number;
-  isLive?: boolean;
-  rows: YearRow[];
-  companyHires: CompanyHire[];
-  summary: {
-    totalStudents: number;
-    totalPlaced: number;
-    highestPackage: number;
-    topRecruiters: string[];
-  };
-}
 
 const DEGREE_OPTIONS = ["All", "MCA", "MTech (CSE)", "MTech (AI)", "MTech (IT)", "IMTech"];
 const COLORS = ["#1a365d", "#8b0000", "#b91c1c", "#94a3b8", "#475569"];
 const PIE_COLORS = ["#1a365d", "#8b0000", "#b91c1c", "#c53030", "#94a3b8", "#cbd5e1", "#e2e8f0"];
 
 const StatsPage = () => {
-  const [statsData, setStatsData] = useState<YearData[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const statsData = PLACEMENT_STATS_DATA;
   const [selectedYear, setSelectedYear] = useState(0);
   const [degreeFilter, setDegreeFilter] = useState("All");
-
-  const fetchStats = useCallback(async () => {
-    try {
-      setError("");
-      const res = await api.get("/stats");
-      setStatsData(res.data.years ?? []);
-    } catch {
-      setError("Failed to load placement statistics.");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchStats();
-  }, [fetchStats]);
-
-  useEffect(() => {
-    const onVisible = () => {
-      if (document.visibilityState === "visible") fetchStats();
-    };
-    document.addEventListener("visibilitychange", onVisible);
-    return () => document.removeEventListener("visibilitychange", onVisible);
-  }, [fetchStats]);
 
   const yearData = statsData[selectedYear];
 
   const filteredRows = useMemo(
     () =>
-      yearData
-        ? degreeFilter === "All"
-          ? yearData.rows
-          : yearData.rows.filter((r) => r.degree === degreeFilter)
-        : [],
+      degreeFilter === "All"
+        ? yearData.rows
+        : yearData.rows.filter((r) => r.degree === degreeFilter),
     [yearData, degreeFilter]
   );
 
@@ -152,33 +92,6 @@ const StatsPage = () => {
   const renderCustomPieLabel = ({ name = "", percent = 0 }: { name?: string; percent?: number }) =>
     `${name} ${(percent * 100).toFixed(0)}%`;
 
-  if (loading) {
-    return (
-      <div className="scis-page-root">
-        <PublicSiteHeader activeNav="stats" brandTitle="SCIS Placement Analytics" brandSubtitle="Training and Placement Cell" />
-        <main className="scis-container scis-main-content">
-          <p className="scis-page-intro">Loading placement statistics…</p>
-        </main>
-        <PublicSiteFooter />
-      </div>
-    );
-  }
-
-  if (error || !yearData) {
-    return (
-      <div className="scis-page-root">
-        <PublicSiteHeader activeNav="stats" brandTitle="SCIS Placement Analytics" brandSubtitle="Training and Placement Cell" />
-        <main className="scis-container scis-main-content">
-          <p className="scis-auth-error">{error || "No placement data available yet."}</p>
-          <button type="button" className="scis-btn-secondary" onClick={fetchStats}>
-            Retry
-          </button>
-        </main>
-        <PublicSiteFooter />
-      </div>
-    );
-  }
-
   return (
     <div className="scis-page-root">
       <PublicSiteHeader
@@ -188,23 +101,14 @@ const StatsPage = () => {
       />
 
       <main className="scis-container scis-main-content">
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "12px", flexWrap: "wrap" }}>
-          <div>
-            <h1 className="scis-page-title">Placement Statistics</h1>
-            <p className="scis-page-intro">
-              Batches from 2026-27 onward update live when coordinators mark students as placed.
-              Earlier batches (e.g. 2025-26) show archived statistics.
-            </p>
-          </div>
-          <button type="button" className="scis-btn-secondary" onClick={fetchStats}>
-            Refresh
-          </button>
-        </div>
+        <h1 className="scis-page-title">Placement Statistics</h1>
+        <p className="scis-page-intro">
+          Year-wise placement outcomes across MCA, M.Tech, and Integrated M.Tech programmes.
+        </p>
 
         <section className="scis-panel">
           <div className="scis-tag-row">
             <span className="scis-tag">{yearData.year}</span>
-            {yearData.isLive && <span className="scis-tag">Live</span>}
             <span className="scis-tag">{yearData.summary.totalPlaced} placed</span>
             {yearData.summary.highestPackage > 0 && (
               <span className="scis-tag">Highest package: {yearData.summary.highestPackage} LPA</span>
@@ -250,7 +154,7 @@ const StatsPage = () => {
             Year {yearData.year} {degreeFilter !== "All" ? `— ${degreeFilter}` : ""}
           </h2>
           {filteredRows.length === 0 ? (
-            <p className="scis-page-intro">No student data for this filter yet.</p>
+            <p className="scis-page-intro">No data for this filter.</p>
           ) : (
             <div className="scis-table-wrap">
               <table className="scis-table">
