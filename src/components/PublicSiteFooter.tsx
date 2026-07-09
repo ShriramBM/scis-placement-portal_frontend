@@ -25,7 +25,11 @@ const PublicSiteFooter = ({ footerId }: PublicSiteFooterProps) => {
             <button type="button" className="scis-inline-btn" onClick={() => navigate("/stats")}>
               Placement Statistics
             </button>
-            <button type="button" className="scis-inline-btn" onClick={() => navigate("/login")}>
+            <button
+              type="button"
+              className="scis-inline-btn"
+              onClick={() => navigate("/coming-soon", { state: { feature: "Portal Login" } })}
+            >
               Student/Coordinator Login
             </button>
           </div>

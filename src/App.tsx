@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import StatsPage from './pages/StatsPage'
 import Login from './pages/Login'
+import ComingSoonPage from './pages/ComingSoonPage'
 import './App.css'
 import StudentDashboard from './pages/student/StudentDashboard'
 import StreamDashboard from './pages/stream/StreamDashboard.tsx'
@@ -21,6 +22,7 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/stats" element={<StatsPage />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/coming-soon" element={<ComingSoonPage />} />
       <Route
   path="/student"
   element={

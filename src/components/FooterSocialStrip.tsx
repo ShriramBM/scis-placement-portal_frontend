@@ -9,7 +9,7 @@ const links = [
   },
   { href: "https://x.com/scisuoh", label: "X", iconClass: "fa-brands fa-square-x-twitter" },
   { href: "https://www.instagram.com/scisuoh", label: "Instagram", iconClass: "fa-brands fa-instagram" },
-  { href: "https://www.uohyd.ac.in", label: "University of Hyderabad website", iconClass: "fa-solid fa-globe" },
+  { href: "https://scis.uohyd.ac.in/", label: "SCIS website", iconClass: "fa-solid fa-globe" },
 ] as const;
 
 const FooterSocialStrip = () => (

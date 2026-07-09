@@ -25,7 +25,11 @@ const HomePage = () => {
             *** Official career services portal for MCA, M.Tech, and Integrated M.Tech programmes ***
           </p>
           <div className="scis-hero-actions">
-            <button type="button" className="scis-btn-primary" onClick={() => navigate("/login")}>
+            <button
+              type="button"
+              className="scis-btn-primary"
+              onClick={() => navigate("/coming-soon", { state: { feature: "Portal Login" } })}
+            >
               Go to Portal
             </button>
             <button type="button" className="scis-btn-secondary" onClick={() => navigate("/stats")}>
@@ -42,23 +46,35 @@ const HomePage = () => {
             <article className="scis-card">
               <h3>Placement Brochure</h3>
               <p>Get programme details, placement process, and student profiles curated for recruiters.</p>
-              <a href="#" className="scis-inline-link">
+              <button
+                type="button"
+                className="scis-inline-btn"
+                onClick={() => navigate("/coming-soon", { state: { feature: "Placement Brochure" } })}
+              >
                 Download brochure
-              </a>
+              </button>
             </article>
             <article className="scis-card">
               <h3>Internship Highlights</h3>
               <p>Explore internship participation, stipend trends, and company engagement by programme.</p>
-              <a href="https://scis.uohyd.ac.in/isure/index.php" className="scis-inline-link">
+              <button
+                type="button"
+                className="scis-inline-btn"
+                onClick={() => navigate("/coming-soon", { state: { feature: "Internship Highlights" } })}
+              >
                 See details
-              </a>
+              </button>
             </article>
             <article className="scis-card">
               <h3>Recruiter Connect</h3>
               <p>Contact the placement office to schedule pre-placement talks, tests, and interviews.</p>
-              <a href="#contact" className="scis-inline-link">
+              <button
+                type="button"
+                className="scis-inline-btn"
+                onClick={() => navigate("/coming-soon", { state: { feature: "Recruiter Connect" } })}
+              >
                 Contact us
-              </a>
+              </button>
             </article>
           </section>
         </div>

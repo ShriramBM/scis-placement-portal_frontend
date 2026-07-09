@@ -120,6 +120,10 @@ const StatsPage = () => {
     [yearData, degreeFilter]
   );
 
+  // Some summary years (e.g. 2022-23) don't have a registered count recorded yet —
+  // hide the Registered/% Placed columns entirely rather than show a wall of "—".
+  const hasRegisteredData = useMemo(() => filteredRows.some((r) => r.registered != null), [filteredRows]);
+
   const filteredInternshipRows = useMemo(
     () =>
       degreeFilter === "All"
@@ -194,8 +198,12 @@ const StatsPage = () => {
     const placedTotal = filteredRows.reduce((s, r) => s + r.placedCount, 0);
     const lowestValues = filteredRows.map((r) => r.lowestLpa).filter((v): v is number => v != null);
     const highestValues = filteredRows.map((r) => r.highestLpa).filter((v): v is number => v != null);
+    const allRegistered = filteredRows.every((r) => r.registered != null);
+    const registeredTotal = allRegistered ? filteredRows.reduce((s, r) => s + (r.registered ?? 0), 0) : undefined;
     return {
       placedTotal,
+      registeredTotal,
+      placedPct: registeredTotal ? (placedTotal / registeredTotal) * 100 : undefined,
       lowestLpa: lowestValues.length ? Math.min(...lowestValues) : undefined,
       highestLpa: highestValues.length ? Math.max(...highestValues) : undefined,
     };
@@ -385,10 +393,10 @@ const StatsPage = () => {
                       <thead>
                         <tr>
                           <th>Degree</th>
-                          <th># Students</th>
-                          <th># Registered</th>
-                          <th># Placed</th>
-                          <th># Internship</th>
+                          <th>Students</th>
+                          <th>Registered</th>
+                          <th>Placed</th>
+                          <th>Internship</th>
                           <th>% Placed </th>
                           <th>Median CTC (LPA)</th>
                           <th>Min CTC (LPA)</th>
@@ -421,8 +429,8 @@ const StatsPage = () => {
                           <thead>
                             <tr>
                               <th>Company</th>
-                              <th># Hired</th>
-                              <th># Interns</th>
+                              <th>Hired</th>
+                              <th>Interns</th>
                               <th>Avg Salary (LPA)</th>
                               <th>Avg Intern Salary (₹/month)</th>
                             </tr>
@@ -450,7 +458,9 @@ const StatsPage = () => {
                       <thead>
                         <tr>
                           <th>Programme</th>
-                          <th># Placed</th>
+                          {hasRegisteredData && <th>Registered</th>}
+                          <th>Placed</th>
+                          {hasRegisteredData && <th>% Placed</th>}
                           <th>Lowest (LPA)</th>
                           <th>Highest (LPA)</th>
                         </tr>
@@ -459,7 +469,15 @@ const StatsPage = () => {
                         {filteredRows.map((row) => (
                           <tr key={row.degree}>
                             <td>{row.degree}</td>
+                            {hasRegisteredData && <td>{row.registered ?? "—"}</td>}
                             <td>{row.placedCount}</td>
+                            {hasRegisteredData && (
+                              <td>
+                                {row.registered
+                                  ? `${((row.placedCount / row.registered) * 100).toFixed(2)}%`
+                                  : "—"}
+                              </td>
+                            )}
                             <td>{row.lowestLpa ?? "—"}</td>
                             <td>{row.highestLpa ?? "—"}</td>
                           </tr>
@@ -467,7 +485,11 @@ const StatsPage = () => {
                         {summaryTotals && filteredRows.length > 1 && (
                           <tr className="scis-table-total-row">
                             <td>Total</td>
+                            {hasRegisteredData && <td>{summaryTotals.registeredTotal ?? "—"}</td>}
                             <td>{summaryTotals.placedTotal}</td>
+                            {hasRegisteredData && (
+                              <td>{summaryTotals.placedPct ? `${summaryTotals.placedPct.toFixed(2)}%` : "—"}</td>
+                            )}
                             <td>{summaryTotals.lowestLpa ?? "—"}</td>
                             <td>{summaryTotals.highestLpa ?? "—"}</td>
                           </tr>
@@ -503,7 +525,7 @@ const StatsPage = () => {
                       <thead>
                         <tr>
                           <th>Degree</th>
-                          <th># Interned</th>
+                          <th>Interned</th>
                           <th>Median Duration (Months)</th>
                           <th>Median Stipend (₹/month)</th>
                           <th>Min Stipend (₹/month)</th>
@@ -533,7 +555,7 @@ const StatsPage = () => {
                           <thead>
                             <tr>
                               <th>Company</th>
-                              <th># Interns</th>
+                              <th>Interns</th>
                               <th>Avg Stipend (₹/month)</th>
                             </tr>
                           </thead>

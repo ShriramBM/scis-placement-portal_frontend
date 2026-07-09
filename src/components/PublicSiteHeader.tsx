@@ -24,9 +24,9 @@ const PublicSiteHeader = ({
   const [navOpen, setNavOpen] = useState(false);
   const [bannerLogoSrc, setBannerLogoSrc] = useState(UOH_LOGO_WHITE_URL);
 
-  const goTo = (path: string) => {
+  const goTo = (path: string, state?: { feature?: string }) => {
     setNavOpen(false);
-    navigate(path);
+    navigate(path, state ? { state } : undefined);
   };
 
   return (
@@ -105,7 +105,7 @@ const PublicSiteHeader = ({
             <button
               type="button"
               className={`scis-link-btn scis-link-btn-primary${activeNav === "login" ? " scis-link-btn-active" : ""}`}
-              onClick={() => goTo("/login")}
+              onClick={() => goTo("/coming-soon", { feature: "Portal Login" })}
             >
               Portal Login
             </button>
