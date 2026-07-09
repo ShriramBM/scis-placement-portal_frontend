@@ -27,6 +27,7 @@
   background: var(--scis-bg);
   color: var(--scis-text);
   font-family: var(--scis-font-sans);
+  overflow-x: clip;
 }
 
 .scis-container {
@@ -97,7 +98,21 @@
     text-align: left;
   }
   .scis-site-banner-inner {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    gap: 0.65rem;
+  }
+
+  .scis-banner-logo {
+    width: 44px;
+    height: 44px;
+  }
+
+  .scis-banner-line1 {
+    font-size: 0.8rem;
+  }
+
+  .scis-banner-line2 {
+    font-size: clamp(0.95rem, 4.2vw, 1.15rem);
   }
 }
 
@@ -116,6 +131,8 @@
   align-items: center;
   padding: 0.35rem 0 0.55rem;
   font-family: var(--scis-font-sans);
+  line-height: 1.45;
+  word-break: break-word;
 }
 
 .scis-header {
@@ -146,6 +163,11 @@
   display: flex;
   align-items: center;
   gap: 0.8rem;
+  min-width: 0;
+}
+
+.scis-brand-text {
+  min-width: 0;
 }
 
 .scis-brand-logo {
@@ -169,6 +191,36 @@
   margin: 0.1rem 0 0;
   font-size: 0.9rem;
   color: var(--scis-muted);
+}
+
+.scis-nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid var(--scis-border);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--scis-navy);
+  cursor: pointer;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+
+.scis-nav-toggle:hover {
+  background: var(--scis-bg-soft);
+}
+
+.scis-nav-toggle:focus-visible {
+  outline: 2px solid rgba(139, 0, 0, 0.35);
+  outline-offset: 2px;
+}
+
+.scis-nav-toggle-icon {
+  font-size: 1.15rem;
+  line-height: 1;
 }
 
 .scis-nav-links {
@@ -606,7 +658,19 @@
 .scis-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 760px;
+  min-width: 640px;
+}
+
+@media (max-width: 640px) {
+  .scis-table {
+    min-width: 520px;
+    font-size: 0.88rem;
+  }
+
+  .scis-table th,
+  .scis-table td {
+    padding: 0.5rem 0.55rem;
+  }
 }
 
 .scis-table th {
@@ -641,10 +705,107 @@
 .scis-chart-wrap {
   width: 100%;
   height: 280px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Recharts: no focus ring / selection box on tap or click */
+.scis-chart-wrap .recharts-wrapper,
+.scis-chart-wrap .recharts-surface,
+.scis-chart-wrap svg {
+  outline: none;
+}
+
+.scis-chart-wrap *:focus,
+.scis-chart-wrap *:focus-visible {
+  outline: none !important;
+}
+
+.scis-chart-wrap .recharts-tooltip-wrapper,
+.scis-chart-wrap .recharts-default-tooltip {
+  outline: none !important;
+}
+
+.scis-chart-wrap .recharts-active-dot,
+.scis-chart-wrap .recharts-bar-rectangle,
+.scis-chart-wrap .recharts-sector {
+  outline: none;
+}
+
+.scis-chart-wrap .recharts-legend-item-text {
+  outline: none;
 }
 
 .scis-chart-wrap-tall {
   height: 320px;
+}
+
+/* Placement statistics page */
+.scis-stats-page .scis-page-title {
+  font-size: clamp(1.35rem, 4vw, 1.85rem);
+}
+
+.scis-stats-page .scis-section-title {
+  font-size: clamp(1.05rem, 3vw, 1.25rem);
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.scis-stats-cards {
+  display: none;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.scis-stats-card {
+  border: 1px solid var(--scis-border);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  background: #fff;
+}
+
+.scis-stats-card-title {
+  margin: 0 0 0.65rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--scis-navy);
+}
+
+.scis-stats-card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.scis-stats-card-grid li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  font-size: 0.88rem;
+}
+
+.scis-stats-card-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--scis-muted);
+}
+
+.scis-stats-card-value {
+  font-weight: 600;
+  color: var(--scis-text);
+}
+
+.scis-stats-company-table .scis-table {
+  min-width: 0;
+}
+
+.scis-table--compact {
+  min-width: 0;
+  width: 100%;
 }
 
 .scis-auth-shell {
@@ -820,5 +981,161 @@
 @media (max-width: 640px) {
   .scis-auth-two-col {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --scis-gutter: 0.85rem;
+  }
+
+  .scis-header-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 0.65rem 0.75rem;
+  }
+
+  .scis-brand {
+    grid-column: 1;
+  }
+
+  .scis-nav-toggle {
+    display: flex;
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .scis-nav-links {
+    grid-column: 1 / -1;
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.35rem;
+    padding-top: 0.15rem;
+  }
+
+  .scis-nav-links--open {
+    display: flex;
+  }
+
+  .scis-link-btn {
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .scis-panel-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .scis-panel-header .scis-btn-secondary,
+  .scis-panel-header .scis-btn-primary {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .scis-hero-highlight {
+    text-align: left;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .scis-main-content {
+    padding: 1.25rem 0 2.5rem;
+  }
+
+  .scis-chart-wrap {
+    height: min(280px, 58vw);
+    min-height: 220px;
+  }
+
+  .scis-chart-wrap-tall {
+    height: min(320px, 70vw);
+    min-height: 260px;
+  }
+
+  .scis-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .scis-tag-row .scis-tag {
+    max-width: 100%;
+    word-break: break-word;
+  }
+
+  .scis-stats-page .scis-filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .scis-stats-page .scis-tab-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
+    gap: 0.4rem;
+  }
+
+  .scis-stats-page .scis-tab {
+    width: 100%;
+    text-align: center;
+    padding: 0.5rem 0.45rem;
+    font-size: 0.88rem;
+  }
+
+  .scis-stats-page .scis-chart-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .scis-stats-page .scis-chart-card {
+    padding: 0.85rem 0.9rem;
+    min-width: 0;
+  }
+
+  .scis-stats-page .scis-chart-title {
+    font-size: 0.98rem;
+  }
+
+  .scis-stats-cards {
+    display: flex;
+  }
+
+  .scis-stats-table-desktop {
+    display: none;
+  }
+
+  .scis-stats-page .scis-table-wrap--wide {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 480px) {
+  .scis-hero-actions {
+    flex-direction: column;
+  }
+
+  .scis-hero-actions .scis-btn-primary,
+  .scis-hero-actions .scis-btn-secondary {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .scis-auth-shell-centered {
+    min-height: auto;
+    padding-top: 1.25rem;
+    padding-bottom: 2rem;
+  }
+
+  .scis-stats-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .scis-stats-page .scis-chart-wrap {
+    min-height: 200px;
+    height: 240px;
+  }
+
+  .scis-stats-page .scis-chart-wrap-tall {
+    min-height: 220px;
   }
 }

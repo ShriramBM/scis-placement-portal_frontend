@@ -125,7 +125,11 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+  .portal-layout {
+    flex-direction: column;
+  }
+
   .portal-sidebar {
     position: static;
     width: 100%;
@@ -151,13 +155,18 @@
   }
 
   .portal-sidebar__link {
-    flex: 1 1 auto;
-    min-width: 140px;
+    flex: 1 1 calc(50% - 8px);
+    min-width: 0;
     width: auto;
   }
 
   .portal-sidebar__footer {
     margin-top: 12px;
     padding-top: 12px;
+  }
+
+  .portal-sidebar__logout {
+    width: auto;
+    min-width: 140px;
   }
 }

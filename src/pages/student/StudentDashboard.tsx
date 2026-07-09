@@ -291,6 +291,31 @@ const sdStyles = `
   .sd-action-btn:focus {
     outline: none;
   }
+  @media (max-width: 768px) {
+    .sd-title {
+      font-size: 22px;
+    }
+    .sd-card,
+    .sd-section {
+      padding: 16px 0;
+    }
+    .sd-search {
+      min-width: 0;
+      width: 100%;
+      flex: 1 1 100%;
+    }
+    .sd-filter-row > div {
+      flex: 1 1 100%;
+      min-width: 0 !important;
+    }
+    .sd-btn-group {
+      flex-direction: column;
+    }
+    .sd-action-btn {
+      width: 100%;
+      box-sizing: border-box;
+    }
+  }
 `;
 
 // ── Main Component ─────────────────────────────────────────────────────────────

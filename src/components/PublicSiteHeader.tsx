@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import fallbackLogo from "../assets/uoh-logo.png";
 
 /** Official SCIS site asset — white seal for dark/maroon backgrounds */
 export const UOH_LOGO_WHITE_URL = "https://scis.uohyd.ac.in/images/uoh_logo_white.png";
@@ -19,19 +21,29 @@ const PublicSiteHeader = ({
   brandSubtitle = "Office of Career Services",
 }: PublicSiteHeaderProps) => {
   const navigate = useNavigate();
+  const [navOpen, setNavOpen] = useState(false);
+  const [bannerLogoSrc, setBannerLogoSrc] = useState(UOH_LOGO_WHITE_URL);
+
+  const goTo = (path: string) => {
+    setNavOpen(false);
+    navigate(path);
+  };
 
   return (
     <>
       <header className="scis-site-banner" role="banner">
         <div className="scis-container scis-site-banner-inner">
           <img
-            src={UOH_LOGO_WHITE_URL}
+            src={bannerLogoSrc}
             alt=""
             className="scis-banner-logo"
             width={56}
             height={56}
             decoding="async"
             referrerPolicy="no-referrer"
+            onError={() => {
+              if (bannerLogoSrc !== fallbackLogo) setBannerLogoSrc(fallbackLogo);
+            }}
           />
           <div className="scis-banner-titles">
             <p className="scis-banner-line1">University of Hyderabad</p>
@@ -47,38 +59,53 @@ const PublicSiteHeader = ({
         <div className="scis-container scis-header-inner">
           <div className="scis-brand">
             <img
-              src={UOH_LOGO_WHITE_URL}
+              src={fallbackLogo}
               alt="University of Hyderabad logo"
-              className="scis-brand-logo scis-brand-logo--on-light"
+              className="scis-brand-logo"
               width={48}
               height={48}
               decoding="async"
-              referrerPolicy="no-referrer"
             />
-            <div>
+            <div className="scis-brand-text">
               <p className="scis-brand-title">{brandTitle}</p>
               <p className="scis-brand-subtitle">{brandSubtitle}</p>
             </div>
           </div>
-          <nav className="scis-nav-links" aria-label="Primary">
+          <button
+            type="button"
+            className="scis-nav-toggle"
+            aria-expanded={navOpen}
+            aria-controls="scis-primary-nav"
+            aria-label={navOpen ? "Close menu" : "Open menu"}
+            onClick={() => setNavOpen((open) => !open)}
+          >
+            <span className="scis-nav-toggle-icon" aria-hidden="true">
+              {navOpen ? "✕" : "☰"}
+            </span>
+          </button>
+          <nav
+            id="scis-primary-nav"
+            className={`scis-nav-links${navOpen ? " scis-nav-links--open" : ""}`}
+            aria-label="Primary"
+          >
             <button
               type="button"
               className={`scis-link-btn${activeNav === "home" ? " scis-link-btn-active" : ""}`}
-              onClick={() => navigate("/")}
+              onClick={() => goTo("/")}
             >
               Home
             </button>
             <button
               type="button"
               className={`scis-link-btn${activeNav === "stats" ? " scis-link-btn-active" : ""}`}
-              onClick={() => navigate("/stats")}
+              onClick={() => goTo("/stats")}
             >
               Statistics
             </button>
             <button
               type="button"
               className={`scis-link-btn scis-link-btn-primary${activeNav === "login" ? " scis-link-btn-active" : ""}`}
-              onClick={() => navigate("/login")}
+              onClick={() => goTo("/login")}
             >
               Portal Login
             </button>
