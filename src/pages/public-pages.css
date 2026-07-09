@@ -611,6 +611,7 @@
   display: flex;
   gap: 0.45rem;
   flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 
 .scis-tab {
@@ -688,6 +689,12 @@
 
 .scis-table tbody tr:hover {
   background: #fafbfc;
+}
+
+.scis-table-total-row td {
+  background: var(--scis-bg-soft);
+  color: var(--scis-navy);
+  font-weight: 700;
 }
 
 .scis-chart-grid {
