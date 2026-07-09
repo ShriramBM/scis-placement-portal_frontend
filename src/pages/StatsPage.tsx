@@ -16,12 +16,12 @@ import {
 } from "recharts";
 import PublicSiteHeader from "../components/PublicSiteHeader";
 import PublicSiteFooter from "../components/PublicSiteFooter";
-import { PLACEMENT_STATS_DATA, type YearRow } from "../data/placementStatsData";
+import { PLACEMENT_STATS_DATA, type YearRow, type InternshipRow } from "../data/placementStatsData";
 import "./public-pages.css";
 
 const DEGREE_OPTIONS = ["All", "MCA", "MTech (CSE)", "MTech (AI)", "MTech (IT)", "IMTech"];
-const COLORS = ["#1a365d", "#8b0000", "#b91c1c", "#94a3b8", "#475569"];
-const PIE_COLORS = ["#1a365d", "#8b0000", "#b91c1c", "#c53030", "#94a3b8", "#cbd5e1", "#e2e8f0"];
+const COLORS = ["#1F3A5F", "#aa0000", "#b91c1c", "#94a3b8", "#475569"];
+const PIE_COLORS = ["#1F3A5F", "#aa0000", "#b91c1c", "#c53030", "#94a3b8", "#cbd5e1", "#e2e8f0"];
 
 /** No highlight box on tap/hover; no browser focus ring on tooltip */
 const CHART_TOOLTIP = {
@@ -101,6 +101,74 @@ const StatsRowCard = ({
   </article>
 );
 
+const SummaryRowCard = ({ row, hasRegisteredData }: { row: YearRow; hasRegisteredData: boolean }) => (
+  <article className="scis-stats-card">
+    <h3 className="scis-stats-card-title">{row.degree}</h3>
+    <ul className="scis-stats-card-grid">
+      {hasRegisteredData && (
+        <li>
+          <span className="scis-stats-card-label">Registered</span>
+          <span className="scis-stats-card-value">{row.registered ?? "—"}</span>
+        </li>
+      )}
+      <li>
+        <span className="scis-stats-card-label">Placed</span>
+        <span className="scis-stats-card-value">{row.placedCount}</span>
+      </li>
+      {hasRegisteredData && (
+        <li>
+          <span className="scis-stats-card-label">% Placed</span>
+          <span className="scis-stats-card-value">
+            {row.registered ? `${((row.placedCount / row.registered) * 100).toFixed(2)}%` : "—"}
+          </span>
+        </li>
+      )}
+      <li>
+        <span className="scis-stats-card-label">Lowest</span>
+        <span className="scis-stats-card-value">{row.lowestLpa ? `${row.lowestLpa} LPA` : "—"}</span>
+      </li>
+      <li>
+        <span className="scis-stats-card-label">Highest</span>
+        <span className="scis-stats-card-value">{row.highestLpa ? `${row.highestLpa} LPA` : "—"}</span>
+      </li>
+    </ul>
+  </article>
+);
+
+const InternshipRowCard = ({ row }: { row: InternshipRow }) => (
+  <article className="scis-stats-card">
+    <h3 className="scis-stats-card-title">{row.degree}</h3>
+    <ul className="scis-stats-card-grid">
+      <li>
+        <span className="scis-stats-card-label">Interned</span>
+        <span className="scis-stats-card-value">{row.internedCount}</span>
+      </li>
+      <li>
+        <span className="scis-stats-card-label">Median Duration</span>
+        <span className="scis-stats-card-value">{row.internedCount ? `${row.medianDurationMonths} mo` : "—"}</span>
+      </li>
+      <li>
+        <span className="scis-stats-card-label">Median Stipend</span>
+        <span className="scis-stats-card-value">
+          {row.internedCount ? `₹${row.medianStipend.toLocaleString("en-IN")}` : "—"}
+        </span>
+      </li>
+      <li>
+        <span className="scis-stats-card-label">Min Stipend</span>
+        <span className="scis-stats-card-value">
+          {row.minStipend ? `₹${row.minStipend.toLocaleString("en-IN")}` : "—"}
+        </span>
+      </li>
+      <li>
+        <span className="scis-stats-card-label">Max Stipend</span>
+        <span className="scis-stats-card-value">
+          {row.maxStipend ? `₹${row.maxStipend.toLocaleString("en-IN")}` : "—"}
+        </span>
+      </li>
+    </ul>
+  </article>
+);
+
 const StatsPage = () => {
   const statsData = PLACEMENT_STATS_DATA;
   const [selectedYear, setSelectedYear] = useState(0);
@@ -164,7 +232,7 @@ const StatsPage = () => {
     const totalStudents = filteredRows.reduce((s, r) => s + (r.students ?? 0), 0);
     const notPlaced = Math.max(totalStudents - placed - interned, 0);
     return [
-      { name: "Placed", value: placed, fill: "#1a365d" },
+      { name: "Placed", value: placed, fill: "#1F3A5F" },
       { name: "Interns", value: interned, fill: "#475569" },
       { name: "Not Placed", value: notPlaced, fill: "#94a3b8" },
     ].filter((d) => d.value > 0);
@@ -257,7 +325,7 @@ const StatsPage = () => {
     `${name} ${(percent * 100).toFixed(0)}%`;
 
   const degreeXAxis = {
-    stroke: "#1a365d",
+    stroke: "#1F3A5F",
     tick: { fontSize: viewport.axisTick },
     angle: viewport.xAxisAngle,
     textAnchor: viewport.xAxisAngle ? ("end" as const) : ("middle" as const),
@@ -431,8 +499,8 @@ const StatsPage = () => {
                               <th>Company</th>
                               <th>Hired</th>
                               <th>Interns</th>
-                              <th>Avg Salary (LPA)</th>
-                              <th>Avg Intern Salary (₹/month)</th>
+                              <th>Avg (LPA)</th>
+                              <th>Avg Intern (₹/mo)</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -453,6 +521,48 @@ const StatsPage = () => {
                 </>
               ) : (
                 <>
+                  <div className="scis-stats-cards" aria-label="Placement data by degree">
+                    {filteredRows.map((row) => (
+                      <SummaryRowCard key={row.degree} row={row} hasRegisteredData={hasRegisteredData} />
+                    ))}
+                    {summaryTotals && filteredRows.length > 1 && (
+                      <article className="scis-stats-card">
+                        <h3 className="scis-stats-card-title">Total</h3>
+                        <ul className="scis-stats-card-grid">
+                          {hasRegisteredData && (
+                            <li>
+                              <span className="scis-stats-card-label">Registered</span>
+                              <span className="scis-stats-card-value">{summaryTotals.registeredTotal ?? "—"}</span>
+                            </li>
+                          )}
+                          <li>
+                            <span className="scis-stats-card-label">Placed</span>
+                            <span className="scis-stats-card-value">{summaryTotals.placedTotal}</span>
+                          </li>
+                          {hasRegisteredData && (
+                            <li>
+                              <span className="scis-stats-card-label">% Placed</span>
+                              <span className="scis-stats-card-value">
+                                {summaryTotals.placedPct ? `${summaryTotals.placedPct.toFixed(2)}%` : "—"}
+                              </span>
+                            </li>
+                          )}
+                          <li>
+                            <span className="scis-stats-card-label">Lowest</span>
+                            <span className="scis-stats-card-value">
+                              {summaryTotals.lowestLpa ? `${summaryTotals.lowestLpa} LPA` : "—"}
+                            </span>
+                          </li>
+                          <li>
+                            <span className="scis-stats-card-label">Highest</span>
+                            <span className="scis-stats-card-value">
+                              {summaryTotals.highestLpa ? `${summaryTotals.highestLpa} LPA` : "—"}
+                            </span>
+                          </li>
+                        </ul>
+                      </article>
+                    )}
+                  </div>
                   <div className="scis-table-wrap scis-table-wrap--wide scis-stats-table-desktop">
                     <table className="scis-table">
                       <thead>
@@ -520,7 +630,12 @@ const StatsPage = () => {
                 <p className="scis-page-intro">No internship data for this filter.</p>
               ) : (
                 <>
-                  <div className="scis-table-wrap scis-stats-company-table">
+                  <div className="scis-stats-cards" aria-label="Internship data by degree">
+                    {filteredInternshipRows.map((row) => (
+                      <InternshipRowCard key={row.degree} row={row} />
+                    ))}
+                  </div>
+                  <div className="scis-table-wrap scis-stats-company-table scis-stats-table-desktop">
                     <table className="scis-table scis-table--compact">
                       <thead>
                         <tr>
@@ -556,7 +671,7 @@ const StatsPage = () => {
                             <tr>
                               <th>Company</th>
                               <th>Interns</th>
-                              <th>Avg Stipend (₹/month)</th>
+                              <th>Avg (₹/mo)</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -636,16 +751,16 @@ const StatsPage = () => {
                       margin={viewport.barMargin}
                     >
                       <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                      <XAxis type="number" stroke="#1a365d" tick={{ fontSize: viewport.axisTick }} />
+                      <XAxis type="number" stroke="#1F3A5F" tick={{ fontSize: viewport.axisTick }} />
                       <YAxis
                         type="category"
                         dataKey="name"
-                        stroke="#1a365d"
+                        stroke="#1F3A5F"
                         width={viewport.categoryAxisWidth}
                         tick={{ fontSize: viewport.axisTick }}
                       />
                       <Tooltip {...CHART_TOOLTIP} />
-                      <Bar dataKey="count" name="Hires" fill="#8b0000" radius={[0, 6, 6, 0]} activeBar={false} />
+                      <Bar dataKey="count" name="Hires" fill="#aa0000" radius={[0, 6, 6, 0]} activeBar={false} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -663,9 +778,9 @@ const StatsPage = () => {
                     >
                       <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                       <XAxis dataKey="name" {...degreeXAxis} />
-                      <YAxis domain={[0, 100]} stroke="#1a365d" tick={{ fontSize: viewport.axisTick }} width={viewport.isMobile ? 36 : 60} />
+                      <YAxis domain={[0, 100]} stroke="#1F3A5F" tick={{ fontSize: viewport.axisTick }} width={viewport.isMobile ? 36 : 60} />
                       <Tooltip {...CHART_TOOLTIP} />
-                      <Bar dataKey="Placement %" fill="#1a365d" radius={[6, 6, 0, 0]} activeBar={false} />
+                      <Bar dataKey="Placement %" fill="#1F3A5F" radius={[6, 6, 0, 0]} activeBar={false} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -681,7 +796,7 @@ const StatsPage = () => {
                     >
                       <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                       <XAxis dataKey="name" {...degreeXAxis} />
-                      <YAxis stroke="#1a365d" tick={{ fontSize: viewport.axisTick }} width={viewport.isMobile ? 36 : 60} />
+                      <YAxis stroke="#1F3A5F" tick={{ fontSize: viewport.axisTick }} width={viewport.isMobile ? 36 : 60} />
                       <Tooltip {...CHART_TOOLTIP} />
                       <Bar dataKey="Median CTC (LPA)" radius={[6, 6, 0, 0]} activeBar={false}>
                         {chartDataByDegree.map((_, i) => (
@@ -705,7 +820,7 @@ const StatsPage = () => {
                     >
                       <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                       <XAxis dataKey="degree" {...degreeXAxis} />
-                      <YAxis stroke="#1a365d" tick={{ fontSize: viewport.axisTick }} width={viewport.isMobile ? 36 : 60} />
+                      <YAxis stroke="#1F3A5F" tick={{ fontSize: viewport.axisTick }} width={viewport.isMobile ? 36 : 60} />
                       <Tooltip {...CHART_TOOLTIP} />
                       <Legend {...viewport.legendProps} />
                       {trendYears.map((year, i) => (

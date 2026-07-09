@@ -740,7 +740,7 @@ const StreamDashboard = () => {
 const styles: Record<string, React.CSSProperties> = {
   page: {
     backgroundColor: "transparent",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     color: "#000",
   },
   main: {
@@ -765,16 +765,16 @@ const styles: Record<string, React.CSSProperties> = {
   topTab: {
     border: "1px solid #e2e8f0",
     backgroundColor: "#fff",
-    color: "#8b0000",
+    color: "#aa0000",
     padding: "8px 14px",
     borderRadius: 8,
     cursor: "pointer",
     fontSize: 13,
     fontWeight: 700,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   topTabActive: {
-    backgroundColor: "#8b0000",
+    backgroundColor: "#aa0000",
     color: "#fff",
     borderColor: "#6d0000",
   },
@@ -789,7 +789,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: 12,
     fontWeight: 700,
     color: "#64748b",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   tableTools: {
     display: "flex",
@@ -801,9 +801,9 @@ const styles: Record<string, React.CSSProperties> = {
   },
   toolsLeft: {
     fontSize: 13,
-    color: "#1a365d",
+    color: "#1F3A5F",
     fontWeight: 700,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   search: {
     border: "1px solid #e2e8f0",
@@ -812,7 +812,7 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "8px 12px",
     width: 210,
     outline: "none",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   listTableWrap: {
@@ -825,7 +825,7 @@ const styles: Record<string, React.CSSProperties> = {
     width: "100%",
     borderCollapse: "collapse",
     backgroundColor: "#fff",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   listTh: {
     padding: "11px 14px",
@@ -835,7 +835,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#334155",
     fontSize: 12,
     fontWeight: 600,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     letterSpacing: "0.2px",
   },
   listTd: {
@@ -845,7 +845,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#0f172a",
     fontSize: 13,
     fontWeight: 600,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     whiteSpace: "nowrap",
   },
   listRow: {
@@ -858,7 +858,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#64748b",
     fontSize: 13,
     fontWeight: 600,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   postingCard: {
     backgroundColor: "#fff",
@@ -870,7 +870,7 @@ const styles: Record<string, React.CSSProperties> = {
     margin: "0 0 4px",
     fontSize: 28,
     fontWeight: 700,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     color: "#000",
   },
   postMandatory: {
@@ -878,7 +878,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#b91c1c",
     fontSize: 14,
     fontWeight: 700,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   postInput: {
     width: "100%",
@@ -891,7 +891,7 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: 10,
     outline: "none",
     boxSizing: "border-box",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   postTextArea: {
@@ -918,7 +918,7 @@ const styles: Record<string, React.CSSProperties> = {
     backgroundColor: "#fff",
     color: "#000",
     pointerEvents: "none",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   jdUploaded: {
     fontSize: 13,
@@ -926,12 +926,12 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     alignItems: "center",
     gap: 8,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   jdPlaceholder: {
     fontSize: 13,
     color: "#555",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   jdClearBtn: {
     padding: "4px 10px",
@@ -942,7 +942,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#b91c1c",
     cursor: "pointer",
     fontWeight: 700,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   formRow: {
     display: "grid",
@@ -960,7 +960,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: 13,
     fontWeight: 700,
     marginBottom: 8,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     color: "#000",
   },
   checkboxRow: {
@@ -974,7 +974,7 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     alignItems: "center",
     gap: 6,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   postActions: {
@@ -985,24 +985,24 @@ const styles: Record<string, React.CSSProperties> = {
   },
   actionBtn: {
     border: "1px solid #6d0000",
-    backgroundColor: "#8b0000",
+    backgroundColor: "#aa0000",
     color: "#fff",
     borderRadius: 8,
     padding: "8px 14px",
     cursor: "pointer",
     fontWeight: 700,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   resetBtn: {
     backgroundColor: "#fff",
-    color: "#8b0000",
-    border: "1px solid #8b0000",
+    color: "#aa0000",
+    border: "1px solid #aa0000",
   },
   postMessage: {
     fontSize: 13,
     color: "#000",
     margin: "2px 0 8px",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   detailsPage: {
@@ -1034,16 +1034,16 @@ const styles: Record<string, React.CSSProperties> = {
   },
   backBtn: {
     alignSelf: "flex-start",
-    border: "1px solid #8b0000",
+    border: "1px solid #aa0000",
     backgroundColor: "#fff",
-    color: "#8b0000",
+    color: "#aa0000",
     fontWeight: 700,
     fontSize: 15,
     textAlign: "left",
     padding: "10px 16px",
     borderRadius: 8,
     cursor: "pointer",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   sideCard: {
     border: "1px solid #e2e8f0",
@@ -1057,13 +1057,13 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: 12,
     margin: "0 0 6px",
     fontWeight: 700,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   sideCardText: {
     fontSize: 11,
     margin: "4px 0",
     color: "#000",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   section: {
     border: "none",
@@ -1083,7 +1083,7 @@ const styles: Record<string, React.CSSProperties> = {
     margin: 0,
     fontSize: 30,
     fontWeight: 700,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     color: "#000",
     lineHeight: 1.25,
   },
@@ -1091,7 +1091,7 @@ const styles: Record<string, React.CSSProperties> = {
     margin: "0 0 12px",
     fontSize: 20,
     fontWeight: 700,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     color: "#000",
     lineHeight: 1.3,
   },
@@ -1103,19 +1103,19 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: 14,
     lineHeight: 1.5,
     alignItems: "start",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   jdDownloadLink: {
     color: "#000",
     fontWeight: 700,
     fontSize: 14,
     textDecoration: "underline",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   table: {
     width: "100%",
     borderCollapse: "collapse",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   th: {
     border: "1px solid #e2e8f0",
@@ -1141,7 +1141,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#000",
     backgroundColor: "#ffffff",
     fontSize: 16,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     fontWeight: 700,
   },
 };

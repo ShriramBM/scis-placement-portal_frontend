@@ -49,7 +49,7 @@ const CustomSelect = ({
           border: "1px solid #e2e8f0",
           backgroundColor: "#fff",
           color: "#000",
-          fontFamily: "Arial, Helvetica, sans-serif",
+          fontFamily: "Inter, Arial, Helvetica, sans-serif",
           fontWeight: 600,
           fontSize: "13px",
           outline: "none",
@@ -86,7 +86,7 @@ const CustomSelect = ({
                 padding: "10px 12px",
                 cursor: "pointer",
                 fontSize: "13px",
-                fontFamily: "Arial, Helvetica, sans-serif",
+                fontFamily: "Inter, Arial, Helvetica, sans-serif",
                 fontWeight: 600,
                 color: "black",
                 borderBottom: "1px solid #ccc",
@@ -309,7 +309,7 @@ const ApplicationsReview = () => {
                           Select
                         </button>
                       ) : (
-                        <span style={{ color: "#15803d", fontWeight: 700, fontFamily: "Arial, Helvetica, sans-serif" }}>
+                        <span style={{ color: "#15803d", fontWeight: 700, fontFamily: "Inter, Arial, Helvetica, sans-serif" }}>
                           Selected
                         </span>
                       )}
@@ -338,7 +338,7 @@ const styles: Record<string, React.CSSProperties> = {
   container: {
     backgroundColor: "transparent",
     color: "#000",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   header: {
     marginBottom: "14px",
@@ -348,13 +348,13 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: "28px",
     fontWeight: 700,
     color: "#000",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   subTitle: {
     margin: "6px 0 0",
     color: "#555",
     fontSize: "13px",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   card: {
     backgroundColor: "#fff",
@@ -375,7 +375,7 @@ const styles: Record<string, React.CSSProperties> = {
     border: "1px solid #e2e8f0",
     backgroundColor: "#fff",
     color: "#000",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     fontWeight: 600,
     fontSize: "13px",
     outline: "none",
@@ -387,7 +387,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: "12px",
     color: "#555",
     fontWeight: 700,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     marginBottom: "12px",
   },
   tableWrap: {
@@ -399,7 +399,7 @@ const styles: Record<string, React.CSSProperties> = {
     width: "100%",
     borderCollapse: "collapse" as const,
     backgroundColor: "#fff",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   th: {
     padding: "12px 14px",
@@ -409,7 +409,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#000",
     fontSize: "12px",
     fontWeight: 700 as const,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   td: {
     padding: "12px 14px",
@@ -417,7 +417,7 @@ const styles: Record<string, React.CSSProperties> = {
     borderBottom: "1px solid #e0e0e0",
     color: "#000",
     fontSize: "13px",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   row: {
     backgroundColor: "#fff",
@@ -430,14 +430,14 @@ const styles: Record<string, React.CSSProperties> = {
     letterSpacing: "0.2px",
     display: "inline-block",
     border: "1.5px solid",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   emptyCell: {
     textAlign: "center",
     padding: "20px",
     color: "#555",
     fontSize: "13px",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   selectBtn: {
@@ -449,7 +449,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: 700,
     fontSize: "12px",
     cursor: "pointer",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   loading: {
     minHeight: "100vh",
@@ -459,7 +459,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: "16px",
     color: "#000",
     backgroundColor: "#ffffff",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     fontWeight: 700,
   },
 };

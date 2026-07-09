@@ -37,8 +37,8 @@ const PublicSiteHeader = ({
             src={bannerLogoSrc}
             alt=""
             className="scis-banner-logo"
-            width={56}
-            height={56}
+            width={76}
+            height={76}
             decoding="async"
             referrerPolicy="no-referrer"
             onError={() => {

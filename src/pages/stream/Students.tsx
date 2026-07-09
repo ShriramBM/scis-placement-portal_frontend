@@ -479,7 +479,7 @@ const styles: Record<string, React.CSSProperties> = {
   container: {
     backgroundColor: "transparent",
     color: "#000",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   header: {
     marginBottom: 14,
@@ -494,13 +494,13 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: "28px",
     fontWeight: 700,
     color: "#000",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   subtitle: {
     margin: "6px 0 0",
     color: "#555",
     fontSize: 13,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   card: {
     backgroundColor: "#fff",
@@ -523,7 +523,7 @@ const styles: Record<string, React.CSSProperties> = {
     minWidth: 170,
     outline: "none",
     fontSize: 13,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   countText: {
@@ -531,7 +531,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#555",
     fontWeight: 700,
     marginBottom: 10,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   tableWrap: {
     overflowX: "auto",
@@ -542,7 +542,7 @@ const styles: Record<string, React.CSSProperties> = {
     width: "100%",
     borderCollapse: "collapse",
     backgroundColor: "#fff",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   th: {
     padding: 12,
@@ -552,7 +552,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#000",
     fontSize: 12,
     fontWeight: 700,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   td: {
     padding: 12,
@@ -561,7 +561,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#000",
     fontSize: 13,
     verticalAlign: "top",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   row: {
     cursor: "pointer",
@@ -575,7 +575,7 @@ const styles: Record<string, React.CSSProperties> = {
     backgroundColor: "#dcfce7",
     color: "#15803d",
     border: "1.5px solid #15803d",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   badTag: {
     display: "inline-block",
@@ -586,7 +586,7 @@ const styles: Record<string, React.CSSProperties> = {
     backgroundColor: "#fee2e2",
     color: "#b91c1c",
     border: "1.5px solid #b91c1c",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   dimTag: {
     display: "inline-block",
@@ -597,7 +597,7 @@ const styles: Record<string, React.CSSProperties> = {
     backgroundColor: "#f1f5f9",
     color: "#64748b",
     border: "1.5px solid #64748b",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   actionCell: {
     display: "flex",
@@ -614,7 +614,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: 700,
     fontSize: 12,
     cursor: "pointer",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   unplaceBtn: {
     padding: "6px 12px",
@@ -625,7 +625,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: 700,
     fontSize: 12,
     cursor: "pointer",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   detailActions: {
     marginTop: 12,
@@ -648,7 +648,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: 700,
     cursor: "pointer",
     fontSize: 14,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   section: {
     backgroundColor: "#fff",
@@ -661,21 +661,21 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: 18,
     color: "#000",
     fontWeight: 700,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   grid: {
     display: "grid",
     gridTemplateColumns: "220px 1fr",
     gap: "8px 12px",
     fontSize: 13,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   emptyCell: {
     textAlign: "center",
     padding: 20,
     color: "#555",
     fontSize: 13,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   loading: {
@@ -686,7 +686,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: 16,
     color: "#000",
     backgroundColor: "#ffffff",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     fontWeight: 700,
   },
   loadingInner: {
@@ -696,7 +696,7 @@ const styles: Record<string, React.CSSProperties> = {
     padding: 20,
     color: "#000",
     fontSize: 14,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
 };

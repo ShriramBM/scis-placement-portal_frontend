@@ -5,6 +5,11 @@ import { PLACEMENT_STATS_DATA } from "../data/placementStatsData";
 import "./public-pages.css";
 
 const latestStats = PLACEMENT_STATS_DATA[0];
+const latestTotalInterned = latestStats.internshipRows.reduce((s, r) => s + r.internedCount, 0);
+const latestPlacedPct =
+  latestStats.summary.totalStudents > 0
+    ? (((latestStats.summary.totalPlaced + latestTotalInterned) / latestStats.summary.totalStudents) * 100).toFixed(2)
+    : null;
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -18,8 +23,8 @@ const HomePage = () => {
           <p className="scis-section-kicker">Placement and Internship Cell</p>
           <h1 className="scis-hero-title">Welcome to SCIS Placement Portal</h1>
           <p className="scis-hero-subtitle">
-            Connecting SCIS students with top recruiters through a structured, transparent,
-            and data-driven placement process.
+            SCIS Placements
+SCIS has a vibrant placement programme where mostly product-based companies with good salary packages come for recruitment. The work in such companies is challenging and interesting with strong brand value in both technology and organization.
           </p>
           <p className="scis-hero-highlight">
             *** Official career services portal for MCA, M.Tech, and Integrated M.Tech programmes ***
@@ -89,7 +94,7 @@ const HomePage = () => {
           <div className="scis-tag-row">
             <span className="scis-tag">{latestStats.year}</span>
             <span className="scis-tag">Highest package: {latestStats.summary.highestPackage} LPA</span>
-            <span className="scis-tag">{latestStats.summary.totalPlaced} placements</span>
+            <span className="scis-tag">{latestPlacedPct !== null ? `${latestPlacedPct}% placed` : `${latestStats.summary.totalPlaced} placements`}</span>
             <span className="scis-tag">Top recruiters: {latestStats.summary.topRecruiters.join(", ")}</span>
           </div>
         </section>

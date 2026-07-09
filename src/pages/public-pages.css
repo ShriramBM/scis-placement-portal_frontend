@@ -1,21 +1,22 @@
 /* SCIS / University of Hyderabad school site theme — maroon, navy, academic fonts */
 
 :root {
-  --scis-maroon: #8b0000;
+  --scis-maroon: #aa0000;
   --scis-maroon-hover: #6d0000;
   --scis-maroon-accent: #a50000;
-  --scis-navy: #1a365d;
+  --scis-navy: #1F3A5F;
   --scis-link-red: #b91c1c;
   --scis-bg: #ffffff;
   --scis-bg-soft: #f0f4f8;
-  --scis-text: #1e293b;
+  --scis-text: #4A5568;
   --scis-muted: #64748b;
   --scis-border: #e2e8f0;
   /* Same horizontal inset for nav, main, and footer grid (not full-bleed maroon bars). */
-  --scis-gutter: 1rem;
-  /* Official SCIS-style: serif on top maroon banner; sans elsewhere (body, nav, headings). */
-  --scis-font-serif: Georgia, "Times New Roman", Times, serif;
-  --scis-font-sans: Arial, Helvetica, "Segoe UI", sans-serif;
+  --scis-gutter: 1.5rem;
+  /* Site-wide font is Inter; this serif is reserved for the "School of ... Sciences"
+     banner heading only (.scis-banner-line2) per brand spec. */
+  --scis-font-serif: "Averia Serif Libre", Georgia, "Times New Roman", Times, serif;
+  --scis-font-sans: Inter, Arial, Helvetica, "Segoe UI", sans-serif;
 }
 
 .scis-page-root {
@@ -39,29 +40,29 @@
   box-sizing: border-box;
 }
 
-/* Maroon banner (official SCIS header style) — full viewport width, serif like scis.uohyd.ac.in */
+/* Maroon banner (official SCIS header style) — full viewport width */
 .scis-site-banner {
   width: 100%;
   margin: 0;
-  padding-top: 0.85rem;
+  padding: .1rem 0.1rem;
   background: var(--scis-maroon);
   color: #fff;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  font-family: var(--scis-font-serif);
 }
 
 .scis-site-banner-inner {
-  min-height: 72px;
+  min-height: 96px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.45rem 0 0.55rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.9rem;
 }
 
 .scis-banner-logo {
-  width: 56px;
-  height: 56px;
+  width: 76px;
+  height: 76px;
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -73,20 +74,22 @@
 
 .scis-banner-line1 {
   margin: 0;
-  font-size: 0.95rem;
-  font-weight: 400;
+  font-size: 1.05rem;
+  font-weight: 600;
   opacity: 0.95;
+  margin-bottom: 7px;
 }
 
 .scis-banner-line2 {
   margin: 0.15rem 0 0;
-  font-size: clamp(1.05rem, 2.5vw, 1.45rem);
+  font-size: clamp(1.05rem, 3vw, 1.7rem);
   font-weight: 700;
   letter-spacing: 0.02em;
+  font-family: var(--scis-font-serif);
 }
 
 .scis-banner-spacer {
-  width: 56px;
+  width: 76px;
   flex-shrink: 0;
 }
 
@@ -103,8 +106,8 @@
   }
 
   .scis-banner-logo {
-    width: 44px;
-    height: 44px;
+    width: 56px;
+    height: 56px;
   }
 
   .scis-banner-line1 {
@@ -129,7 +132,8 @@
   min-height: 36px;
   display: flex;
   align-items: center;
-  padding: 0.35rem 0 0.55rem;
+  padding-top: 0.35rem;
+  padding-bottom: 0.55rem;
   font-family: var(--scis-font-sans);
   line-height: 1.45;
   word-break: break-word;
@@ -144,8 +148,8 @@
   top: 0;
   z-index: 20;
   /* Space between announcement strip and primary nav (SCIS site spacing). */
-  padding-top: 0.85rem;
-  padding-bottom: 0.65rem;
+  padding-top: 1.1rem;
+  padding-bottom: 1rem;
   font-family: var(--scis-font-sans);
 }
 
@@ -156,7 +160,8 @@
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
-  padding: 0.35rem 0 0.25rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .scis-brand {
@@ -270,12 +275,12 @@
 .scis-hero {
   background: #fff;
   color: var(--scis-navy);
-  padding: 0.65rem 0 clamp(1.5rem, 4vw, 2.75rem) 0;
+  padding: clamp(1.5rem, 4vw, 2.25rem) 0 clamp(1.5rem, 4vw, 2.75rem) 0;
   border-bottom: 1px solid var(--scis-border);
 }
 
 .scis-section-kicker {
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.9rem;
   font-size: 0.82rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -284,7 +289,7 @@
 }
 
 .scis-hero-title {
-  margin: 0;
+  margin: 0.9rem 0 0.1rem;
   font-size: clamp(1.6rem, 3.5vw, 2.5rem);
   color: var(--scis-navy);
   font-weight: 700;
@@ -292,13 +297,13 @@
 
 .scis-hero-subtitle {
   max-width: 760px;
-  margin: 0.85rem 0 0;
+  margin: 1.85rem 0;
   line-height: 1.65;
   color: #334155;
 }
 
 .scis-hero-highlight {
-  margin: 1rem 0 0;
+  margin: 2rem 0 ;
   text-align: center;
   font-weight: 700;
   color: var(--scis-maroon-accent);
@@ -344,7 +349,8 @@
 }
 
 .scis-main-content {
-  padding: 1.75rem 0 3rem;
+  padding-top: 1.75rem;
+  padding-bottom: 3rem;
   display: grid;
   gap: 1rem;
 }
@@ -369,6 +375,10 @@
 .scis-card,
 .scis-panel,
 .scis-chart-card {
+  /* Grid items default to min-width: auto (= their content's min-content size), so a
+     wide table with nowrap headers would otherwise stretch this — and the whole page
+     — wider than the screen instead of scrolling within its own .scis-table-wrap. */
+  min-width: 0;
   background: #fff;
   border: 1px solid var(--scis-border);
   border-radius: 8px;
@@ -463,7 +473,7 @@
 
 /* Contact + quick links + social + copyright — one red block */
 .scis-footer-red {
-  background: #991b1b;
+  background: #aa0000;
   color: #fff;
   -webkit-font-smoothing: antialiased;
   width: 100%;
@@ -672,12 +682,29 @@
   .scis-table td {
     padding: 0.5rem 0.55rem;
   }
+
+  /* Company-wise count tables stay as tables (not cards) on mobile — narrow the
+     header labels further so more columns fit before horizontal scroll kicks in. */
+  .scis-stats-company-table th {
+    font-size: 0.68rem;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+    letter-spacing: -0.01em;
+  }
+
+  .scis-stats-company-table td {
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+  }
 }
 
 .scis-table th {
   background: var(--scis-bg-soft);
   color: var(--scis-navy);
   font-size: 0.82rem;
+  /* Keep header labels on one line so narrow/compact tables grow to fit content
+     and scroll horizontally, instead of squashing every column unreadably thin. */
+  white-space: nowrap;
 }
 
 .scis-table th,
@@ -816,7 +843,8 @@
 }
 
 .scis-auth-shell {
-  padding: 2rem 0 3rem;
+  padding-top: 2rem;
+  padding-bottom: 3rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
@@ -1008,7 +1036,7 @@
 
 @media (max-width: 768px) {
   :root {
-    --scis-gutter: 0.85rem;
+    --scis-gutter: 1.1rem;
   }
 
   .scis-header-inner {
@@ -1065,7 +1093,8 @@
   }
 
   .scis-main-content {
-    padding: 1.25rem 0 2.5rem;
+    padding-top: 1.25rem;
+    padding-bottom: 2.5rem;
   }
 
   .scis-chart-wrap {

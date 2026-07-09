@@ -32,12 +32,12 @@ const styles: Record<string, React.CSSProperties> = {
     border: "none",
     borderRadius: "10px",
     padding: "14px 16px",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   value: {
     fontSize: "26px",
     fontWeight: 700,
-    color: "#1a365d",
+    color: "#1F3A5F",
     lineHeight: 1.1,
   },
   label: {

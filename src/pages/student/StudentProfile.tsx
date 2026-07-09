@@ -706,7 +706,7 @@ const StudentProfile = () => {
                   backgroundColor: "#000",
                   color: "#fff",
                   cursor: "pointer",
-                  fontFamily: "Arial, Helvetica, sans-serif",
+                  fontFamily: "Inter, Arial, Helvetica, sans-serif",
                   boxShadow: "4px 4px 0px #333",
                 }}
               >
@@ -814,14 +814,14 @@ const s: Record<string, React.CSSProperties> = {
     backgroundColor: "#ffffff",
     minHeight: "100vh",
     padding: "24px 32px",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     color: "#000",
     overflowY: "auto",
   },
   breadcrumb: {
     fontSize: 14,
     marginBottom: 12,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   backArrow: {
     width: 36,
@@ -856,11 +856,11 @@ const s: Record<string, React.CSSProperties> = {
     marginBottom: -2,
     transition: "all 0.2s ease",
     userSelect: "none",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   tabActive: {
-    color: "#1a365d",
-    borderBottomColor: "#8b0000",
+    color: "#1F3A5F",
+    borderBottomColor: "#aa0000",
     fontWeight: 700,
   },
   toast: {
@@ -871,7 +871,7 @@ const s: Record<string, React.CSSProperties> = {
     fontWeight: 600,
     animation: "fadeIn 0.3s ease",
     border: "1px solid #e2e8f0",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   card: {
     backgroundColor: "#fff",
@@ -886,7 +886,7 @@ const s: Record<string, React.CSSProperties> = {
     fontWeight: 700,
     fontSize: 14,
     marginBottom: 24,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   row: {
     display: "flex",
@@ -902,7 +902,7 @@ const s: Record<string, React.CSSProperties> = {
     fontWeight: 700,
     color: "#000",
     marginBottom: 6,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   input: {
     width: "100%",
@@ -915,7 +915,7 @@ const s: Record<string, React.CSSProperties> = {
     outline: "none",
     boxSizing: "border-box",
     transition: "border-color 0.2s, box-shadow 0.2s",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   select: {
@@ -930,7 +930,7 @@ const s: Record<string, React.CSSProperties> = {
     boxSizing: "border-box",
     cursor: "pointer",
     appearance: "auto",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   disabledInput: {
@@ -947,7 +947,7 @@ const s: Record<string, React.CSSProperties> = {
     color: "#000",
     cursor: "pointer",
     fontWeight: 600,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   buttonRow: {
     display: "flex",
@@ -967,7 +967,7 @@ const s: Record<string, React.CSSProperties> = {
     color: "#000",
     cursor: "pointer",
     transition: "all 0.2s ease",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     boxShadow: "0 1px 3px rgba(26, 54, 93, 0.06)",
   },
   saveBtn: {
@@ -976,11 +976,11 @@ const s: Record<string, React.CSSProperties> = {
     fontWeight: 700,
     borderRadius: 8,
     border: "1px solid #6d0000",
-    backgroundColor: "#8b0000",
+    backgroundColor: "#aa0000",
     color: "#fff",
     cursor: "pointer",
     transition: "all 0.2s ease",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     boxShadow: "0 1px 2px rgba(26, 54, 93, 0.12)",
   },
 
@@ -991,7 +991,7 @@ const s: Record<string, React.CSSProperties> = {
     color: "#000",
     marginBottom: 16,
     marginTop: 0,
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   tableHeader: {
     display: "flex",
@@ -1001,7 +1001,7 @@ const s: Record<string, React.CSSProperties> = {
     fontSize: 13,
     fontWeight: 700,
     color: "#000",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
   },
   tableRow: {
     display: "flex",
@@ -1020,7 +1020,7 @@ const s: Record<string, React.CSSProperties> = {
     color: "#000",
     outline: "none",
     boxSizing: "border-box",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   priorBlock: {
@@ -1054,7 +1054,7 @@ const s: Record<string, React.CSSProperties> = {
     fontSize: 14,
     padding: "16px 0",
     textAlign: "center",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, Helvetica, sans-serif",
     fontWeight: 600,
   },
   loadingBox: {
@@ -1068,7 +1068,7 @@ const s: Record<string, React.CSSProperties> = {
     width: 36,
     height: 36,
     border: "4px solid #e0e0e0",
-    borderTopColor: "#8b0000",
+    borderTopColor: "#aa0000",
     borderRadius: "50%",
     animation: "spin 0.8s linear infinite",
   },

@@ -70,8 +70,8 @@ const CustomSelect = ({
           borderRadius: "6px",
           border: "1px solid #e2e8f0",
           backgroundColor: "#fff",
-          color: "#1e293b",
-          fontFamily: "Arial, Helvetica, sans-serif",
+          color: "#4A5568",
+          fontFamily: "Inter, Arial, Helvetica, sans-serif",
           fontWeight: 600,
           fontSize: "13px",
           outline: "none",
@@ -109,9 +109,9 @@ const CustomSelect = ({
                 padding: "10px 12px",
                 cursor: "pointer",
                 fontSize: "13px",
-                fontFamily: "Arial, Helvetica, sans-serif",
+                fontFamily: "Inter, Arial, Helvetica, sans-serif",
                 fontWeight: 600,
-                color: "#1e293b",
+                color: "#4A5568",
                 borderBottom: "1px solid #e2e8f0",
                 backgroundColor: value === opt.value ? "#f0f0f0" : "#fff",
                 transition: "background-color 0.15s ease",
@@ -148,11 +148,11 @@ const ActionBtn = ({
     className="sd-action-btn"
     style={{
       padding: "8px 16px",
-      border: `1px solid ${disabled ? "#cbd5e1" : "#1a365d"}`,
+      border: `1px solid ${disabled ? "#cbd5e1" : "#1F3A5F"}`,
       borderRadius: "6px",
       cursor: disabled ? "not-allowed" : "pointer",
       fontWeight: "bold",
-      fontFamily: "Arial, Helvetica, sans-serif",
+      fontFamily: "Inter, Arial, Helvetica, sans-serif",
       fontSize: "14px",
       backgroundColor: bg,
       color,
@@ -172,15 +172,15 @@ const sdStyles = `
   }
   .sd-container {
     background-color: transparent;
-    color: #1e293b;
-    font-family: Arial, Helvetica, sans-serif;
+    color: #4A5568;
+    font-family: Inter, Arial, Helvetica, sans-serif;
   }
   .sd-title {
     margin: 0;
     font-size: 28px;
     font-weight: 700;
-    color: #1a365d;
-    font-family: Arial, Helvetica, sans-serif;
+    color: #1F3A5F;
+    font-family: Inter, Arial, Helvetica, sans-serif;
   }
   .sd-card {
     background-color: #fff;
@@ -200,8 +200,8 @@ const sdStyles = `
     border-radius: 6px;
     border: 1px solid #e2e8f0;
     background-color: #fff;
-    color: #1e293b;
-    font-family: Arial, Helvetica, sans-serif;
+    color: #4A5568;
+    font-family: Inter, Arial, Helvetica, sans-serif;
     font-weight: 600;
     font-size: 13px;
     outline: none;
@@ -210,7 +210,7 @@ const sdStyles = `
     box-sizing: border-box;
   }
   .sd-search:focus {
-    border-color: #8b0000;
+    border-color: #aa0000;
     outline: 2px solid rgba(139, 0, 0, 0.15);
   }
   .sd-search::placeholder {
@@ -225,25 +225,25 @@ const sdStyles = `
     width: 100%;
     border-collapse: collapse;
     background-color: #fff;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Inter, Arial, Helvetica, sans-serif;
   }
   .sd-th {
     padding: 12px 14px;
     text-align: left;
     border-bottom: 1px solid #e2e8f0;
     background-color: #f0f4f8;
-    color: #1a365d;
+    color: #1F3A5F;
     font-size: 12px;
     font-weight: 700;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Inter, Arial, Helvetica, sans-serif;
   }
   .sd-td {
     padding: 12px 14px;
     text-align: left;
     border-bottom: 1px solid #e2e8f0;
-    color: #1e293b;
+    color: #4A5568;
     font-size: 13px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Inter, Arial, Helvetica, sans-serif;
   }
   .sd-row {
     cursor: pointer;
@@ -258,7 +258,7 @@ const sdStyles = `
     color: #64748b;
     font-size: 13px;
     font-weight: 700;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Inter, Arial, Helvetica, sans-serif;
   }
   .sd-back-btn {
     align-self: flex-start;
@@ -267,7 +267,7 @@ const sdStyles = `
     border-radius: 6px;
     background-color: #ffffff;
     color: #b91c1c;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Inter, Arial, Helvetica, sans-serif;
     font-weight: 700;
     font-size: 14px;
     cursor: pointer;
@@ -363,7 +363,7 @@ const StudentDashboard = () => {
       case "APPLIED":     return { backgroundColor: "#dcfce7", color: "#15803d", borderColor: "#15803d" };
       case "REJECTED":    return { backgroundColor: "#fee2e2", color: "#b91c1c", borderColor: "#b91c1c" };
       case "IGNORED":     return { backgroundColor: "#fef9c3", color: "#854d0e", borderColor: "#854d0e" };
-      case "SHORTLISTED": return { backgroundColor: "#e8eef4", color: "#1a365d", borderColor: "#1a365d" };
+      case "SHORTLISTED": return { backgroundColor: "#e8eef4", color: "#1F3A5F", borderColor: "#1F3A5F" };
       case "SELECTED":    return { backgroundColor: "#ccfbf1", color: "#0f766e", borderColor: "#0f766e" };
       default:            return { backgroundColor: "#f1f5f9", color: "#64748b", borderColor: "#64748b" };
     }
@@ -439,7 +439,7 @@ const StudentDashboard = () => {
     return (
       <div className="sd-container">
         <style>{sdStyles}</style>
-        <div style={{ borderRadius: "8px", padding: "30px 40px", display: "inline-block", fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 700, fontSize: "16px", color: "#1a365d" }}>
+        <div style={{ borderRadius: "8px", padding: "30px 40px", display: "inline-block", fontFamily: "Inter, Arial, Helvetica, sans-serif", fontWeight: 700, fontSize: "16px", color: "#1F3A5F" }}>
           Loading dashboard...
         </div>
       </div>
@@ -456,7 +456,7 @@ const StudentDashboard = () => {
         <>
           <div style={{ marginBottom: "24px" }}>
             <h1 className="sd-title">Jobs on Campus</h1>
-            <p style={{ margin: "8px 0 0", color: "#64748b", fontSize: "13px", fontFamily: "Arial, Helvetica, sans-serif" }}>
+            <p style={{ margin: "8px 0 0", color: "#64748b", fontSize: "13px", fontFamily: "Inter, Arial, Helvetica, sans-serif" }}>
               Newly listed companies are shown first. Expired deadlines appear at the end.
             </p>
           </div>
@@ -492,7 +492,7 @@ const StudentDashboard = () => {
                 ]} />
             </div>
 
-            <p style={{ fontSize: "12px", color: "#64748b", fontWeight: 700, fontFamily: "Arial, Helvetica, sans-serif", marginBottom: "12px" }}>
+            <p style={{ fontSize: "12px", color: "#64748b", fontWeight: 700, fontFamily: "Inter, Arial, Helvetica, sans-serif", marginBottom: "12px" }}>
               {companyTotal === 0
                 ? `No companies match filters (${companies.length} total)`
                 : `Showing ${companyFrom}–${companyTo} of ${companyTotal} filtered (${companies.length} total companies)`}
@@ -522,10 +522,10 @@ const StudentDashboard = () => {
                           <td className="sd-td" data-label="Eligibility">{company.department === "MCA" ? "MCA" : (company.streamsAllowed?.length ? company.streamsAllowed.join(", ") : "All streams")}</td>
                           <td className="sd-td" data-label="Deadline" style={{ color: expired ? "#ef4444" : "inherit", fontWeight: expired ? 700 : 400 }}>
                             {new Date(company.deadline).toLocaleString("en-IN")}
-                            {expired && <span style={{ display: "block", fontSize: "10px", fontWeight: 700, color: "#b91c1c", fontFamily: "Arial, Helvetica, sans-serif", marginTop: "2px" }}>Expired</span>}
+                            {expired && <span style={{ display: "block", fontSize: "10px", fontWeight: 700, color: "#b91c1c", fontFamily: "Inter, Arial, Helvetica, sans-serif", marginTop: "2px" }}>Expired</span>}
                           </td>
                           <td className="sd-td" data-label="Status">
-                            <span style={{ padding: "4px 10px", borderRadius: "6px", fontSize: "11px", fontWeight: 700, display: "inline-block", border: "1.5px solid", fontFamily: "Arial, Helvetica, sans-serif", ...statusStyle(status) }}>
+                            <span style={{ padding: "4px 10px", borderRadius: "6px", fontSize: "11px", fontWeight: 700, display: "inline-block", border: "1.5px solid", fontFamily: "Inter, Arial, Helvetica, sans-serif", ...statusStyle(status) }}>
                               {status || "NO RESPONSE"}
                             </span>
                           </td>
@@ -609,7 +609,7 @@ const StudentDashboard = () => {
           </div>
 
           <div className="sd-section">
-            <h3 style={{ margin: "0 0 14px", fontFamily: "Arial, Helvetica, sans-serif", fontSize: "18px", color: "#1a365d" }}>Your Response</h3>
+            <h3 style={{ margin: "0 0 14px", fontFamily: "Inter, Arial, Helvetica, sans-serif", fontSize: "18px", color: "#1F3A5F" }}>Your Response</h3>
             <div className="sd-btn-group">
               <ActionBtn disabled={deadlinePassed || getStatus(selectedCompany.id) === "APPLIED"} onClick={() => respond(selectedCompany.id, "ACCEPT")} bg="#dcfce7" color="#15803d">✓ Apply</ActionBtn>
               <ActionBtn disabled={deadlinePassed || getStatus(selectedCompany.id) === "REJECTED"} onClick={() => respond(selectedCompany.id, "REJECT")} bg="#fee2e2" color="#b91c1c">✕ Reject</ActionBtn>
@@ -627,7 +627,7 @@ const styles: Record<string, React.CSSProperties> = {
     minHeight: "100vh",
     backgroundColor: "#ffffff",
     padding: "22px",
-    color: "#1e293b",
+    color: "#4A5568",
   },
   loading: {
     minHeight: "100vh",
@@ -645,7 +645,7 @@ const styles: Record<string, React.CSSProperties> = {
     margin: 0,
     fontSize: "30px",
     fontWeight: 600,
-    color: "#1a365d",
+    color: "#1F3A5F",
   },
   subtitle: {
     margin: "6px 0 0",
@@ -747,7 +747,7 @@ const styles: Record<string, React.CSSProperties> = {
     margin: "0 0 10px",
     fontSize: "24px",
     fontWeight: 600,
-    color: "#1a365d",
+    color: "#1F3A5F",
   },
   keyValueGrid: {
     display: "grid",
