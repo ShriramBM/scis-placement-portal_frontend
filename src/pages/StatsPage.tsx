@@ -145,7 +145,7 @@ const InternshipRowCard = ({ row }: { row: InternshipRow }) => (
       </li>
       <li>
         <span className="scis-stats-card-label">Median Duration</span>
-        <span className="scis-stats-card-value">{row.internedCount ? `${row.medianDurationMonths} mo` : "—"}</span>
+        <span className="scis-stats-card-value">{row.medianDurationMonths ? `${row.medianDurationMonths} mo` : "—"}</span>
       </li>
       <li>
         <span className="scis-stats-card-label">Median Stipend</span>
@@ -215,9 +215,9 @@ const StatsPage = () => {
 
   const chartDataByDegree = useMemo(
     () =>
-      filteredRowsWithInternship.map(({ row, combinedPct }) => ({
+      filteredRowsWithInternship.map(({ row }) => ({
         name: row.degree,
-        "Placement %": combinedPct,
+        "Placement %": row.placedPct ?? 0,
         "Median CTC (LPA)": row.medianLpa,
       })),
     [filteredRowsWithInternship]
@@ -472,14 +472,14 @@ const StatsPage = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {filteredRowsWithInternship.map(({ row, internedCount, combinedPct }) => (
+                        {filteredRowsWithInternship.map(({ row, internedCount }) => (
                           <tr key={row.degree}>
                             <td>{row.degree}</td>
                             <td>{row.students}</td>
                             <td>{row.registered}</td>
                             <td>{row.placedCount}</td>
                             <td>{internedCount}</td>
-                            <td>{combinedPct.toFixed(2)}%</td>
+                            <td>{row.placedPct != null ? `${row.placedPct.toFixed(2)}%` : "—"}</td>
                             <td>{row.medianLpa || "—"}</td>
                             <td>{row.lowestLpa ?? "—"}</td>
                             <td>{row.highestLpa ?? "—"}</td>
@@ -652,7 +652,7 @@ const StatsPage = () => {
                           <tr key={row.degree}>
                             <td>{row.degree}</td>
                             <td>{row.internedCount}</td>
-                            <td>{row.internedCount ? row.medianDurationMonths : "—"}</td>
+                            <td>{row.medianDurationMonths ?? "—"}</td>
                             <td>{row.internedCount ? row.medianStipend.toLocaleString("en-IN") : "—"}</td>
                             <td>{row.minStipend ? row.minStipend.toLocaleString("en-IN") : "—"}</td>
                             <td>{row.maxStipend ? row.maxStipend.toLocaleString("en-IN") : "—"}</td>
